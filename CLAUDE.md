@@ -126,8 +126,8 @@ Regel5: Mathematische Formeln aus der Vorlesung sollen erklärt und mit Beispiel
 
 1. Einführung
 
-1.1 Begriff der Regelung und grundsätzlicher Aufbau
-1.2 Beispiele von Regelungen
+	1.1 Begriff der Regelung und grundsätzlicher Aufbau
+	1.2 Beispiele von Regelungen
 
 2. Regelung und Steuerung
 
