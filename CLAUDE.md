@@ -206,6 +206,7 @@ Regel5: Mathematische Formeln aus der Vorlesung sollen erklärt und mit Beispiel
 
 	8.2 Reglerentwurf durch Eigenwertvorgabe
 
+---
 
 ##Fragen-Modus
 
