@@ -127,57 +127,99 @@ Regel5: Mathematische Formeln aus der Vorlesung sollen erklärt und mit Beispiel
 1. Einführung
 
 	1.1 Begriff der Regelung und grundsätzlicher Aufbau
+
 	1.2 Beispiele von Regelungen
 
 2. Regelung und Steuerung
 
-2.2 Einfaches Beispiel einer Antriebsregelung
-2.3 Entwurf von Vorsteuerungen
+	2.2 Einfaches Beispiel einer Antriebsregelung
+
+	2.3 Entwurf von Vorsteuerungen
 
 3. Der lineare Regelkreis
-3.1 Allgemeine Struktur und Gleichungen des Regelkreises
-3.2 Stabilität von Regelkreisen
-3.3 Das Hurwitz-Kriterium
-3.4 Das spezielle Nyquist-Kriterium
-3.5 Stabilitätsprüfung im Bode-Diagramm mit dem speziellen Nyquist-Kriterium
-3.6 Maße für die Stabilitätsreserve (Betrags- und Phasenreserve)
-3.7 Die allgemeine Formulierung des Nyquist-Kriteriums
-3.8 Totzeitglieder und Stabilität von Regelkreisen mit Totzeit
+
+	3.1 Allgemeine Struktur und Gleichungen des Regelkreises
+
+	3.2 Stabilität von Regelkreisen
+
+	3.3 Das Hurwitz-Kriterium
+
+	3.4 Das spezielle Nyquist-Kriterium
+
+	3.5 Stabilitätsprüfung im Bode-Diagramm mit dem speziellen Nyquist-Kriterium
+
+	3.6 Maße für die Stabilitätsreserve (Betrags- und Phasenreserve)
+
+	3.7 Die allgemeine Formulierung des Nyquist-Kriteriums
+
+	3.8 Totzeitglieder und Stabilität von Regelkreisen mit Totzeit
+
 4. Synthese (Entwurf) von Regelungen
-4.1 Aufgabenstellung und Anforderungen an den Regelkreis
-4.2 Stationäres Verhalten des Regelkreises
-4.3 Grundsätzliche Struktur des Reglers
-4.4 Realisierung von Reglern (P-, I-, PI-, PD-, PID-Regler)
-4.5 Methoden zur Festlegung der Reglerparameter
-4.6 Anwendungsbeispiel: Entwurf einer Drehzahlregelung für einen fremderregten Gleichstrommotor
-4.7 Maßnahmen zur gezielten Formung des Frequenzgangs
+
+	4.1 Aufgabenstellung und Anforderungen an den Regelkreis
+
+	4.2 Stationäres Verhalten des Regelkreises
+
+	4.3 Grundsätzliche Struktur des Reglers
+
+	4.4 Realisierung von Reglern (P-, I-, PI-, PD-, PID-Regler)
+
+	4.5 Methoden zur Festlegung der Reglerparameter
+
+	4.6 Anwendungsbeispiel: Entwurf einer Drehzahlregelung für einen fremderregten Gleichstrommotor
+
+	4.7 Maßnahmen zur gezielten Formung des Frequenzgangs
+
 5. Strukturmaßnahmen: Kaskadenregelung und Störgrößenaufschaltung
-5a) Kaskadenregelung (Grundidee, Bedingungen, Störverhalten)
-5b) Störgrößenaufschaltung (Grundidee, Voraussetzungen, ideale Kompensation)
-Kombination von Kaskadenregelung und Störgrößenaufschaltung
-Anwendungsbeispiel: Drehzahlregelung mit Kaskadenregelung und Störgrößenaufschaltung
+
+	5a) Kaskadenregelung (Grundidee, Bedingungen, Störverhalten)
+
+	5b) Störgrößenaufschaltung (Grundidee, Voraussetzungen, ideale Kompensation)
+
+	Kombination von Kaskadenregelung und Störgrößenaufschaltung
+
+	Anwendungsbeispiel: Drehzahlregelung mit Kaskadenregelung und Störgrößenaufschaltung
+
 6. Grundlagen der digitalen Signalverarbeitung
-6.1 Abtastung, Analog/Digital- und Digital/Analog-Umsetzung
-6.2 Digitale Filter
-6.3 Das Abtast-Theorem von Shannon
+
+	6.1 Abtastung, Analog/Digital- und Digital/Analog-Umsetzung
+
+	6.2 Digitale Filter
+
+	6.3 Das Abtast-Theorem von Shannon
+
 7. Beschreibung dynamischer Systeme im Zustandsraum
-7.1 Beispiele und Vergleich von Frequenzbereichs- und Zustandsmethodik
-7.2 Allgemeine Form der Zustandsgleichungen
-7.3 Die Diagonalform (Modalform) der Zustandsgleichungen
-7.4 Stabilität im Zustandsraum
-7.5 Zusammenhang zwischen Übertragungsfunktion und Zustandsdarstellung
+
+	7.1 Beispiele und Vergleich von Frequenzbereichs- und Zustandsmethodik
+
+	7.2 Allgemeine Form der Zustandsgleichungen
+
+	7.3 Die Diagonalform (Modalform) der Zustandsgleichungen
+
+	7.4 Stabilität im Zustandsraum
+
+	7.5 Zusammenhang zwischen Übertragungsfunktion und Zustandsdarstellung
+
 8. Regelung im Zustandsraum
-8.1 Allgemeine Struktur einer Zustandsregelung
-8.2 Reglerentwurf durch Eigenwertvorgabe
+
+	8.1 Allgemeine Struktur einer Zustandsregelung
+
+	8.2 Reglerentwurf durch Eigenwertvorgabe
 
 
 ##Fragen-Modus
+
 -Es soll eine egene Übersicht zu den Fragen geben:
+
 	-Orientieren soll man sich edabei an die fragen pdfs aus 
+
 		-Fragen aus Tut
 		-Klausurfragen 
+
 -Es sollen alle gegebenen Fragen die schon in den pdfs zu finden sind beinhalten und zusätzliche fragen erstellt werden die es so noch nicht gibt und anders sind die ebenfalls in zukünftigen Klausuren abgefragt werden
+
 -Jede Frage soll:
+
 	-Aufklabbar sein sodass man nicht direkt die Anwort sehen kann
 	-Es soll eine gute Erkläreung, wenn nötig mit selbst erstelleten Abbildungen zu Aufklappen hinterlegt sein
 	-Es sollen alle Fragen auf einer sellbst erstelten Skala nach Schwierigkeit bewertet werden
