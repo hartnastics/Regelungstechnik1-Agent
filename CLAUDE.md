@@ -20,6 +20,7 @@ Varianten / Extra-Teilaufgaben:
 	-Stationären Fehler per Endwertsatz berechnen
 	-Regler aus Bode-Diagramm ablesen (z.B. PI-Regler: Knickfrequenz = 1/T_R, K_R ablesen)
 	-PD-Regler qualitativ skizzieren + Vor-/Nachteile nennen
+
 ---
 
 Aufgabe 2 — Mehrere unabhängige Teilaufgaben (20 Punkte)
@@ -35,6 +36,7 @@ Varianten:
 	-Hurwitz mit zwei Parametern (K_R, K_D) → Bedingungen für Stabilitätsbereich
 	-Allgemeines Nyquist-Kriterium (bei instabilem offenem Regelkreis, Pol-Nullstellen-Diagramm gegeben)
 	-Stationäre Abweichung per Endwertsatz + prüfen ob Ziel erreichbar
+
 ---
 
 Aufgabe 3 — Kaskadenregelung (33 Punkte)
@@ -51,6 +53,7 @@ Varianten:
 	-Störgrößenkompensation F_SD: ideale Korrekturfunktion bestimmen, Realisierbarkeit prüfen
 	-Alternativen: stationäre Kompensation (nur bei ω=0) oder PT1-Näherung
 	-Qualitative Verlaufszuordnung (ideal / keine / stationäre Kompensation)
+
 ---
 
 Aufgabe 4 — Zustandsraum (35 Punkte)
@@ -67,6 +70,7 @@ Varianten:
 
 	-Eigenvektoren berechnen → Modalform (Diagonalform) herleiten (V, V⁻¹, Λ)
 	-Vorfilter f berechnen für stationäre Genauigkeit (u = −r^T·z + f·w)
+
 ---
 
 Aufgabe 5 — Digitale Signalverarbeitung (20–28 Punkte)
@@ -84,6 +88,7 @@ Was oft vorkommt:
 Digitaler Filter: Koeffizienten a₀, a₁, b₀ aus Sprungantwort bestimmen (Gleichungssystem)
 BIBO-Stabilität digitaler Filter prüfen (aufklingende Ausgangsfolge → instabil)
 Differenzengleichung ↔ PT1-Glied über Euler-Integration (T und K aus Δt und Koeffizienten)
+
 ---
 
 Aufgabe Fragen: Richtig/Faslch ankreuzen
@@ -97,6 +102,7 @@ Häufige Themen:
 	-Übertragungsfunktion: nur für lineare, zeitinvariante Systeme
 	-Zustandsraum: auch für nichtlineare, zeitvariante Systeme + Totzeit
 	-Stabilität: Voraussetzung für stationäre Genauigkeit
+
 ---
 
 ##Regeln zur Verwendung der gegebenen Inhalte
@@ -119,11 +125,15 @@ Regel5: Mathematische Formeln aus der Vorlesung sollen erklärt und mit Beispiel
 ##Übersicht: Themen der Vorlesungen
 
 1. Einführung
+
 1.1 Begriff der Regelung und grundsätzlicher Aufbau
 1.2 Beispiele von Regelungen
+
 2. Regelung und Steuerung
+
 2.2 Einfaches Beispiel einer Antriebsregelung
 2.3 Entwurf von Vorsteuerungen
+
 3. Der lineare Regelkreis
 3.1 Allgemeine Struktur und Gleichungen des Regelkreises
 3.2 Stabilität von Regelkreisen
