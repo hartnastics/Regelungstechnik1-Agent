@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aufgabe 1 – Linearer Regelkreis | RT1</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});"></script>
+  <script src="https://cdn.plot.ly/plotly-2.26.0.min.js"></script>
+</head>
+<body>
+
+<nav class="navbar">
+  <a class="nav-brand" href="index.html">RT1 Lernportal</a>
+  <div class="nav-links">
+    <a href="aufgabe1.html" class="active" style="--accent:#4f46e5;">Aufgabe 1</a>
+    <a href="aufgabe2.html">Aufgabe 2</a>
+    <a href="aufgabe3.html">Aufgabe 3</a>
+    <a href="aufgabe4.html">Aufgabe 4</a>
+    <a href="aufgabe5.html">Aufgabe 5</a>
+    <a href="fragen.html" class="nav-highlight">Fragen</a>
+  </div>
+</nav>
+
+<div class="hero hero-a1">
+  <div class="hero-inner">
+    <div class="hero-badge">30 Punkte · Aufgabe 1</div>
+    <h1>Linearer Regelkreis</h1>
+    <p>Analyse und Stabilitätsuntersuchung des geschlossenen Regelkreises. Herleitung der Übertragungsfunktionen, Hurwitz-Kriterium, Bode-Diagramm und Stabilitätsreserven.</p>
+  </div>
+</div>
+
+<div class="content-wrap">
+
+  <!-- Tab-Navigation -->
+  <div class="tab-nav" id="tabNav">
+    <button class="tab-btn active" onclick="showTab('blockschaltbild')">Blockschaltbild</button>
+    <button class="tab-btn" onclick="showTab('hurwitz')">Hurwitz-Kriterium</button>
+    <button class="tab-btn" onclick="showTab('bode')">Bode-Diagramm</button>
+    <button class="tab-btn" onclick="showTab('reserve')">Stabilitätsreserven</button>
+    <button class="tab-btn" onclick="showTab('totzeit')">Totzeit</button>
+    <button class="tab-btn" onclick="showTab('interaktiv')">Interaktiv</button>
+  </div>
+
+  <!-- ══════════════ TAB: BLOCKSCHALTBILD ══════════════ -->
+  <div class="tab-content active" id="tab-blockschaltbild">
+
+    <div class="section-title" style="--accent:#4f46e5;">Struktur des linearen Regelkreises</div>
+
+    <div class="tip-box">
+      <strong>Was wird in der Klausur verlangt?</strong> Aus einem gegebenen Blockschaltbild (evtl. Nicht-Standard-Struktur) wird $F_o(s)$, $F_W(s)$ und $F_Z(s)$ bestimmt. Anschließend Stabilitätsprüfung des offenen und geschlossenen Kreises.
+    </div>
+
+    <h2 class="sub-heading">Standardstruktur des Regelkreises</h2>
+
+    <!-- ASCII-Blockschaltbild -->
+    <div class="formula-box">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:0.88rem;line-height:1.8;white-space:pre;overflow-x:auto;">
+         W(s)       E(s)          U(s)          Y(s)
+          ──►[+]───►[ G_R(s) ]───►[ G_S(s) ]──┬──► Y(s)
+             ↑-                                │
+             └──────────────────────────────────┘
+                  Rückführung (Messglied G_M ≈ 1)
+
+      Störung Z(s) greift zwischen Regler und Strecke an:
+          U(s)──►[G_S1(s)]──►[+]──►[G_S2(s)]──►Y(s)
+                              ↑
+                          Z(s)·G_Z(s)
+      </div>
+    </div>
+
+    <h2 class="sub-heading">Die drei wichtigsten Übertragungsfunktionen</h2>
+    <p>Der <strong>offene Regelkreis</strong> (Schleifenübertragungsfunktion) ist die Basis für alle Stabilitätsuntersuchungen:</p>
+
+    <div class="formula-box">
+      <div class="formula-label">Offener Regelkreis</div>
+      $$F_o(s) = G_R(s) \cdot G_S(s)$$
+    </div>
+
+    <div class="formula-box">
+      <div class="formula-label">Führungsübertragungsfunktion (Sollwert → Regelgröße)</div>
+      $$F_W(s) = \frac{Y(s)}{W(s)} = \frac{G_R(s)\,G_S(s)}{1 + G_R(s)\,G_S(s)} = \frac{F_o(s)}{1 + F_o(s)}$$
+    </div>
+
+    <div class="formula-box">
+      <div class="formula-label">Störübertragungsfunktion (Störgröße → Regelgröße)</div>
+      $$F_Z(s) = \frac{Y(s)}{Z(s)} = \frac{G_{S2}(s)}{1 + G_R(s)\,G_{S1}(s)\,G_{S2}(s)}$$
+    </div>
+
+    <div class="warning-box">
+      <strong>Nicht-Standard-Strukturen:</strong> In der Klausur kommen oft Blockschaltbilder vor, die nicht der Standardform entsprechen (z.B. Rückführzweig mit Übertragungsglied, innere Schleifen). Strategie: Zuerst alle Schleifen durch Umformung auf die Standardform bringen, dann $F_o$ ablesen.
+    </div>
+
+    <h2 class="sub-heading">Stationäres Verhalten und Endwertsatz</h2>
+    <p>Der stationäre Fehler nach einem Sprung $W_0/s$ berechnet sich mit dem <strong>Endwertsatz der Laplace-Transformation</strong>:</p>
+
+    <div class="formula-box">
+      <div class="formula-label">Endwertsatz</div>
+      $$\lim_{t\to\infty} e(t) = \lim_{s\to 0} s \cdot E(s) = \lim_{s\to 0} s \cdot \frac{W_0/s}{1 + F_o(s)} = \frac{W_0}{1 + F_o(0)}$$
+    </div>
+
+    <p>Für <strong>stationäre Genauigkeit</strong> muss $e_\infty = 0$, d.h. $F_o(0) \to \infty$. Das ist erfüllt wenn $G_R(s)$ oder $G_S(s)$ einen I-Anteil enthält.</p>
+
+    <div class="tip-box">
+      <strong>Merksatz:</strong> P-Regler + P-Strecke → stationäre Abweichung. PI-Regler → keine stationäre Abweichung (I-Anteil erzwingt $e_\infty = 0$).
+    </div>
+
+  </div><!-- end tab-blockschaltbild -->
+
+
+  <!-- ══════════════ TAB: HURWITZ ══════════════ -->
+  <div class="tab-content" id="tab-hurwitz">
+
+    <div class="section-title" style="--accent:#4f46e5;">Hurwitz-Kriterium</div>
+
+    <div class="tip-box">
+      <strong>Klausur-Relevanz:</strong> Das Hurwitz-Kriterium wird genutzt, um den Wertebereich für $K_R$ zu bestimmen, bei dem der geschlossene Regelkreis stabil ist. Meistens ist das Nennerpolynom 2. oder 3. Ordnung.
+    </div>
+
+    <h2 class="sub-heading">Voraussetzung und Gültigkeitsbereich</h2>
+
+    <div class="theorem-box">
+      <div class="theorem-title">Hurwitz-Kriterium (notwendig und hinreichend)</div>
+      <p>Für ein System <strong>ohne Totzeit</strong> mit charakteristischem Polynom</p>
+      $$P(s) = a_n s^n + a_{n-1} s^{n-1} + \cdots + a_1 s + a_0$$
+      <p>ist der geschlossene Regelkreis genau dann stabil, wenn alle Hurwitz-Determinanten positiv sind:</p>
+      $$H_1 > 0, \quad H_2 > 0, \quad \ldots, \quad H_n > 0$$
+      <p><strong>Notwendige Bedingung:</strong> Alle Koeffizienten $a_i > 0$.</p>
+    </div>
+
+    <h2 class="sub-heading">Hurwitz-Matrix und Determinanten</h2>
+
+    <p>Die Hurwitz-Matrix für Grad $n$ wird wie folgt aufgebaut:</p>
+    <div class="formula-box">
+      $$H = \begin{pmatrix}
+        a_{n-1} & a_{n-3} & a_{n-5} & \cdots \\
+        a_n     & a_{n-2} & a_{n-4} & \cdots \\
+        0       & a_{n-1} & a_{n-3} & \cdots \\
+        0       & a_n     & a_{n-2} & \cdots \\
+        \vdots  & \vdots  & \vdots  & \ddots
+      \end{pmatrix}$$
+    </div>
+
+    <h2 class="sub-heading">Praktische Anwendung: n=2 und n=3</h2>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">n=2</div>
+        <div class="step-body">
+          <p>Polynom: $P(s) = a_2 s^2 + a_1 s + a_0$</p>
+          <p><strong>Bedingung:</strong> $a_0, a_1, a_2 > 0$ (alle Koeffizienten positiv)</p>
+          <p>$H_1 = a_1 > 0$, $H_2 = a_1 a_0 - a_2 \cdot 0 = a_1 a_0 > 0$ (automatisch erfüllt wenn $a_i>0$)</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">n=3</div>
+        <div class="step-body">
+          <p>Polynom: $P(s) = a_3 s^3 + a_2 s^2 + a_1 s + a_0$</p>
+          <p><strong>Bedingungen:</strong></p>
+          <ul>
+            <li>$a_0, a_1, a_2, a_3 > 0$</li>
+            <li>$H_2 = a_2 a_1 - a_3 a_0 > 0$</li>
+          </ul>
+          <p>Also: $a_1 a_2 > a_0 a_3$</p>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="sub-heading">Beispiel aus Klausur (typisch)</h2>
+
+    <div class="example-box">
+      <p><strong>Gegeben:</strong> $G_S(s) = \frac{1}{s(s+1)(s+2)}$, Regler $G_R(s) = K_R$</p>
+      <p><strong>Gesucht:</strong> Stabilitätsbereich für $K_R$</p>
+
+      <p><strong>Schritt 1:</strong> $F_o(s) = \frac{K_R}{s(s+1)(s+2)}$</p>
+      <p><strong>Schritt 2:</strong> Charakteristisches Polynom des geschlossenen Kreises:</p>
+      $$1 + F_o(s) = 0 \implies s(s+1)(s+2) + K_R = 0$$
+      $$s^3 + 3s^2 + 2s + K_R = 0$$
+      <p><strong>Schritt 3:</strong> Hurwitz, $n=3$:</p>
+      <ul>
+        <li>$a_3=1,\ a_2=3,\ a_1=2,\ a_0=K_R$</li>
+        <li>Alle positiv: $K_R > 0$ ✓</li>
+        <li>$H_2 = a_2 a_1 - a_3 a_0 = 3\cdot 2 - 1\cdot K_R > 0 \implies K_R < 6$</li>
+      </ul>
+      <p><strong>Ergebnis:</strong> $\boxed{0 < K_R < 6}$</p>
+    </div>
+
+  </div><!-- end tab-hurwitz -->
+
+
+  <!-- ══════════════ TAB: BODE ══════════════ -->
+  <div class="tab-content" id="tab-bode">
+
+    <div class="section-title" style="--accent:#4f46e5;">Bode-Diagramm</div>
+
+    <div class="tip-box">
+      <strong>Klausur:</strong> Den asymptotischen Betragsverlauf des Bode-Diagramms einzeichnen und daraus Amplituden- sowie Phasenreserve ablesen. Oft auch: Regler-Typ aus Bode rücklesen (Knickfrequenz, Steigung).
+    </div>
+
+    <h2 class="sub-heading">Grundlagen: Grundglieder im Bode-Diagramm</h2>
+
+    <div class="card-grid">
+      <div class="info-card" style="border-left: 4px solid #4f46e5;">
+        <h3>P-Glied: $G(j\omega) = K$</h3>
+        <p><strong>Betrag:</strong> $|G| = K$ (konstant) → $20\log_{10}(K)$ dB</p>
+        <p><strong>Phase:</strong> $\angle G = 0°$</p>
+        <p>Keine Frequenzabhängigkeit</p>
+      </div>
+      <div class="info-card" style="border-left: 4px solid #4f46e5;">
+        <h3>I-Glied: $G(j\omega) = \frac{1}{j\omega}$</h3>
+        <p><strong>Betrag:</strong> $|G| = 1/\omega$ → Steigung $-20$ dB/Dekade</p>
+        <p><strong>Phase:</strong> $\angle G = -90°$ (konstant)</p>
+        <p>Bei $\omega=1$: $|G|=0$ dB</p>
+      </div>
+      <div class="info-card" style="border-left: 4px solid #4f46e5;">
+        <h3>PT1: $G(j\omega) = \frac{1}{1+j\omega T}$</h3>
+        <p><strong>Knickfrequenz:</strong> $\omega_k = 1/T$</p>
+        <p>Davor: 0 dB/Dek. Danach: $-20$ dB/Dek.</p>
+        <p>Phase: 0° bis −90°, bei $\omega_k$: −45°</p>
+      </div>
+      <div class="info-card" style="border-left: 4px solid #4f46e5;">
+        <h3>PT2: $G(j\omega) = \frac{1}{1 + 2D\frac{j\omega}{\omega_0} + \left(\frac{j\omega}{\omega_0}\right)^2}$</h3>
+        <p><strong>Knickfrequenz:</strong> $\omega_0$ (Eigenfrequenz)</p>
+        <p>Danach: $-40$ dB/Dek. Phase: bis $-180°$</p>
+        <p>Bei $D < 1/\sqrt{2}$: Resonanzüberhöhung!</p>
+      </div>
+    </div>
+
+    <h2 class="sub-heading">Asymptotischer Betragsverlauf – Regeln</h2>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <p><strong>Anfangssteigung bestimmen:</strong> Zähle die freien Pole bei $s=0$ (I-Anteile). Jeder I-Anteil gibt $-20$ dB/Dek. Anfangssteigung.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <p><strong>Anfangswert bestimmen:</strong> Schreibe $F_o(j\omega)$ in normierter Form und lese den Verstärkungsfaktor $K$ ab. Einzeichnen bei $\omega=1$: $|F_o(j)| = 20\log K$ dB.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <p><strong>Knickfrequenzen eintragen:</strong> Jede Polstelle bei $\omega_k = 1/T$ → Steigung um $-20$ dB/Dek. verringern. Jede Nullstelle → Steigung um $+20$ dB/Dek. erhöhen.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <p><strong>Phase skizzieren:</strong> Pro Pol $-90°$, pro I-Glied $-90°$ konstant. PT1-Glied: bei Knickfrequenz $-45°$, asymptotisch $-90°$.</p>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="sub-heading">Beispiel: PI-Regler im Bode-Diagramm erkennen</h2>
+
+    <div class="example-box">
+      <p>Gegeben: Bode-Diagramm zeigt für kleine $\omega$ Steigung $-20$ dB/Dek., dann ab $\omega = 1/T_R$ Steigung 0 dB/Dek.</p>
+      <p>→ Dies entspricht einem <strong>PI-Regler</strong>:</p>
+      $$G_R(s) = K_R \frac{1 + T_R s}{T_R s}$$
+      <ul>
+        <li>Knickfrequenz ablesen: $\omega_\text{Knick} = 1/T_R$ → $T_R = 1/\omega_\text{Knick}$</li>
+        <li>$K_R$ ablesen: Wert des Betrags bei $\omega = 1$, dann $K_R = 10^{|G|_\text{dB}/20}$</li>
+      </ul>
+    </div>
+
+  </div><!-- end tab-bode -->
+
+
+  <!-- ══════════════ TAB: STABILITÄTSRESERVEN ══════════════ -->
+  <div class="tab-content" id="tab-reserve">
+
+    <div class="section-title" style="--accent:#4f46e5;">Stabilitätsreserven</div>
+
+    <div class="tip-box">
+      <strong>Klausur:</strong> Aus dem Bode-Diagramm des offenen Regelkreises werden Amplitudenreserve $A_r$ und Phasenreserve $\varphi_r$ abgelesen. Beide sagen aus, wie weit das System von der Stabilitätsgrenze entfernt ist.
+    </div>
+
+    <div class="theorem-box">
+      <div class="theorem-title">Definitionen der Stabilitätsreserven</div>
+      <p>Sei $\omega_D$ die <strong>Durchtrittsfrequenz</strong> (wo $|F_o(j\omega_D)| = 1$, d.h. 0 dB).</p>
+      <p>Sei $\omega_k$ die <strong>Phasenschnittfrequenz</strong> (wo $\angle F_o(j\omega_k) = -180°$).</p>
+
+      <div class="formula-box" style="margin-top:12px;">
+        <div class="formula-label">Phasenreserve (Phase Reserve)</div>
+        $$\varphi_r = 180° + \angle F_o(j\omega_D)$$
+        <p style="font-size:0.9rem;color:#475569;margin-top:8px;">Ein positiver Wert bedeutet Stabilitätsmarge. Typisch: $\varphi_r \geq 30°$ gefordert.</p>
+      </div>
+
+      <div class="formula-box" style="margin-top:12px;">
+        <div class="formula-label">Amplitudenreserve (Gain Margin)</div>
+        $$A_r = -|F_o(j\omega_k)|_\text{dB}$$
+        <p style="font-size:0.9rem;color:#475569;margin-top:8px;">Positiv wenn $|F_o(j\omega_k)| < 1$ (0 dB). Typisch: $A_r \geq 6$ dB gefordert.</p>
+      </div>
+    </div>
+
+    <h2 class="sub-heading">Ablesen aus dem Bode-Diagramm</h2>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body"><strong>Durchtrittsfrequenz $\omega_D$ finden:</strong> Suche die Frequenz, bei der die Betragskurve die 0-dB-Linie schneidet.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body"><strong>Phasenreserve ablesen:</strong> Lies die Phase bei $\omega_D$ ab. $\varphi_r = 180° + \text{(abgelesene Phase)}$. Z.B. Phase = $-140°$ → $\varphi_r = 40°$.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body"><strong>Phasenschnittfrequenz $\omega_k$ finden:</strong> Suche die Frequenz, bei der die Phasenkurve $-180°$ erreicht.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body"><strong>Amplitudenreserve ablesen:</strong> Lies den Betrag bei $\omega_k$ ab. $A_r = -|F_o(j\omega_k)|_\text{dB}$. Z.B. Betrag = $-10$ dB → $A_r = 10$ dB.</div>
+      </div>
+    </div>
+
+    <div class="warning-box">
+      <strong>Vorzeichen beachten!</strong> Die Amplitudenreserve ist das <em>Negative</em> des dB-Wertes. Wenn der Betrag bei $\omega_k$ den Wert $-8$ dB hat, dann $A_r = +8$ dB (gut!). Wenn er $+3$ dB hat, ist $A_r = -3$ dB → instabiles System!
+    </div>
+
+    <h2 class="sub-heading">Zusammenhang Nyquist-Kriterium</h2>
+    <p>Das spezielle Nyquist-Kriterium besagt: Ein stabiler offener Regelkreis ist genau dann stabil im geschlossenen Kreis, wenn die Ortskurve $F_o(j\omega)$ den Punkt $(-1, 0)$ nicht einschließt.</p>
+    <div class="formula-box">
+      <p>Die Stabilitätsreserven geben an, <em>wie weit</em> die Ortskurve vom kritischen Punkt $(-1, 0)$ entfernt ist:</p>
+      <ul>
+        <li><strong>Phasenreserve:</strong> Winkelabstand des Schnittpunkts der Ortskurve mit dem Einheitskreis zum Winkel $-180°$</li>
+        <li><strong>Amplitudenreserve:</strong> Reziproker Betrag der Ortskurve an der Stelle $\angle F_o = -180°$, also $A_r = 1/|F_o(j\omega_k)|$</li>
+      </ul>
+    </div>
+
+  </div><!-- end tab-reserve -->
+
+
+  <!-- ══════════════ TAB: TOTZEIT ══════════════ -->
+  <div class="tab-content" id="tab-totzeit">
+
+    <div class="section-title" style="--accent:#4f46e5;">Totzeitglieder</div>
+
+    <div class="warning-box">
+      <strong>Wichtig für Klausur:</strong> Totzeit wirkt sich nur auf die Phase aus – <em>nicht</em> auf den Betrag! Daher ist das Hurwitz-Kriterium bei Totzeit <strong>nicht anwendbar</strong>. Stattdessen muss das Nyquist-Kriterium benutzt werden.
+    </div>
+
+    <div class="theorem-box">
+      <div class="theorem-title">Übertragungsfunktion des Totzeitglieds</div>
+      $$G_{Tt}(s) = e^{-T_t \cdot s}$$
+      <p>Im Frequenzbereich mit $s = j\omega$:</p>
+      $$G_{Tt}(j\omega) = e^{-j\omega T_t}$$
+      <p>Betrag und Phase:</p>
+      $$|G_{Tt}(j\omega)| = 1 \quad \text{(unveränderlich!)}$$
+      $$\angle G_{Tt}(j\omega) = -\omega \cdot T_t \quad \text{[in Radiant]}$$
+      $$\angle G_{Tt}(j\omega) = -\omega \cdot T_t \cdot \frac{180°}{\pi} \quad \text{[in Grad]}$$
+    </div>
+
+    <h2 class="sub-heading">Wirkung auf Stabilitätsreserven</h2>
+
+    <div class="card-grid">
+      <div class="info-card" style="border-left: 4px solid #ef4444;">
+        <h3>Destabilisierende Wirkung</h3>
+        <p>Totzeit addiert immer mehr negative Phase bei höheren Frequenzen. Die Phase sinkt immer weiter, während der Betrag konstant bleibt.</p>
+        <p>→ Die Phasenreserve wird kleiner!</p>
+        <p>→ Bei großer Totzeit kann der Regelkreis instabil werden.</p>
+      </div>
+      <div class="info-card" style="border-left: 4px solid #059669;">
+        <h3>Amplitudenreserve unverändert</h3>
+        <p>Da der Betrag von $G_{Tt}$ immer genau 1 ist, ändert sich die Amplitudenreserve $A_r$ durch die Totzeit nicht.</p>
+        <p>Nur $\varphi_r$ wird durch Totzeit verschlechtert.</p>
+      </div>
+    </div>
+
+    <h2 class="sub-heading">Nyquist-Kriterium bei Totzeit</h2>
+
+    <p>Das Hurwitz-Kriterium gilt nur für rationale Übertragungsfunktionen (Polynome). Das Totzeitglied $e^{-sT_t}$ ist keine rationale Funktion → <strong>Hurwitz nicht anwendbar</strong>.</p>
+
+    <div class="formula-box">
+      <div class="formula-label">Spezielles Nyquist-Kriterium (anwendbar mit Totzeit)</div>
+      <p>Der geschlossene Regelkreis ist stabil, wenn der offene Regelkreis stabil ist und die Ortskurve $F_o(j\omega)$ den Punkt $(-1, 0)$ <strong>nicht einschließt</strong> (für $\omega: 0 \to +\infty$).</p>
+    </div>
+
+    <h2 class="sub-heading">Beispiel: Einfluss der Totzeit</h2>
+
+    <div class="example-box">
+      <p><strong>Gegeben:</strong> $F_o(s) = \frac{K_R}{s(1+Ts)} \cdot e^{-T_t s}$, $T = 1$ s, $K_R = 1$, $T_t = 0.2$ s</p>
+      <p><strong>Ohne Totzeit:</strong> $\varphi_r = 90° - \arctan(\omega_D \cdot T) \approx 65°$ (gut stabil)</p>
+      <p><strong>Mit Totzeit:</strong> Zusätzliche Phase bei $\omega_D$: $\Delta\varphi = -\omega_D \cdot T_t \cdot \frac{180°}{\pi}$</p>
+      <p>→ Phasenreserve sinkt um diesen Betrag. Bei zu großer Totzeit wird $\varphi_r < 0$ → instabil.</p>
+    </div>
+
+  </div><!-- end tab-totzeit -->
+
+
+  <!-- ══════════════ TAB: INTERAKTIV ══════════════ -->
+  <div class="tab-content" id="tab-interaktiv">
+
+    <div class="section-title" style="--accent:#4f46e5;">Interaktives Bode-Diagramm</div>
+    <p>Stelle Regler und Strecke ein und beobachte den offenen Regelkreis im Bode-Diagramm. Die Stabilitätsreserven werden automatisch berechnet.</p>
+
+    <div class="demo-controls">
+      <div class="control-group">
+        <label>Verstärkung $K_R$</label>
+        <input type="range" id="kr" min="0.1" max="20" step="0.1" value="2">
+        <span class="control-val" id="kr-val">2.0</span>
+      </div>
+      <div class="control-group">
+        <label>Zeitkonstante $T_1$ [s]</label>
+        <input type="range" id="t1" min="0.1" max="5" step="0.1" value="1">
+        <span class="control-val" id="t1-val">1.0</span>
+      </div>
+      <div class="control-group">
+        <label>Zeitkonstante $T_2$ [s]</label>
+        <input type="range" id="t2" min="0.1" max="3" step="0.1" value="0.5">
+        <span class="control-val" id="t2-val">0.5</span>
+      </div>
+      <div class="control-group">
+        <label>Totzeit $T_t$ [s]</label>
+        <input type="range" id="tt" min="0" max="2" step="0.05" value="0">
+        <span class="control-val" id="tt-val">0.0</span>
+      </div>
+      <div class="control-group">
+        <label>Streckentyp</label>
+        <select id="structureType">
+          <option value="pt1pt1">P-Regler · PT1PT1-Strecke</option>
+          <option value="pt1pt1pt1">P-Regler · PT1PT1PT1-Strecke</option>
+          <option value="ipt1">P-Regler · IPT1-Strecke</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="result-badge-row" id="stability-results" style="display:flex;gap:16px;margin:16px 0;flex-wrap:wrap;">
+      <div class="result-badge" id="badge-pr" style="background:#ecfdf5;border:1px solid #6ee7b7;border-radius:8px;padding:10px 18px;font-size:0.9rem;">
+        <strong>Phasenreserve:</strong> <span id="pr-val">–</span>
+      </div>
+      <div class="result-badge" id="badge-ar" style="background:#eff6ff;border:1px solid #93c5fd;border-radius:8px;padding:10px 18px;font-size:0.9rem;">
+        <strong>Amplitudenreserve:</strong> <span id="ar-val">–</span>
+      </div>
+      <div class="result-badge" id="badge-stable" style="background:#f0fdf4;border:1px solid #4ade80;border-radius:8px;padding:10px 18px;font-size:0.9rem;font-weight:700;">
+        <span id="stable-text">–</span>
+      </div>
+    </div>
+
+    <div id="bode-plot" style="width:100%;height:520px;"></div>
+
+  </div><!-- end tab-interaktiv -->
+
+</div><!-- end content-wrap -->
+
+<footer style="text-align:center;padding:40px 32px;background:#f8fafc;border-top:1px solid #e2e8f0;margin-top:60px;">
+  <p style="color:#94a3b8;font-size:0.88rem;">
+    <a href="index.html" style="color:#4f46e5;text-decoration:none;">← Zurück zur Übersicht</a> ·
+    Regelungstechnik 1 · Uni Paderborn
+  </p>
+</footer>
+
+<script>
+// Tab switching
+function showTab(id) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  event.target.classList.add('active');
+  if (id === 'interaktiv') setTimeout(updateBode, 100);
+}
+
+// Bode diagram computation
+function computeBode(omega, KR, T1, T2, Tt, type) {
+  return omega.map(w => {
+    let mag = KR;
+    let phase = 0;
+
+    if (type === 'pt1pt1') {
+      // F_o = KR / ((1+jw*T1)(1+jw*T2))
+      let m1 = 1 / Math.sqrt(1 + (w*T1)**2);
+      let m2 = 1 / Math.sqrt(1 + (w*T2)**2);
+      mag = KR * m1 * m2;
+      phase = -Math.atan(w*T1) - Math.atan(w*T2);
+    } else if (type === 'pt1pt1pt1') {
+      // F_o = KR / ((1+jw*T1)(1+jw*T2)(1+jw*0.2))
+      let T3 = 0.2;
+      let m1 = 1 / Math.sqrt(1 + (w*T1)**2);
+      let m2 = 1 / Math.sqrt(1 + (w*T2)**2);
+      let m3 = 1 / Math.sqrt(1 + (w*T3)**2);
+      mag = KR * m1 * m2 * m3;
+      phase = -Math.atan(w*T1) - Math.atan(w*T2) - Math.atan(w*T3);
+    } else if (type === 'ipt1') {
+      // F_o = KR / (jw * (1+jw*T1))
+      let m1 = 1 / Math.sqrt(1 + (w*T1)**2);
+      mag = KR / w * m1;
+      phase = -Math.PI/2 - Math.atan(w*T1);
+    }
+
+    // Add dead time phase
+    phase -= w * Tt;
+
+    return { mag, phase };
+  });
+}
+
+function updateBode() {
+  const KR = parseFloat(document.getElementById('kr').value);
+  const T1 = parseFloat(document.getElementById('t1').value);
+  const T2 = parseFloat(document.getElementById('t2').value);
+  const Tt = parseFloat(document.getElementById('tt').value);
+  const type = document.getElementById('structureType').value;
+
+  document.getElementById('kr-val').textContent = KR.toFixed(1);
+  document.getElementById('t1-val').textContent = T1.toFixed(1);
+  document.getElementById('t2-val').textContent = T2.toFixed(1);
+  document.getElementById('tt-val').textContent = Tt.toFixed(2);
+
+  // Generate frequency range
+  const N = 500;
+  const omega = [];
+  for (let i = 0; i < N; i++) {
+    omega.push(Math.pow(10, -2 + 4 * i / (N-1)));
+  }
+
+  const data = computeBode(omega, KR, T1, T2, Tt, type);
+  const magDB = data.map(d => 20 * Math.log10(d.mag));
+  const phaseDeg = data.map(d => d.phase * 180 / Math.PI);
+
+  // Find crossover frequencies
+  let wD = null, phaseAtWD = null;
+  let wK = null, magAtWK = null;
+
+  for (let i = 0; i < N-1; i++) {
+    if (magDB[i] >= 0 && magDB[i+1] < 0) {
+      wD = omega[i];
+      phaseAtWD = phaseDeg[i];
+    }
+    if (phaseDeg[i] >= -180 && phaseDeg[i+1] < -180) {
+      wK = omega[i];
+      magAtWK = magDB[i];
+    }
+  }
+
+  let prText = '–', arText = '–', stableText = '–';
+  let isStable = true;
+
+  if (wD !== null) {
+    const pr = 180 + phaseAtWD;
+    prText = pr.toFixed(1) + '°';
+    if (pr < 0) isStable = false;
+  }
+  if (wK !== null) {
+    const ar = -magAtWK;
+    arText = ar.toFixed(1) + ' dB';
+    if (ar < 0) isStable = false;
+  }
+  stableText = isStable ? '✓ Stabil' : '✗ Instabil';
+  document.getElementById('pr-val').textContent = prText;
+  document.getElementById('ar-val').textContent = arText;
+  document.getElementById('stable-text').textContent = stableText;
+  document.getElementById('badge-stable').style.background = isStable ? '#f0fdf4' : '#fef2f2';
+  document.getElementById('badge-stable').style.borderColor = isStable ? '#4ade80' : '#fca5a5';
+
+  const traces = [
+    {
+      x: omega, y: magDB, type: 'scatter', name: 'Betrag [dB]',
+      line: { color: '#4f46e5', width: 2.5 }, xaxis: 'x', yaxis: 'y1'
+    },
+    {
+      x: omega, y: phaseDeg, type: 'scatter', name: 'Phase [°]',
+      line: { color: '#dc2626', width: 2.5, dash: 'dash' }, xaxis: 'x', yaxis: 'y2'
+    },
+    // 0 dB line
+    { x: [omega[0], omega[N-1]], y: [0, 0], type: 'scatter', mode: 'lines',
+      line: { color: '#94a3b8', width: 1, dash: 'dot' }, showlegend: false, xaxis: 'x', yaxis: 'y1' },
+    // -180° line
+    { x: [omega[0], omega[N-1]], y: [-180, -180], type: 'scatter', mode: 'lines',
+      line: { color: '#94a3b8', width: 1, dash: 'dot' }, showlegend: false, xaxis: 'x', yaxis: 'y2' }
+  ];
+
+  Plotly.newPlot('bode-plot', traces, {
+    grid: { rows: 2, columns: 1, pattern: 'independent' },
+    xaxis: { type: 'log', title: 'Kreisfrequenz ω [rad/s]', gridcolor: '#f1f5f9' },
+    yaxis: { title: 'Betrag [dB]', gridcolor: '#f1f5f9', domain: [0.55, 1] },
+    yaxis2: { title: 'Phase [°]', gridcolor: '#f1f5f9', domain: [0, 0.45] },
+    legend: { x: 0.02, y: 0.98 },
+    margin: { l: 60, r: 20, t: 20, b: 60 },
+    plot_bgcolor: '#fafafa', paper_bgcolor: 'white',
+    font: { family: 'Inter, sans-serif', size: 12 }
+  }, { responsive: true });
+}
+
+// Initialize controls
+['kr','t1','t2','tt'].forEach(id => {
+  document.getElementById(id).addEventListener('input', updateBode);
+});
+document.getElementById('structureType').addEventListener('change', updateBode);
+
+// Load Bode on page load if interaktiv tab is shown
+window.addEventListener('load', () => {
+  if (document.getElementById('tab-interaktiv').classList.contains('active')) {
+    updateBode();
+  }
+});
+</script>
+</body>
+</html>

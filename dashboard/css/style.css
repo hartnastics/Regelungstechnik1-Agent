@@ -1,0 +1,330 @@
+/* =====================================================
+   Regelungstechnik 1 – Dashboard Stylesheet
+   ===================================================== */
+
+/* ─── CSS Variables ─── */
+:root {
+  --nav-h: 58px;
+  --a1: #4f46e5; --a1-l: #eef2ff; --a1-d: #3730a3;
+  --a2: #7c3aed; --a2-l: #f5f3ff; --a2-d: #5b21b6;
+  --a3: #dc2626; --a3-l: #fef2f2; --a3-d: #991b1b;
+  --a4: #059669; --a4-l: #ecfdf5; --a4-d: #065f46;
+  --a5: #d97706; --a5-l: #fffbeb; --a5-d: #92400e;
+  --af: #0284c7; --af-l: #f0f9ff; --af-d: #075985;
+}
+
+/* ─── Reset ─── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: #f0f4f8;
+  color: #1e293b;
+  line-height: 1.65;
+  font-size: 15px;
+}
+
+/* ─── Navigation ─── */
+.navbar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  background: #0f172a;
+  display: flex; align-items: center;
+  height: var(--nav-h);
+  padding: 0 24px;
+  gap: 6px;
+  box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+}
+.nav-brand {
+  font-weight: 800; font-size: 1rem; color: #818cf8;
+  text-decoration: none; margin-right: auto; white-space: nowrap; letter-spacing: -0.3px;
+}
+.nav-links {
+  display: flex; gap: 4px; align-items: center;
+}
+.nav-links a {
+  color: #94a3b8; text-decoration: none; font-size: 0.8rem;
+  padding: 6px 11px; border-radius: 7px; transition: all 0.15s;
+  white-space: nowrap; font-weight: 500;
+}
+.nav-links a:hover { color: #fff; background: rgba(255,255,255,0.1); }
+.nav-links a.active { color: #fff; background: rgba(255,255,255,0.13); }
+.nav-highlight {
+  background: rgba(2,132,199,0.25) !important;
+  color: #7dd3fc !important;
+}
+.nav-highlight:hover { background: rgba(2,132,199,0.4) !important; }
+
+/* ─── Page structure ─── */
+.content-wrap {
+  max-width: 1100px;
+  margin: calc(var(--nav-h) + 0px) auto 0;
+  padding: 32px 32px 60px;
+}
+
+/* ─── Hero Sections ─── */
+.hero {
+  padding: 56px 32px 44px;
+  color: white;
+  text-align: left;
+  margin-bottom: 0;
+  margin-top: var(--nav-h);
+}
+.hero-inner { max-width: 700px; }
+.hero-badge {
+  display: inline-block;
+  background: rgba(255,255,255,0.18);
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 50px;
+  padding: 5px 16px;
+  font-size: 0.78rem; font-weight: 700;
+  letter-spacing: 0.5px;
+  margin-bottom: 16px;
+}
+.hero h1 { font-size: 2.2rem; font-weight: 800; margin-bottom: 12px; line-height: 1.2; }
+.hero p { font-size: 1rem; opacity: 0.88; max-width: 620px; line-height: 1.6; }
+
+.hero-a1 { background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #3730a3 100%); }
+.hero-a2 { background: linear-gradient(135deg, #1e0a3c 0%, #3b1f6b 50%, #5b21b6 100%); }
+.hero-a3 { background: linear-gradient(135deg, #3b0a0a 0%, #7f1d1d 50%, #991b1b 100%); }
+.hero-a4 { background: linear-gradient(135deg, #022c22 0%, #065f46 50%, #059669 100%); }
+.hero-a5 { background: linear-gradient(135deg, #2d1a01 0%, #78350f 50%, #92400e 100%); }
+.hero-af { background: linear-gradient(135deg, #0c1445 0%, #0f2d5e 50%, #075985 100%); }
+
+/* ─── Tab navigation ─── */
+.tab-nav {
+  display: flex;
+  background: white;
+  border-bottom: 2px solid #e2e8f0;
+  overflow-x: auto;
+  position: sticky;
+  top: var(--nav-h);
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+.tab-btn {
+  padding: 14px 20px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 0.87rem;
+  font-weight: 500;
+  color: #64748b;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+  white-space: nowrap;
+  transition: all 0.15s;
+  font-family: inherit;
+}
+.tab-btn:hover { color: #334155; }
+.tab-btn.active { color: #4f46e5; border-bottom-color: #4f46e5; font-weight: 600; }
+
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* ─── Section & headings ─── */
+.section-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 3px solid var(--accent, #4f46e5);
+  margin-top: 8px;
+}
+.sub-heading {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 28px 0 12px;
+  padding-left: 12px;
+  border-left: 3px solid #e2e8f0;
+}
+p { margin-bottom: 10px; }
+ul, ol { margin: 8px 0 12px 20px; }
+li { margin-bottom: 5px; }
+
+/* ─── Formula, Theorem, Warning, Tip boxes ─── */
+.formula-box {
+  background: #f8fafc;
+  border: 1px solid #cbd5e0;
+  border-left: 4px solid var(--accent, #4f46e5);
+  border-radius: 0 8px 8px 0;
+  padding: 16px 20px;
+  margin: 14px 0;
+  overflow-x: auto;
+  font-size: 0.93rem;
+}
+.formula-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: var(--accent, #4f46e5);
+  margin-bottom: 8px;
+  font-family: 'Inter', sans-serif;
+}
+
+.theorem-box {
+  background: #f0f9ff;
+  border: 1.5px solid #7dd3fc;
+  border-radius: 10px;
+  padding: 18px 22px;
+  margin: 14px 0;
+}
+.theorem-title {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: #0369a1;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #bae6fd;
+}
+
+.warning-box {
+  background: #fffbeb;
+  border: 1px solid #fcd34d;
+  border-left: 4px solid #f59e0b;
+  border-radius: 0 8px 8px 0;
+  padding: 14px 18px;
+  margin: 14px 0;
+  font-size: 0.93rem;
+}
+
+.tip-box {
+  background: #f0fdf4;
+  border: 1px solid #86efac;
+  border-left: 4px solid #22c55e;
+  border-radius: 0 8px 8px 0;
+  padding: 14px 18px;
+  margin: 14px 0;
+  font-size: 0.93rem;
+}
+
+.example-box {
+  background: #fafafa;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 18px 22px;
+  margin: 14px 0;
+  font-size: 0.93rem;
+}
+.example-box p:last-child { margin-bottom: 0; }
+
+/* ─── Card grid ─── */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+  margin: 16px 0;
+}
+.info-card {
+  background: white;
+  border-radius: 10px;
+  padding: 18px 20px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
+.info-card h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 10px;
+}
+.info-card p { font-size: 0.88rem; color: #475569; margin-bottom: 6px; }
+.info-card ul { font-size: 0.88rem; color: #475569; }
+
+/* ─── Steps ─── */
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 16px 0;
+}
+.step {
+  display: flex;
+  gap: 16px;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 16px 18px;
+  align-items: flex-start;
+}
+.step-num {
+  background: var(--accent, #4f46e5);
+  color: white;
+  border-radius: 8px;
+  padding: 4px 10px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-top: 2px;
+  min-width: 36px;
+  text-align: center;
+}
+.step-body { flex: 1; font-size: 0.92rem; color: #334155; line-height: 1.6; }
+.step-body p:last-child { margin-bottom: 0; }
+
+/* ─── Demo controls ─── */
+.demo-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 18px 20px;
+  margin: 16px 0;
+  align-items: flex-end;
+}
+.control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 140px;
+  flex: 1;
+}
+.control-group label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #64748b;
+  letter-spacing: 0.3px;
+}
+.control-group input[type="range"] {
+  width: 100%;
+  accent-color: var(--accent, #4f46e5);
+  cursor: pointer;
+}
+.control-group select {
+  width: 100%;
+  padding: 7px 10px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 7px;
+  font-size: 0.85rem;
+  background: white;
+  color: #334155;
+  font-family: inherit;
+}
+.control-val {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--accent, #4f46e5);
+  text-align: right;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 900px) {
+  .content-wrap { padding: 24px 20px 40px; }
+  .hero { padding: 44px 20px 36px; }
+  .hero h1 { font-size: 1.7rem; }
+  .card-grid { grid-template-columns: 1fr; }
+  .navbar { padding: 0 16px; }
+  .nav-links a { font-size: 0.72rem; padding: 5px 8px; }
+}
+@media (max-width: 600px) {
+  .tab-btn { padding: 10px 14px; font-size: 0.8rem; }
+  .hero h1 { font-size: 1.4rem; }
+}

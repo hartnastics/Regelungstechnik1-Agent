@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aufgabe 3 – Kaskadenregelung | RT1</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});"></script>
+  <script src="https://cdn.plot.ly/plotly-2.26.0.min.js"></script>
+</head>
+<body>
+
+<nav class="navbar">
+  <a class="nav-brand" href="index.html">RT1 Lernportal</a>
+  <div class="nav-links">
+    <a href="aufgabe1.html">Aufgabe 1</a>
+    <a href="aufgabe2.html">Aufgabe 2</a>
+    <a href="aufgabe3.html" class="active" style="--accent:#dc2626;">Aufgabe 3</a>
+    <a href="aufgabe4.html">Aufgabe 4</a>
+    <a href="aufgabe5.html">Aufgabe 5</a>
+    <a href="fragen.html" class="nav-highlight">Fragen</a>
+  </div>
+</nav>
+
+<div class="hero hero-a3">
+  <div class="hero-inner">
+    <div class="hero-badge">33 Punkte · Aufgabe 3</div>
+    <h1>Kaskadenregelung</h1>
+    <p>Entwurf einer Kaskadenregelung mit Störgrößenaufschaltung. Kompensationsglied, P-Regler im Innenkreis, PI-Regler nach Kessler im Außenkreis.</p>
+  </div>
+</div>
+
+<div class="content-wrap">
+
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="showTab('grundidee')">Grundidee</button>
+    <button class="tab-btn" onclick="showTab('kompensation')">Kompensationsglied</button>
+    <button class="tab-btn" onclick="showTab('innenkreis')">Innenkreis (P)</button>
+    <button class="tab-btn" onclick="showTab('kessler')">Kessler / Außenkreis</button>
+    <button class="tab-btn" onclick="showTab('stoerung')">Störgrößenaufschaltung</button>
+    <button class="tab-btn" onclick="showTab('beispiel')">Vollständiges Beispiel</button>
+  </div>
+
+
+  <!-- ══════════════ TAB: GRUNDIDEE ══════════════ -->
+  <div class="tab-content active" id="tab-grundidee">
+
+    <div class="section-title" style="--accent:#dc2626;">Grundidee der Kaskadenregelung</div>
+
+    <div class="tip-box">
+      <strong>Klausur:</strong> Ein physikalisches System (Hydraulikzylinder oder Gleichstrommotor) wird gegeben, das Blockschaltbild muss ergänzt werden. Dann wird der Entwurf der Kaskade Schritt für Schritt durchgeführt.
+    </div>
+
+    <h2 class="sub-heading">Warum Kaskadenregelung?</h2>
+    <p>Wenn eine Strecke aus mehreren Teilsystemen besteht und eine Zwischengröße messbar ist, kann durch eine innere Regelschleife das Führungsverhalten und das Störverhalten des Gesamtsystems verbessert werden.</p>
+
+    <div class="formula-box">
+      <div class="formula-label">Grundstruktur der Kaskade</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:0.85rem;line-height:2;white-space:pre;">
+  W ──►[R_A]──► W_i ──►[R_I]──►[G_S1]──►[G_S2]──►Y
+                         ▲_____________│
+                          Innenkreis   │
+                 ▲________________________│
+                          Außenkreis
+      </div>
+      <p style="margin-top:8px;font-size:0.9rem;color:#475569;">
+        $R_A$ = Außenregler (oft PI), $R_I$ = Innenregler (oft P)<br>
+        $G_{S1}$ = schnelle Teilstrecke (innen), $G_{S2}$ = langsame Teilstrecke (außen)
+      </p>
+    </div>
+
+    <h2 class="sub-heading">Bedingungen für die Kaskadenregelung</h2>
+
+    <div class="card-grid">
+      <div class="info-card" style="border-left:4px solid #dc2626;">
+        <h3>1. Messbarkeit der Zwischengröße</h3>
+        <p>Die Zwischengröße zwischen $G_{S1}$ und $G_{S2}$ muss messbar sein (z.B. Strom, Drehzahl, Druck).</p>
+      </div>
+      <div class="info-card" style="border-left:4px solid #dc2626;">
+        <h3>2. Zeitskalentrennung</h3>
+        <p>Der Innenkreis muss <strong>deutlich schneller</strong> sein als der Außenkreis (mindestens 5-10 mal schneller). Nur dann kann der Innenkreis für den Außenregler-Entwurf vereinfacht werden.</p>
+      </div>
+      <div class="info-card" style="border-left:4px solid #dc2626;">
+        <h3>3. Entwurfsreihenfolge</h3>
+        <p><strong>Zuerst Innenkreis</strong> entwerfen und stabilisieren, dann Außenkreis entwerfen. Der geschlossene Innenkreis wird als Ersatzglied für den Außenkreis benutzt.</p>
+      </div>
+      <div class="info-card" style="border-left:4px solid #dc2626;">
+        <h3>4. Vorteile</h3>
+        <ul>
+          <li>Innere Störungen werden schnell kompensiert</li>
+          <li>Nichtlinearitäten der inneren Strecke werden unterdrückt</li>
+          <li>Bessere Dynamik des Gesamtsystems</li>
+        </ul>
+      </div>
+    </div>
+
+    <h2 class="sub-heading">Praxisbeispiele in der Klausur</h2>
+
+    <div class="card-grid">
+      <div class="info-card" style="border-left:4px solid #7c3aed;">
+        <h3>Gleichstrommotor</h3>
+        <p><strong>Innen:</strong> Stromregelung (schnell, elektrische Zeitkonstante $T_a \ll T_m$)</p>
+        <p><strong>Außen:</strong> Drehzahlregelung (langsam, mechanische Zeitkonstante $T_m$)</p>
+        <p>Strecke innen: $G_{S1} = \frac{1}{R_a(1+T_a s)}$</p>
+        <p>Strecke außen: $G_{S2} = \frac{K_\Phi}{J s}$ (I-Glied)</p>
+      </div>
+      <div class="info-card" style="border-left:4px solid #7c3aed;">
+        <h3>Hydraulikzylinder</h3>
+        <p><strong>Innen:</strong> Druckregelung (Ventil → Druck)</p>
+        <p><strong>Außen:</strong> Positionsregelung (Druck → Kraft → Position)</p>
+        <p>Strecke außen: $G_{S2} = \frac{A}{ms}$ (I-Glied, Masse + Fläche)</p>
+      </div>
+    </div>
+
+  </div><!-- end tab-grundidee -->
+
+
+  <!-- ══════════════ TAB: KOMPENSATION ══════════════ -->
+  <div class="tab-content" id="tab-kompensation">
+
+    <div class="section-title" style="--accent:#dc2626;">Kompensationsglied</div>
+
+    <div class="tip-box">
+      <strong>Klausur:</strong> Das Kompensationsglied $G_K(s)$ wird hergeleitet und auf Realisierbarkeit geprüft. Dann wird der Innenkreis mit dem kompensierten System neu aufgestellt.
+    </div>
+
+    <h2 class="sub-heading">Ziel der Kompensation</h2>
+    <p>Bei der Kaskadenregelung wird häufig ein Kompensationsglied $G_K(s)$ in den Vorwärtszweig oder Rückführzweig eingefügt, um ungünstige Polstellen der Strecke (z.B. langsame Zeitkonstanten) zu kompensieren (kürzen).</p>
+
+    <div class="formula-box">
+      <div class="formula-label">Ideales Kompensationsglied</div>
+      $$G_K(s) = \frac{1}{G_{S1}(s)} \cdot \text{(gewünschte Übertragungsfunktion)}$$
+      <p>Wird so gewählt, dass der kompensierte offene Innenkreis eine einfachere Struktur hat.</p>
+    </div>
+
+    <h2 class="sub-heading">Realisierbarkeit prüfen</h2>
+
+    <div class="theorem-box">
+      <div class="theorem-title">Realisierbarkeit</div>
+      <p>Ein Übertragungsglied $G_K(s) = \frac{Z(s)}{N(s)}$ ist physikalisch realisierbar, wenn:</p>
+      $$\text{Grad}(Z) \leq \text{Grad}(N)$$
+      <p>d.h. der Zählergrad darf den Nennergrad nicht übersteigen (kein „echtes Differenzieren").</p>
+    </div>
+
+    <div class="warning-box">
+      <strong>Nicht-realisierbar:</strong> Wenn die ideale Kompensation zu $G_K(s) = T_x s + 1$ führt (reiner D-Anteil), ist das in der Praxis nicht exakt realisierbar. Alternativen:
+      <ul>
+        <li>DT1-Näherung: $G_K(s) = \frac{1+T_x s}{1+T_N s}$ mit $T_N \ll T_x$</li>
+        <li>Nur stationäre Kompensation: Kompensiere nur den Gleichanteil</li>
+      </ul>
+    </div>
+
+    <h2 class="sub-heading">Beispiel: Kompensationsglied berechnen</h2>
+
+    <div class="example-box">
+      <p><strong>Gegeben:</strong> Innere Strecke $G_{S1}(s) = \frac{K_1}{(1+T_1 s)(1+T_2 s)}$, wobei $T_1 \gg T_2$</p>
+      <p><strong>Ziel:</strong> Kompensierten Innenkreis auf eine PT1-Strecke reduzieren mit Zeitkonstante $T_2$</p>
+      <p><strong>Kompensationsglied:</strong></p>
+      $$G_K(s) = (1+T_1 s)$$
+      <p><strong>Prüfung:</strong> Grad$(Z) = 1$, Grad$(N) = 0$ → Nicht realisierbar!</p>
+      <p><strong>Abhilfe:</strong> $G_K(s) = \frac{1+T_1 s}{1+T_N s}$ mit $T_N \ll T_2$</p>
+      <p>Dann: $G_K \cdot G_{S1} \approx \frac{K_1}{1+T_2 s}$ (näherungsweise PT1)</p>
+    </div>
+
+  </div><!-- end tab-kompensation -->
+
+
+  <!-- ══════════════ TAB: INNENKREIS ══════════════ -->
+  <div class="tab-content" id="tab-innenkreis">
+
+    <div class="section-title" style="--accent:#dc2626;">Innenkreis – P-Regler-Entwurf</div>
+
+    <div class="tip-box">
+      <strong>Klausur:</strong> P-Regler für den Innenkreis so auslegen, dass der geschlossene Innenkreis $n$-mal schneller ist als die offene Innenkreisstrecke. Dann wird der geschlossene Innenkreis als PT1-Näherung für den Außenkreis verwendet.
+    </div>
+
+    <h2 class="sub-heading">Auslegung des P-Reglers</h2>
+
+    <p>Wenn die innere Strecke eine dominante Zeitkonstante $T_0$ hat (nach Kompensation: meist PT1-Form), wird der P-Regler mit $K_{R,I}$ so gewählt:</p>
+
+    <div class="formula-box">
+      <div class="formula-label">P-Regler-Auslegung (n-fach schneller)</div>
+      $$T_W = \frac{T_0}{n} \quad \text{(gewünschte Führungszeitkonstante)}$$
+      $$K_{R,I} = \frac{n-1}{K_{S1}} \approx \frac{n}{K_{S1}} \quad (\text{für großes } n)$$
+      <p>Dabei ist $K_{S1}$ die Streckenverstärkung der inneren Strecke.</p>
+    </div>
+
+    <div class="example-box">
+      <p><strong>Herleitung:</strong> Geschlossener Innenkreis mit P-Regler $K_{R,I}$ und PT1-Strecke $\frac{K_{S1}}{1+T_0 s}$:</p>
+      $$F_{W,i}(s) = \frac{K_{R,I} K_{S1}}{1 + K_{R,I} K_{S1}} \cdot \frac{1}{1 + \frac{T_0}{1+K_{R,I}K_{S1}} s}$$
+      <p>Neue Zeitkonstante: $T_W = \frac{T_0}{1 + K_{R,I} K_{S1}}$</p>
+      <p>Für $n$-fache Beschleunigung ($T_W = T_0/n$): $K_{R,I} K_{S1} = n - 1$</p>
+    </div>
+
+    <h2 class="sub-heading">Ersatzglied für den Außenkreis</h2>
+
+    <p>Der geschlossene Innenkreis $F_{W,i}(s)$ wird als neues Streckenglied für den Außenregler verwendet:</p>
+
+    <div class="formula-box">
+      <div class="formula-label">Näherung des geschlossenen Innenkreises</div>
+      $$F_{W,i}(s) \approx \frac{1}{1 + T_W s} \quad \text{(PT1-Näherung)}$$
+      <p>mit $T_W = T_0 / n$ (klein gegenüber den Zeitkonstanten der äußeren Strecke).</p>
+    </div>
+
+    <div class="tip-box">
+      <strong>Für den Außenkreis-Entwurf:</strong> Die Gesamtstrecke von außen ist dann:<br>
+      $G_{S,ges}(s) = F_{W,i}(s) \cdot G_{S2}(s) \approx \frac{1}{1+T_W s} \cdot G_{S2}(s)$<br>
+      Die kleine Zeitkonstante $T_W$ geht in die Summe $T_\Sigma$ beim Kessler-Entwurf ein.
+    </div>
+
+  </div><!-- end tab-innenkreis -->
+
+
+  <!-- ══════════════ TAB: KESSLER ══════════════ -->
+  <div class="tab-content" id="tab-kessler">
+
+    <div class="section-title" style="--accent:#dc2626;">Kessler / Betragsoptimum – Außenkreis</div>
+
+    <div class="tip-box">
+      <strong>Die wichtigste Formel in Aufgabe 3!</strong> Das vereinfachte Betragsoptimum nach Kessler ist die Standardmethode für den PI-Regler-Entwurf des Außenkreises.
+    </div>
+
+    <div class="theorem-box">
+      <div class="theorem-title">Vereinfachtes Betragsoptimum (Kessler)</div>
+      <p>Gegeben: Strecke mit einer dominierenden Zeitkonstante $T_1$ und einer Summe kleiner Zeitkonstanten $T_\Sigma = \sum T_{k}$ (Parasitäre Zeitkonstanten, Abtastzeit, geschlossener Innenkreis etc.).</p>
+      <p>Optimaler PI-Regler für Dämpfung $D = 1/\sqrt{2}$ (optimale Dämpfung):</p>
+
+      <div class="formula-box" style="margin:16px 0;">
+        <div class="formula-label">Kessler-Formeln (D = 1/√2)</div>
+        $$T_R = T_1 \quad \text{(Nachstellzeit = größte Zeitkonstante)}$$
+        $$K_R = \frac{T_1}{2 K_S T_\Sigma} = \frac{1}{2 K_S T_\Sigma} \cdot T_1$$
+      </div>
+
+      <p>Für Dämpfung $D = 1$ (aperiodisch optimaler Fall):</p>
+      <div class="formula-box" style="margin:8px 0;">
+        $$K_R = \frac{T_1}{4 K_S T_\Sigma}, \quad T_R = T_1$$
+      </div>
+    </div>
+
+    <h2 class="sub-heading">Voraussetzungen und Erklärung</h2>
+
+    <div class="card-grid">
+      <div class="info-card" style="border-left:4px solid #dc2626;">
+        <h3>$T_R = T_1$ – Warum?</h3>
+        <p>Der PI-Regler $G_R = K_R(1+T_R s)/(T_R s)$ bringt eine Nullstelle bei $s = -1/T_R$. Diese wird auf die größte Polstelle $s = -1/T_1$ der Strecke gelegt → Polkompensation!</p>
+        <p>→ Vereinfacht das System erheblich (verbleibende Dynamik: $T_\Sigma$-Pole)</p>
+      </div>
+      <div class="info-card" style="border-left:4px solid #dc2626;">
+        <h3>$T_\Sigma$ – Summenzeitkonstante</h3>
+        <p>Alle kleinen Zeitkonstanten, die nicht kompensiert werden:</p>
+        $$T_\Sigma = T_W + \sum_k T_{k,\text{klein}}$$
+        <ul>
+          <li>$T_W$ = Zeitkonstante des geschlossenen Innenkreises</li>
+          <li>Totzeitapproximation: $T_t \approx T_t$</li>
+          <li>Weitere kleine Parasitärzeitkonstanten</li>
+        </ul>
+      </div>
+      <div class="info-card" style="border-left:4px solid #dc2626;">
+        <h3>$K_S$ – Streckenverstärkung</h3>
+        <p>Ist die stationäre Gesamtverstärkung der Strecke ohne den kompensierten PT1:</p>
+        $$K_S = \lim_{s\to 0} s \cdot G_{S,ges}(s) \quad \text{(bei I-Anteil)}$$
+        <p>oder $K_S = G_{S,ges}(0)$ bei P-Strecke.</p>
+      </div>
+      <div class="info-card" style="border-left:4px solid #dc2626;">
+        <h3>Warum D = 1/√2?</h3>
+        <p>D = 1/√2 ≈ 0.707 entspricht dem <strong>optimalen Überschwingverhalten</strong>:</p>
+        <ul>
+          <li>Minimale Anregelzeit bei $\leq 4.3\%$ Überschwingen</li>
+          <li>Flaches Betragsfrequenzgang → breite Bandbreite</li>
+          <li>Praktischer Kompromiss zwischen Schnelligkeit und Stabilität</li>
+        </ul>
+      </div>
+    </div>
+
+    <h2 class="sub-heading">Systematischer Entwurfsweg Außenkreis</h2>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body"><strong>Gesamtstrecke aufstellen:</strong> $G_{S,ges}(s) = F_{W,i}(s) \cdot G_{S2}(s)$ – Innenkreis-PT1 × äußere Strecke.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body"><strong>Streckenparameter identifizieren:</strong> Größte Zeitkonstante $T_1$, Streckenverstärkung $K_S$, Summenzeitkonstante $T_\Sigma$.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body"><strong>Regler-Parameter nach Kessler:</strong> $T_R = T_1$, $K_R = \frac{T_1}{2 K_S T_\Sigma}$ (für $D = 1/\sqrt{2}$).</div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body"><strong>Ergebnis aufschreiben:</strong> $G_{R,A}(s) = K_R \frac{1+T_R s}{T_R s}$ (PI-Regler).</div>
+      </div>
+    </div>
+
+  </div><!-- end tab-kessler -->
+
+
+  <!-- ══════════════ TAB: STÖRUNG ══════════════ -->
+  <div class="tab-content" id="tab-stoerung">
+
+    <div class="section-title" style="--accent:#dc2626;">Störgrößenaufschaltung</div>
+
+    <div class="tip-box">
+      <strong>Klausur:</strong> Herleitung des idealen Kompensationsglieds $G_{K,SD}(s)$, Realisierbarkeit prüfen, und qualitative Verlaufszuordnung (ideal / keine / stationäre Kompensation).
+    </div>
+
+    <h2 class="sub-heading">Grundidee der Störgrößenaufschaltung</h2>
+
+    <p>Wenn die Störgröße $Z(s)$ messbar ist, kann sie vorwärts aufgeschaltet werden, bevor sie auf die Regelgröße wirkt. Das Kompensationsglied $G_{K,SD}(s)$ erzeugt ein Gegensignal, das den Störeinfluss kompensiert.</p>
+
+    <div class="formula-box">
+      <div class="formula-label">Blockschaltbild der Störgrößenaufschaltung</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:0.85rem;line-height:1.8;white-space:pre;">
+Z(s)──┬──────────────────────────►[G_Z(s)]──►[+]──►Y(s)
+      │                                        ↑
+      └──►[G_K,SD(s)]──►[+]──►[G_R]──►[G_S1]──┘
+                         ↑
+                    W(s)─┘
+      </div>
+    </div>
+
+    <div class="theorem-box">
+      <div class="theorem-title">Ideale Kompensation</div>
+      <p>Das Kompensationsglied, das die Störung vollständig kompensiert, ist:</p>
+      $$G_{K,SD}(s) = -\frac{G_Z(s)}{G_{S1}(s)}$$
+      <p>Dann gilt $Y(s)|_{W=0} = 0$ (keine Auswirkung der Störung auf die Regelgröße).</p>
+    </div>
+
+    <h2 class="sub-heading">Realisierbarkeit prüfen</h2>
+
+    <div class="card-grid">
+      <div class="info-card" style="border-left:4px solid #059669;">
+        <h3>Ideal (vollständige Kompensation)</h3>
+        <p>Realisierbar wenn: Grad$(Z_\text{GK}) \leq$ Grad$(N_\text{GK})$</p>
+        <p>→ Störung für alle Frequenzen kompensiert</p>
+        <p><strong>Sprungantwort:</strong> $y(t) = 0$ für alle $t > 0$</p>
+      </div>
+      <div class="info-card" style="border-left:4px solid #d97706;">
+        <h3>Stationäre Kompensation</h3>
+        <p>Wenn ideal nicht realisierbar: Nur $\omega = 0$ kompensieren:</p>
+        $$G_{K,SD}(0) = -\frac{G_Z(0)}{G_{S1}(0)}$$
+        <p><strong>Sprungantwort:</strong> $y$ springt zunächst, kehrt aber zu $y=0$ zurück.</p>
+      </div>
+      <div class="info-card" style="border-left:4px solid #dc2626;">
+        <h3>Keine Kompensation</h3>
+        <p>Ohne Aufschaltung: Der I-Regler kompensiert stationär, braucht aber Zeit.</p>
+        <p><strong>Sprungantwort:</strong> $y$ springt und kehrt langsam zurück (I-Regler) oder verbleibt auf Störwert (P-Regler).</p>
+      </div>
+    </div>
+
+    <h2 class="sub-heading">Qualitative Verlaufszuordnung</h2>
+
+    <p>Typische Klausurfrage: Ordne Kurven den Kompensationsarten zu:</p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">Ideal</div>
+        <div class="step-body">$y(t) \equiv 0$ nach Störung → waagrechte Linie auf Null. Beste Kompensation, wenn realisierbar.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">Stationär</div>
+        <div class="step-body">$y(t)$ macht einen Ausschlag (wegen unvollständiger dynamischer Kompensation), kehrt aber zu $y=0$ zurück. Mittlere Kurve.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">Keine</div>
+        <div class="step-body">$y(t)$ macht größten Ausschlag, kehrt langsam zurück (durch I-Anteil im Regler). Schlechteste der drei.</div>
+      </div>
+    </div>
+
+    <h2 class="sub-heading">Beispiel: Kompensationsglied herleiten</h2>
+
+    <div class="example-box">
+      <p><strong>Gegeben:</strong></p>
+      <ul>
+        <li>Störübertragung: $G_Z(s) = \frac{K_Z}{1+T_Z s}$ (PT1)</li>
+        <li>Innere Strecke: $G_{S1}(s) = \frac{K_1}{1+T_1 s}$ (PT1)</li>
+      </ul>
+      <p><strong>Ideales Kompensationsglied:</strong></p>
+      $$G_{K,SD}(s) = -\frac{G_Z(s)}{G_{S1}(s)} = -\frac{K_Z}{K_1} \cdot \frac{1+T_1 s}{1+T_Z s}$$
+      <p><strong>Realisierbarkeit:</strong> Grad$(Z) = 1$, Grad$(N) = 1$ → Grad(Z) = Grad(N) → realisierbar! ✓</p>
+      <p><strong>Stationäre Verstärkung:</strong> $G_{K,SD}(0) = -K_Z/K_1$</p>
+    </div>
+
+  </div><!-- end tab-stoerung -->
+
+
+  <!-- ══════════════ TAB: BEISPIEL ══════════════ -->
+  <div class="tab-content" id="tab-beispiel">
+
+    <div class="section-title" style="--accent:#dc2626;">Vollständiges Klausur-Beispiel</div>
+
+    <div class="tip-box">
+      Hier wird der komplette Entwurf einer Kaskadenregelung für einen Gleichstrommotor Schritt für Schritt durchgeführt – analog zu typischen Klausuraufgaben.
+    </div>
+
+    <h2 class="sub-heading">Systemdaten: Gleichstrommotor</h2>
+    <div class="formula-box">
+      <ul>
+        <li>Ankerwiderstand: $R_a = 2\,\Omega$, Ankerinduktivität: $L_a = 0.1\,\text{H}$</li>
+        <li>Flussmaschine: $c\Phi = 1\,\text{Vs/rad}$</li>
+        <li>Massenträgheitsmoment: $J = 0.5\,\text{kgm}^2$, Reibbeiwert: $b = 0.1\,\text{Nm·s/rad}$</li>
+        <li>→ Elektrische Zeitkonstante: $T_a = L_a/R_a = 0.05\,\text{s}$</li>
+        <li>→ Mechanische Zeitkonstante: $T_m = J/b = 5\,\text{s}$</li>
+        <li>Streckenverstärkung Strom→Drehzahl: $K_m = c\Phi/b = 10\,\text{rad/(A·s)}$ (I-Glied)</li>
+      </ul>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">A</div>
+        <div class="step-body">
+          <strong>Innenkreis: Stromregelkreis</strong><br>
+          Innere Strecke: $G_{S1}(s) = \frac{1/R_a}{1+T_a s} = \frac{0.5}{1+0.05s}$ (PT1, $K_{S1}=0.5$, $T_a=0.05$ s)<br>
+          Gewünschte Zeitkonstante des geschlossenen Innenkreises: $T_W = T_a/10 = 0.005$ s (10× schneller)<br>
+          P-Regler: $K_{R,I} = (10-1)/K_{S1} = 9/0.5 = 18$<br>
+          → Geschlossener Innenkreis: $F_{W,i}(s) \approx \frac{1}{1+0.005s}$
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">B</div>
+        <div class="step-body">
+          <strong>Äußere Strecke: Drehzahlstrecke</strong><br>
+          $G_{S2}(s) = \frac{c\Phi}{Js + b} = \frac{c\Phi/b}{1+(J/b)s} \cdot \frac{1}{s} \to $ eigentlich:<br>
+          $G_{S2}(s) = \frac{c\Phi}{b} \cdot \frac{1}{1+T_m s}$ …(abhängig von Modellierung)<br>
+          Vereinfacht als I-Glied (große $T_m$): $G_{S2}(s) \approx \frac{K_m}{s}$ (I-Anteil)<br>
+          <strong>Gesamte äußere Strecke:</strong> $G_{S,ges} = F_{W,i} \cdot G_{S2} = \frac{K_m}{s(1+T_W s)}$
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">C</div>
+        <div class="step-body">
+          <strong>Kessler-Entwurf für Außenregler (PI):</strong><br>
+          Dominante Zeitkonstante der Strecke: $T_1 = T_W = 0.005$ s (einzige Zeitkonstante!)<br>
+          Streckenverstärkung (I-Anteil): $K_S = K_m = 10$<br>
+          Summenzeitkonstante: $T_\Sigma = T_W = 0.005$ s (nur die PT1 des Innenkreises)<br>
+          $T_R = T_1 = 0.005$ s<br>
+          $K_R = \frac{T_1}{2 K_S T_\Sigma} = \frac{0.005}{2 \cdot 10 \cdot 0.005} = \frac{0.005}{0.1} = 0.05$<br>
+          <strong>Außenregler:</strong> $G_{R,A}(s) = 0.05 \cdot \frac{1+0.005s}{0.005s}$
+        </div>
+      </div>
+    </div>
+
+    <div class="tip-box">
+      <strong>Typische Fehler vermeiden:</strong>
+      <ul>
+        <li>$T_R$ ist immer die <em>größte</em> Zeitkonstante der Strecke (außer $T_\Sigma$-Terme)</li>
+        <li>$T_\Sigma$ enthält NUR kleine Zeitkonstanten (parasitär, $T_W$ des Innenkreises etc.)</li>
+        <li>Formel für $K_R$: bei I-Strecke $K_S$ als Integrierbeiwert einsetzen (nicht $K_S = G(0)$, da $\infty$)</li>
+      </ul>
+    </div>
+
+  </div><!-- end tab-beispiel -->
+
+</div><!-- end content-wrap -->
+
+<footer style="text-align:center;padding:40px 32px;background:#f8fafc;border-top:1px solid #e2e8f0;margin-top:60px;">
+  <p style="color:#94a3b8;font-size:0.88rem;">
+    <a href="index.html" style="color:#dc2626;text-decoration:none;">← Zurück zur Übersicht</a> ·
+    Regelungstechnik 1 · Uni Paderborn
+  </p>
+</footer>
+
+<script>
+function showTab(id) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+</body>
+</html>

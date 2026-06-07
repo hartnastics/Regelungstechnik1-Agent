@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aufgabe 5 – Digitale Signalverarbeitung | RT1</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});"></script>
+  <script src="https://cdn.plot.ly/plotly-2.26.0.min.js"></script>
+</head>
+<body>
+
+<nav class="navbar">
+  <a class="nav-brand" href="index.html">RT1 Lernportal</a>
+  <div class="nav-links">
+    <a href="aufgabe1.html">Aufgabe 1</a>
+    <a href="aufgabe2.html">Aufgabe 2</a>
+    <a href="aufgabe3.html">Aufgabe 3</a>
+    <a href="aufgabe4.html">Aufgabe 4</a>
+    <a href="aufgabe5.html" class="active" style="--accent:#d97706;">Aufgabe 5</a>
+    <a href="fragen.html" class="nav-highlight">Fragen</a>
+  </div>
+</nav>
+
+<div class="hero hero-a5">
+  <div class="hero-inner">
+    <div class="hero-badge">20–28 Punkte · Aufgabe 5</div>
+    <h1>Digitale Signalverarbeitung</h1>
+    <p>Abtastung, Shannon-Theorem, Quantisierung, digitale Filter (IIR/FIR), Anti-Aliasing-Filter und BIBO-Stabilität.</p>
+  </div>
+</div>
+
+<div class="content-wrap">
+
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="showTab('signale')">Signalklassen</button>
+    <button class="tab-btn" onclick="showTab('shannon')">Shannon-Theorem</button>
+    <button class="tab-btn" onclick="showTab('quantisierung')">Quantisierung</button>
+    <button class="tab-btn" onclick="showTab('filter')">Digitale Filter</button>
+    <button class="tab-btn" onclick="showTab('antialiasing')">Anti-Aliasing</button>
+    <button class="tab-btn" onclick="showTab('interaktiv')">Abtast-Simulator</button>
+  </div>
+
+
+  <!-- ══════════════ TAB: SIGNALKLASSEN ══════════════ -->
+  <div class="tab-content active" id="tab-signale">
+
+    <div class="section-title" style="--accent:#d97706;">Signalklassen</div>
+
+    <div class="tip-box">
+      <strong>Klausur:</strong> Drei gegebene Signale (z.B. Sinusschwingung, abgetastetes Signal, digitales Signal) werden den vier Signalklassen zugeordnet. Wichtig: Unterschied zwischen wert- und zeitkontinuierlich/diskret verstehen.
+    </div>
+
+    <h2 class="sub-heading">Die vier Signalklassen</h2>
+
+    <div class="card-grid">
+      <div class="info-card" style="border-left:4px solid #d97706;">
+        <h3>Analoges Signal</h3>
+        <p><strong>Wertkontinuierlich + Zeitkontinuierlich</strong></p>
+        <p>Der Signalwert kann jeden beliebigen Wert annehmen und existiert zu jedem Zeitpunkt.</p>
+        <p><em>Beispiel:</em> Sinusschwingung aus analoger Schaltung, Temperatursensor-Spannung</p>
+      </div>
+      <div class="info-card" style="border-left:4px solid #d97706;">
+        <h3>Abgetastetes Signal</h3>
+        <p><strong>Wertkontinuierlich + Zeitdiskret</strong></p>
+        <p>Existiert nur zu bestimmten Zeitpunkten ($t = k \cdot T_\text{abt}$), aber der Wert ist nicht gerundet.</p>
+        <p><em>Beispiel:</em> Sample-and-Hold-Ausgabe</p>
+      </div>
+      <div class="info-card" style="border-left:4px solid #d97706;">
+        <h3>Quantisiertes Signal</h3>
+        <p><strong>Wertdiskret + Zeitkontinuierlich</strong></p>
+        <p>Wertemenge ist endlich (diskret), aber Signal existiert kontinuierlich in der Zeit.</p>
+        <p><em>Beispiel:</em> Stufentreppen-Signal</p>
+      </div>
+      <div class="info-card" style="border-left:4px solid #d97706;">
+        <h3>Digitales Signal</h3>
+        <p><strong>Wertdiskret + Zeitdiskret</strong></p>
+        <p>Sowohl Zeit als auch Wertemenge sind diskret. Dargestellt als Binärzahlen.</p>
+        <p><em>Beispiel:</em> A/D-Wandler-Ausgabe, digitale Signale in Mikrocontroller</p>
+      </div>
+    </div>
+
+    <h2 class="sub-heading">Signalverarbeitungskette</h2>
+
+    <div class="formula-box">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:0.85rem;line-height:2;white-space:pre;overflow-x:auto;">
+ Analoges     Anti-      Abgetastetes    A/D-       Digitales
+  Signal ──►[Aliasing]──►  Signal   ──►[Wandler]──► Signal
+            Filter      (Sample & Hold)           (binär)
+
+Zurück:
+ Digitales    D/A-      Analoges     Rekon-     Analoges
+  Signal ──►[Wandler]──► Signal  ──►[struktions]──► Signal
+                                     filter
+      </div>
+    </div>
+
+  </div><!-- end tab-signale -->
+
+
+  <!-- ══════════════ TAB: SHANNON ══════════════ -->
+  <div class="tab-content" id="tab-shannon">
+
+    <div class="section-title" style="--accent:#d97706;">Shannon-Abtasttheorem</div>
+
+    <div class="theorem-box">
+      <div class="theorem-title">Nyquist-Shannon-Abtasttheorem</div>
+      <p>Ein Signal mit maximaler Frequenzkomponente $f_\text{max}$ kann exakt rekonstruiert werden, wenn die Abtastfrequenz $f_\text{abt}$ die <strong>Nyquist-Bedingung</strong> erfüllt:</p>
+      $$f_\text{abt} \geq 2 \cdot f_\text{max}$$
+      <p>Die <strong>Nyquist-Frequenz</strong> ist: $f_N = f_\text{abt}/2$</p>
+      <p>Signalfrequenzen über $f_N$ verursachen <strong>Aliasing</strong>!</p>
+    </div>
+
+    <h2 class="sub-heading">Aliasing-Effekt</h2>
+
+    <div class="warning-box">
+      <strong>Aliasing tritt auf, wenn:</strong> $f_\text{sig} > f_\text{abt}/2$<br>
+      Das Signal erscheint dann mit einer <em>falschen</em> (niedrigeren) Frequenz im abgetasteten Signal:
+      $$f_\text{alias} = |f_\text{sig} - f_\text{abt}|$$
+      oder allgemein: $f_\text{alias} = |f_\text{sig} - k \cdot f_\text{abt}|$ für das $k$, das $f_\text{alias} < f_\text{abt}/2$ ergibt.
+    </div>
+
+    <h2 class="sub-heading">Typische Klausurfrage</h2>
+
+    <div class="example-box">
+      <p><strong>Gegeben:</strong> Abtastfrequenz $f_\text{abt} = 100$ Hz. Signal enthält Frequenzanteile bei 20 Hz, 60 Hz und 80 Hz.</p>
+      <p><strong>Nyquist-Frequenz:</strong> $f_N = 100/2 = 50$ Hz</p>
+      <p><strong>Analyse:</strong></p>
+      <ul>
+        <li>20 Hz: $20 < 50$ Hz → OK, kein Aliasing ✓</li>
+        <li>60 Hz: $60 > 50$ Hz → Aliasing! $f_\text{alias} = |60 - 100| = 40$ Hz</li>
+        <li>80 Hz: $80 > 50$ Hz → Aliasing! $f_\text{alias} = |80 - 100| = 20$ Hz</li>
+      </ul>
+      <p><strong>Lösung:</strong> Anti-Aliasing-Filter mit Grenzfrequenz $f_g \leq 50$ Hz einsetzen.</p>
+    </div>
+
+    <h2 class="sub-heading">Abtastfrequenz aus Signal ablesen</h2>
+
+    <div class="tip-box">
+      In der Klausur ist oft ein zeitdiskretes Signal gegeben und die Abtastfrequenz soll abgelesen werden:
+      <p>Abtastfrequenz: $f_\text{abt} = 1 / T_\text{abt}$ (wobei $T_\text{abt}$ der Abstand zwischen zwei Abtastwerten ist)</p>
+      <p>Maximale Signalfrequenz: $f_\text{max,zulässig} = f_\text{abt}/2$ (Nyquist-Grenze)</p>
+    </div>
+
+  </div><!-- end tab-shannon -->
+
+
+  <!-- ══════════════ TAB: QUANTISIERUNG ══════════════ -->
+  <div class="tab-content" id="tab-quantisierung">
+
+    <div class="section-title" style="--accent:#d97706;">Quantisierung</div>
+
+    <div class="tip-box">
+      <strong>Klausur:</strong> Quantisierungsintervall berechnen, maximalen Quantisierungsfehler bestimmen, benötigte Bit-Zahl für gegebene Auflösung ermitteln.
+    </div>
+
+    <h2 class="sub-heading">Grundformeln</h2>
+
+    <div class="formula-box">
+      <div class="formula-label">Quantisierungsintervall (Auflösung)</div>
+      $$\Delta = \frac{x_\text{max} - x_\text{min}}{2^n - 1}$$
+      <p>wobei $n$ die Anzahl der Bits und $2^n$ die Anzahl der Quantisierungsstufen ist.</p>
+    </div>
+
+    <div class="formula-box">
+      <div class="formula-label">Maximaler Quantisierungsfehler</div>
+      $$e_\text{max} = \frac{\Delta}{2} = \frac{x_\text{max} - x_\text{min}}{2(2^n - 1)}$$
+    </div>
+
+    <div class="formula-box">
+      <div class="formula-label">Benötigte Bit-Anzahl</div>
+      $$2^n \geq N_\text{Stufen} \implies n \geq \log_2(N_\text{Stufen})$$
+      <p>$n$ auf die nächste ganze Zahl aufrunden!</p>
+    </div>
+
+    <h2 class="sub-heading">Klausurbeispiele</h2>
+
+    <div class="example-box">
+      <p><strong>Aufgabe:</strong> Ein Sensor misst Temperaturen von $-20°C$ bis $+80°C$. Der A/D-Wandler hat 8 Bit. Wie groß ist das Quantisierungsintervall und der maximale Fehler?</p>
+      <p><strong>Lösung:</strong></p>
+      <ul>
+        <li>$x_\text{max} - x_\text{min} = 80 - (-20) = 100\,°C$</li>
+        <li>$2^8 = 256$ Stufen</li>
+        <li>$\Delta = 100 / (256 - 1) = 100/255 \approx 0.392\,°C$</li>
+        <li>$e_\text{max} = \Delta/2 \approx 0.196\,°C$</li>
+      </ul>
+    </div>
+
+    <div class="example-box">
+      <p><strong>Aufgabe:</strong> Ein Signal soll auf $\pm 0.1\%$ seines Maximalwertes genau gemessen werden. Wie viele Bits werden benötigt?</p>
+      <p><strong>Lösung:</strong></p>
+      <ul>
+        <li>Relative Auflösung: $0.1\% = 0.001 \to$ Anzahl Stufen: $N = 1/0.001 = 1000$</li>
+        <li>$2^n \geq 1000 \implies n \geq \log_2(1000) = 9.97$</li>
+        <li>$\implies n = 10$ Bit (aufrunden!)</li>
+        <li>Probe: $2^{10} = 1024 \geq 1000$ ✓</li>
+      </ul>
+    </div>
+
+    <h2 class="sub-heading">Interaktive Berechnung</h2>
+
+    <div class="demo-controls">
+      <div class="control-group">
+        <label>Minimalwert $x_\text{min}$</label>
+        <input type="number" id="xmin" value="-10" style="width:80px;padding:6px;border:1px solid #e2e8f0;border-radius:6px;">
+      </div>
+      <div class="control-group">
+        <label>Maximalwert $x_\text{max}$</label>
+        <input type="number" id="xmax" value="10" style="width:80px;padding:6px;border:1px solid #e2e8f0;border-radius:6px;">
+      </div>
+      <div class="control-group">
+        <label>Bit-Anzahl $n$</label>
+        <input type="range" id="bits" min="1" max="16" step="1" value="8">
+        <span class="control-val" id="bits-val">8</span>
+      </div>
+      <button onclick="calcQuant()" style="background:#d97706;color:white;border:none;padding:10px 20px;border-radius:8px;cursor:pointer;font-weight:600;">Berechnen</button>
+    </div>
+
+    <div id="quant-result" style="background:#fffbeb;border:1px solid #fcd34d;border-radius:8px;padding:16px;margin-top:12px;font-size:0.95rem;display:none;">
+      <strong>Ergebnis:</strong>
+      <ul id="quant-list"></ul>
+    </div>
+
+  </div><!-- end tab-quantisierung -->
+
+
+  <!-- ══════════════ TAB: FILTER ══════════════ -->
+  <div class="tab-content" id="tab-filter">
+
+    <div class="section-title" style="--accent:#d97706;">Digitale Filter</div>
+
+    <div class="tip-box">
+      <strong>Klausur:</strong> Differenzengleichung aufstellen, Koeffizienten aus Sprungantwort bestimmen, BIBO-Stabilität prüfen, Zusammenhang mit PT1-Glied über Euler-Integration herstellen.
+    </div>
+
+    <h2 class="sub-heading">IIR-Filter (Rekursive Filter)</h2>
+
+    <div class="formula-box">
+      <div class="formula-label">Allgemeine Differenzengleichung (1. Ordnung)</div>
+      $$y_k = a_1 y_{k-1} + b_0 u_k + b_1 u_{k-1}$$
+      <p>oder allgemein:</p>
+      $$y_k = \sum_{i=1}^{p} a_i y_{k-i} + \sum_{j=0}^{q} b_j u_{k-j}$$
+      <p>IIR (Infinite Impulse Response): Ausgang hängt von vergangenen Ausgangswerten ab → rekursiv</p>
+    </div>
+
+    <h2 class="sub-heading">FIR-Filter (Nicht-rekursive Filter)</h2>
+
+    <div class="formula-box">
+      <div class="formula-label">FIR-Differenzengleichung</div>
+      $$y_k = \sum_{j=0}^{q} b_j u_{k-j}$$
+      <p>FIR (Finite Impulse Response): Kein Rückkopplungsanteil → immer BIBO-stabil</p>
+      <p>Beispiel gleitender Mittelwert: $y_k = \frac{1}{3}(u_k + u_{k-1} + u_{k-2})$</p>
+    </div>
+
+    <h2 class="sub-heading">BIBO-Stabilität digitaler Filter</h2>
+
+    <div class="theorem-box">
+      <div class="theorem-title">BIBO-Stabilität (Bounded Input – Bounded Output)</div>
+      <p>Ein digitaler Filter ist BIBO-stabil, wenn für jedes beschränkte Eingangssignal auch das Ausgangssignal beschränkt bleibt.</p>
+      <p><strong>Stabilitätsbedingung:</strong> Alle Polstellen der z-Übertragungsfunktion $H(z) = Y(z)/U(z)$ müssen im <strong>Einheitskreis</strong> liegen: $|z_i| < 1$</p>
+    </div>
+
+    <div class="card-grid">
+      <div class="info-card" style="border-left:4px solid #059669;">
+        <h3>Stabil</h3>
+        <p>Ausgangswerte klingen ab oder bleiben konstant nach Impuls.</p>
+        <p>Pol: $|a_1| < 1$ (für 1. Ordnung)</p>
+      </div>
+      <div class="info-card" style="border-left:4px solid #dc2626;">
+        <h3>Instabil</h3>
+        <p>Ausgangswerte wachsen über alle Grenzen (aufklingende Folge).</p>
+        <p>Pol: $|a_1| > 1$ (für 1. Ordnung)</p>
+      </div>
+    </div>
+
+    <h2 class="sub-heading">Koeffizienten aus Sprungantwort bestimmen</h2>
+
+    <div class="example-box">
+      <p><strong>Gegeben:</strong> Filter $y_k = a_1 y_{k-1} + b_0 u_k$ mit Sprung $u_k = 1$ für $k \geq 0$</p>
+      <p>Sprungantwort-Werte: $y_0 = 0.2$, $y_1 = 0.36$, $y_2 = 0.488$, $y_\infty = 1.0$</p>
+      <p><strong>Aus Anfangsbedingung $y_{-1} = 0$:</strong></p>
+      <p>$y_0 = a_1 \cdot 0 + b_0 \cdot 1 = b_0 \implies b_0 = 0.2$</p>
+      <p>$y_1 = a_1 \cdot y_0 + b_0 \cdot 1 = 0.2 a_1 + 0.2 = 0.36$</p>
+      <p>$0.2 a_1 = 0.16 \implies a_1 = 0.8$</p>
+      <p><strong>Probe:</strong> $y_\infty = \frac{b_0}{1-a_1} = \frac{0.2}{1-0.8} = \frac{0.2}{0.2} = 1.0$ ✓</p>
+      <p><strong>BIBO-Stabilität:</strong> $|a_1| = 0.8 < 1$ → stabil ✓</p>
+    </div>
+
+    <h2 class="sub-heading">Zusammenhang mit PT1-Glied (Euler-Integration)</h2>
+
+    <div class="formula-box">
+      <div class="formula-label">Euler-Vorwärtsintegration eines PT1-Glieds</div>
+      <p>Kontinuierlich: $T\dot{y} + y = K u$ → Diskretisierung mit $\dot{y} \approx (y_k - y_{k-1})/\Delta t$:</p>
+      $$T \frac{y_k - y_{k-1}}{\Delta t} + y_k = K u_{k-1}$$
+      $$\implies y_k = \underbrace{\frac{T}{T+\Delta t}}_{a_1} y_{k-1} + \underbrace{\frac{K \Delta t}{T + \Delta t}}_{b_0} u_{k-1}$$
+      <p>→ Aus $a_1$ und $b_0$ kann man $T$ und $K$ zurückrechnen:</p>
+      $$a_1 = \frac{T}{T+\Delta t} \implies T = \frac{a_1 \Delta t}{1-a_1}$$
+      $$K = \frac{b_0(T+\Delta t)}{\Delta t} = \frac{b_0}{1-a_1}$$
+    </div>
+
+  </div><!-- end tab-filter -->
+
+
+  <!-- ══════════════ TAB: ANTI-ALIASING ══════════════ -->
+  <div class="tab-content" id="tab-antialiasing">
+
+    <div class="section-title" style="--accent:#d97706;">Anti-Aliasing-Filter</div>
+
+    <div class="tip-box">
+      <strong>Klausur:</strong> Operationsverstärker-Schaltung wird gegeben → Übertragungsglied (PT1) identifizieren → Parameter aus Bode-Diagramm ablesen → Eignung als Tiefpass prüfen.
+    </div>
+
+    <h2 class="sub-heading">Funktion des Anti-Aliasing-Filters</h2>
+
+    <p>Der Anti-Aliasing-Filter ist ein analoger <strong>Tiefpassfilter</strong>, der vor dem A/D-Wandler eingesetzt wird. Er begrenzt das Eingangssignal auf Frequenzen unterhalb der Nyquist-Grenze und verhindert so Aliasing-Effekte.</p>
+
+    <div class="formula-box">
+      <div class="formula-label">Anforderung</div>
+      $$f_g \leq \frac{f_\text{abt}}{2}$$
+      <p>Die Grenzfrequenz des Anti-Aliasing-Filters muss kleiner oder gleich der Nyquist-Frequenz sein.</p>
+    </div>
+
+    <h2 class="sub-heading">RC-Tiefpass als Anti-Aliasing-Filter</h2>
+
+    <div class="example-box">
+      <p><strong>Schaltung:</strong> RC-Tiefpass (Widerstand $R$ in Reihe, Kondensator $C$ parallel zum Ausgang)</p>
+      <p><strong>Übertragungsfunktion:</strong></p>
+      $$G(s) = \frac{1}{1 + RCs} = \frac{1}{1+Ts}$$
+      <p>→ <strong>PT1-Glied</strong> mit $T = RC$</p>
+      <p><strong>Grenzfrequenz:</strong> $f_g = \frac{1}{2\pi RC}$</p>
+      <p><strong>Bode-Diagramm:</strong> Bis $f_g$: 0 dB, dann Abfall mit $-20$ dB/Dekade</p>
+      <p>Bei $f = f_g$: Betrag $= -3$ dB, Phase $= -45°$</p>
+    </div>
+
+    <h2 class="sub-heading">Operationsverstärker-Tiefpass</h2>
+
+    <div class="formula-box">
+      <div class="formula-label">Invertierender OPV-Tiefpass</div>
+      $$G(s) = -\frac{Z_2(s)}{Z_1(s)}$$
+      <p>Mit $Z_1 = R_1$ und $Z_2 = R_2 \| (1/sC_2) = \frac{R_2}{1+R_2 C_2 s}$:</p>
+      $$G(s) = -\frac{R_2}{R_1} \cdot \frac{1}{1+R_2 C_2 s}$$
+      <p>→ Verstärkendes PT1-Glied (invertierend) mit $K = -R_2/R_1$, $T = R_2 C_2$</p>
+    </div>
+
+    <h2 class="sub-heading">Parameter aus Bode-Diagramm ablesen</h2>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body"><strong>Gleichverstärkung $K$:</strong> Betrag bei kleinen Frequenzen (flacher Bereich) ablesen: $K = 10^{|G(0)|_\text{dB}/20}$</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body"><strong>Grenzfrequenz $f_g$:</strong> Frequenz bei der der Betrag um $-3$ dB abgefallen ist, oder: Schnittpunkt der Asymptoten (0 dB-Gerade und $-20$ dB/Dek.-Gerade)</div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body"><strong>Zeitkonstante:</strong> $T = 1/(2\pi f_g)$</div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body"><strong>Eignung prüfen:</strong> Ist $f_g \leq f_\text{abt}/2$? Dann geeignet als Anti-Aliasing-Filter. Steigung nach $f_g$: $-20$ dB/Dek. (genug Dämpfung?)</div>
+      </div>
+    </div>
+
+  </div><!-- end tab-antialiasing -->
+
+
+  <!-- ══════════════ TAB: INTERAKTIV ══════════════ -->
+  <div class="tab-content" id="tab-interaktiv">
+
+    <div class="section-title" style="--accent:#d97706;">Interaktiver Abtast-Simulator</div>
+    <p>Stelle Signalfrequenz und Abtastfrequenz ein und beobachte den Aliasing-Effekt. Bei Aliasing erscheint das Signal mit falscher Frequenz.</p>
+
+    <div class="demo-controls">
+      <div class="control-group">
+        <label>Signalfrequenz $f_\text{sig}$ [Hz]</label>
+        <input type="range" id="fsig" min="1" max="50" step="0.5" value="5">
+        <span class="control-val" id="fsig-val">5.0</span>
+      </div>
+      <div class="control-group">
+        <label>Abtastfrequenz $f_\text{abt}$ [Hz]</label>
+        <input type="range" id="fabt" min="5" max="100" step="1" value="40">
+        <span class="control-val" id="fabt-val">40</span>
+      </div>
+      <div class="control-group">
+        <label>Signal-Amplitude</label>
+        <input type="range" id="amp" min="0.5" max="3" step="0.1" value="1">
+        <span class="control-val" id="amp-val">1.0</span>
+      </div>
+    </div>
+
+    <div id="aliasing-info" style="border-radius:8px;padding:12px 18px;margin:12px 0;font-size:0.9rem;">
+      <strong>Shannon-Theorem:</strong> <span id="shannon-status">–</span>
+    </div>
+
+    <div id="sampling-plot" style="width:100%;height:500px;"></div>
+
+  </div><!-- end tab-interaktiv -->
+
+</div><!-- end content-wrap -->
+
+<footer style="text-align:center;padding:40px 32px;background:#f8fafc;border-top:1px solid #e2e8f0;margin-top:60px;">
+  <p style="color:#94a3b8;font-size:0.88rem;">
+    <a href="index.html" style="color:#d97706;text-decoration:none;">← Zurück zur Übersicht</a> ·
+    Regelungstechnik 1 · Uni Paderborn
+  </p>
+</footer>
+
+<script>
+function showTab(id) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  event.target.classList.add('active');
+  if (id === 'interaktiv') setTimeout(updateSampling, 100);
+}
+
+// Quantisierung
+document.getElementById('bits').addEventListener('input', function() {
+  document.getElementById('bits-val').textContent = this.value;
+});
+
+function calcQuant() {
+  const xmin = parseFloat(document.getElementById('xmin').value);
+  const xmax = parseFloat(document.getElementById('xmax').value);
+  const n = parseInt(document.getElementById('bits').value);
+  const levels = Math.pow(2, n);
+  const delta = (xmax - xmin) / (levels - 1);
+  const emax = delta / 2;
+  const errPct = (emax / (xmax - xmin)) * 100;
+
+  const list = document.getElementById('quant-list');
+  list.innerHTML = `
+    <li>Wertebereich: ${xmin} bis ${xmax} (Breite: ${(xmax-xmin).toFixed(2)})</li>
+    <li>Anzahl Stufen: $2^{${n}} = ${levels}$</li>
+    <li>Quantisierungsintervall: $\\Delta = ${delta.toFixed(4)}$</li>
+    <li>Maximaler Fehler: $e_\\max = \\Delta/2 = ${emax.toFixed(4)}$</li>
+    <li>Relativer Fehler: ${errPct.toFixed(3)}%</li>
+  `;
+  document.getElementById('quant-result').style.display = 'block';
+  if (window.renderMathInElement) renderMathInElement(document.getElementById('quant-result'));
+}
+
+// Sampling simulator
+function updateSampling() {
+  const fsig = parseFloat(document.getElementById('fsig').value);
+  const fabt = parseFloat(document.getElementById('fabt').value);
+  const amp = parseFloat(document.getElementById('amp').value);
+
+  document.getElementById('fsig-val').textContent = fsig.toFixed(1);
+  document.getElementById('fabt-val').textContent = fabt.toFixed(0);
+  document.getElementById('amp-val').textContent = amp.toFixed(1);
+
+  const nyquist = fabt / 2;
+  const aliasing = fsig > nyquist;
+  const fAlias = aliasing ? Math.abs(fsig - fabt) : fsig;
+
+  const infoEl = document.getElementById('aliasing-info');
+  if (aliasing) {
+    infoEl.innerHTML = `<strong>⚠️ ALIASING!</strong> $f_\\text{sig} = ${fsig}$ Hz $> f_N = ${nyquist}$ Hz →
+      Signal erscheint als $f_\\text{alias} = |${fsig} - ${fabt}| = ${fAlias.toFixed(1)}$ Hz`;
+    infoEl.style.background = '#fef2f2'; infoEl.style.border = '1px solid #fca5a5';
+  } else {
+    infoEl.innerHTML = `<strong>✓ Shannon erfüllt:</strong> $f_\\text{sig} = ${fsig}$ Hz $\\leq f_N = ${nyquist}$ Hz → Kein Aliasing`;
+    infoEl.style.background = '#f0fdf4'; infoEl.style.border = '1px solid #4ade80';
+  }
+  if (window.renderMathInElement) renderMathInElement(infoEl);
+
+  // Continuous signal
+  const tEnd = 2.0;
+  const Nt = 1000;
+  const tCont = [], yCont = [];
+  for (let i = 0; i < Nt; i++) {
+    const t = i * tEnd / (Nt-1);
+    tCont.push(t); yCont.push(amp * Math.sin(2*Math.PI*fsig*t));
+  }
+
+  // Sampled points
+  const Ts = 1/fabt;
+  const tSamp = [], ySamp = [];
+  for (let k = 0; k <= Math.floor(tEnd/Ts); k++) {
+    const t = k * Ts;
+    tSamp.push(t); ySamp.push(amp * Math.sin(2*Math.PI*fsig*t));
+  }
+
+  // Reconstructed signal (using aliased frequency)
+  const tRecon = [], yRecon = [];
+  for (let i = 0; i < Nt; i++) {
+    const t = i * tEnd / (Nt-1);
+    tRecon.push(t); yRecon.push(amp * Math.sin(2*Math.PI*fAlias*t));
+  }
+
+  Plotly.newPlot('sampling-plot', [
+    { x: tCont, y: yCont, type:'scatter', mode:'lines', name:`Originalsignal (${fsig} Hz)`,
+      line: { color:'#d97706', width:2 } },
+    { x: tRecon, y: yRecon, type:'scatter', mode:'lines',
+      name: aliasing ? `Rekonstruiert – ALIAS (${fAlias.toFixed(1)} Hz)` : `Rekonstruiert (${fsig} Hz)`,
+      line: { color: aliasing ? '#dc2626' : '#059669', width:2, dash:'dash' } },
+    { x: tSamp, y: ySamp, type:'scatter', mode:'markers', name:'Abtastwerte',
+      marker: { color:'#7c3aed', size:10, symbol:'circle' } }
+  ], {
+    xaxis: { title: 'Zeit [s]', gridcolor:'#f1f5f9' },
+    yaxis: { title: 'Amplitude', gridcolor:'#f1f5f9' },
+    legend: { x:0.02, y:0.98 },
+    margin: { l:60, r:20, t:20, b:60 },
+    plot_bgcolor:'#fafafa', paper_bgcolor:'white',
+    font: { family:'Inter, sans-serif', size:12 }
+  }, { responsive:true });
+}
+
+['fsig','fabt','amp'].forEach(id => {
+  document.getElementById(id).addEventListener('input', updateSampling);
+});
+window.addEventListener('load', () => {
+  if (document.getElementById('tab-interaktiv').classList.contains('active')) updateSampling();
+});
+</script>
+</body>
+</html>
