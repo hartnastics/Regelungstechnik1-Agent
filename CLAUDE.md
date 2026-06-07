@@ -113,6 +113,7 @@ Regel3: Selbstständig aus den Ordnern Tutorien, Übungen, Vorlesungen und Klaus
 Regel4: Themen aus der Vorlesung sind alle wichtig und sollten mit sinvollen Beschreibungen und Abbildung, sowie interaktiven Abbildungen, in denen man selber Werte, Regler, Strukturbilder usw zusammenstellen kann um dann daraus resultierende Ortskurve, Betrags- sowie Phasendiagramm dann sehen kann - Soll zum Verständnis von den Themen helfen
 
 Regel5: Mathematische Formeln aus der Vorlesung sollen erklärt und mit Beispielen stärker beschrieben werden
+
 ---
 
 ##Übersicht: Themen der Vorlesungen
