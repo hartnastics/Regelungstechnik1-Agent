@@ -209,6 +209,19 @@ Es sollen alle vorhandenen Fragen aus den PDFs übernommen werden, plus zusätzl
 
 Jede Frage soll:
 - Aufklappbar sein, sodass man nicht direkt die Antwort sehen kann
-- Eine gute Erklärung beim Aufklappen hinterlegt haben (wenn nötig mit selbst erstellten Abbildungen)
+- Eine gute Erklärung beim Aufklappen hinterlegt haben (wenn nötig mit selbst erstellten Abbildungen, mit Vorlesung)
 - Auf einer selbst erstellten Schwierigkeitsskala bewertet sein
 - Angeben, aus welchem Thema der Vorlesung die Frage stammt
+
+---
+
+## Dashboard in Form einer Webside
+
+Gestaltungsrichtlinien:
+- Jeder Aufgabentyp soll klar abgegrenzt sein von den anderen, also jeder Aufgabentyp eine eigene Seiet auf der Webside bzw auf dem Dashboard
+- Sehr gut Übersichtlich
+- gut gestaltet, eher hell mit bunten akzenten
+- Alle Acht themen, mit den Unterthemen der Vorlesung sollen bei den Aufgabentypen enthalten sein, selbständig dazu einordnen
+-Fragen Modus wie oben beschrieben soll auch als extra seite erstellt werden
+- der Inhalt von all dem soll sich an den Oben genannten Sachen orientieren
+
