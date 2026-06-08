@@ -1,105 +1,116 @@
 # Lernzettel 1 – Einführung in die Regelungstechnik
 
-> Kapitel 1 der Vorlesung. Begriff der Regelung, grundsätzlicher Aufbau eines Regelkreises und klassische Beispiele. (Die Original-PDF Kap. 1 ist beschädigt – Inhalte aus Vorlesungsübersicht, Tutorium 1 und Standardliteratur.)
+> Kapitel 1. Aufbau in zwei Teilen:
+> **Teil A – Fragestellungen:** Jede Frage aus der CLAUDE.md wird einzeln und vollständig beantwortet.
+> **Teil B – Komplette Beispiele:** vollständige Aufgaben/Beispiele (Tutorium, Richtig-Falsch-Fragen) mit Begründung.
+>
+> *(Die Original-PDF zu Kap. 1 ist beschädigt; Inhalte aus Vorlesungsübersicht, Tutorium 1 und Standardliteratur.)*
 
 ---
+---
+
+# TEIL A – Fragestellungen (alle einzeln beantwortet)
 
 ## 1.1 Begriff der Regelung und grundsätzlicher Aufbau
 
-### Unterschied Regelung ↔ Steuerung
+**F: Was ist der Unterschied zwischen einer Regelung und einer Steuerung?**
+A: Bei der **Steuerung** (offener Wirkungsweg) wird die Stellgröße nur aus dem Sollwert (und ggf. einem Streckenmodell) berechnet; der Ausgang wird **nicht** zurückgemessen. Bei der **Regelung** (geschlossener Wirkungskreis) wird die Regelgröße $y$ gemessen, mit dem Sollwert $w$ verglichen ($e=w-y$) und die Differenz über einen Regler ausgeglichen. Kurz: Steuerung = ohne Rückführung, Regelung = mit Rückführung.
 
-| | **Steuerung** (offener Wirkungsweg) | **Regelung** (geschlossener Wirkungskreis) |
-|---|---|---|
-| Wirkungsweg | offen: Eingang → Strecke → Ausgang | geschlossen: Ausgang wird zurückgeführt |
-| Messung der Regelgröße | **nein** | **ja** (zwingend) |
-| Reaktion auf unbekannte Störungen | nein | ja |
-| Reaktion auf Modellfehler | nein | ja |
+**F: Wann reicht eine Steuerung aus, wann ist eine Regelung notwendig?**
+A: Eine **Steuerung reicht**, wenn die Strecke exakt bekannt ist und keine unbekannten Störungen wirken (Beispiel: Masse exakt bekannt, keine Reibung → die Vorsteuerung trifft das Ziel genau). Eine **Regelung ist notwendig**, sobald Modellunsicherheiten oder unbekannte/unvorhersehbare Störungen auftreten – nur die Rückführung kann diese ausgleichen.
 
-- **Steuerung:** Die Stellgröße wird nur aus dem Sollwert (und ggf. einem Streckenmodell) berechnet. Der tatsächliche Ausgang wird **nicht** zurückgemessen. Eine Steuerung „weiß" nicht, ob ihr Ziel erreicht wurde.
-- **Regelung:** Der Istwert $y$ wird gemessen, mit dem Sollwert $w$ verglichen und die Differenz über einen Regler ausgeglichen. Dadurch entsteht der **geschlossene Wirkungskreis** (Rückkopplung).
+**F: Was ist die Regelgröße, die Führungsgröße, die Stellgröße?**
+A: **Regelgröße $y$ (Istwert):** die zu beeinflussende Ausgangsgröße der Strecke (z. B. Drehzahl, Temperatur, Position). **Führungsgröße $w$ (Sollwert):** der gewünschte Wert für $y$. **Stellgröße $u$:** der vom Regler erzeugte Eingang der Strecke, innerhalb von Grenzen frei vorgebbar.
 
-### Wann reicht eine Steuerung, wann braucht man eine Regelung?
+**F: Was ist eine Störgröße und wo greift sie in den Regelkreis ein?**
+A: Die **Störgröße $z$** ist ein nicht vorgebbarer, häufig unbekannter Eingang, der die Strecke meist unerwünscht beeinflusst (z. B. Lastmoment, Wind, Außentemperatur). Sie greift typischerweise **innerhalb der Strecke** oder **am Streckenausgang** ein.
 
-- **Steuerung reicht**, wenn das System **exakt bekannt** ist und **keine unbekannten Störungen** auftreten. Beispiel aus Kap. 2: Masse $m$ exakt bekannt, keine Reibung → die Vorsteuerung trifft die Endposition exakt.
-- **Regelung notwendig**, sobald die Strecke **ungenau bekannt** ist oder **unvorhersehbare Störungen** wirken. Beispiel: Masse 20 % leichter als angenommen → reine Steuerung schießt über das Ziel hinaus, erst die Rückführung korrigiert.
+**F: Was ist der Regelfehler und wie wird er berechnet?**
+A: Der Regelfehler (Regeldifferenz) ist die Abweichung zwischen Soll- und Istwert und der Eingang des Reglers:
+$$e(t)=w(t)-y(t).$$
 
-> **Merksatz:** Modellunsicherheiten und unbekannte Störungen lassen sich **nur durch eine Regelung** ausgleichen, **nicht** durch eine Steuerung.
+**F: Was versteht man unter dem „geschlossenen Wirkungskreis"?**
+A: Die ringförmige Signalkette $w\to[e=w-y]\to\text{Regler}\to u\to\text{Strecke}\to y\to(\text{Messung})\to$ zurück zum Vergleich. Jede Änderung von $y$ wirkt über die Rückführung auf sich selbst zurück – das ist der Kern der Regelung.
 
-### Die Grundgrößen
+**F: Welche Grundbestandteile hat jeder Regelkreis?**
+A: (1) **Regelstrecke** (zu beeinflussendes System), (2) **Stellglied/Aktor** (verstellt die Strecke, Leistungsverstärkung), (3) **Messglied/Sensor** (erfasst $y$), (4) **Regler** (bildet aus $e$ die Stellgröße $u$), (5) **Vergleichsstelle** (bildet $e=w-y$).
 
-- **Regelgröße $y(t)$ (Istwert):** Die zu beeinflussende Ausgangsgröße der Strecke (z. B. Drehzahl, Temperatur, Position).
-- **Führungsgröße $w(t)$ (Sollwert):** Der gewünschte Wert für die Regelgröße.
-- **Stellgröße $u(t)$:** Eingang der Strecke, vom Regler erzeugt, innerhalb von Grenzen frei vorgebbar.
-- **Regeldifferenz / Regelfehler $e(t)$:** Abweichung zwischen Soll und Ist, Eingang des Reglers:
-$$e(t) = w(t) - y(t)$$
-- **Störgröße $z(t)$:** Ein nicht vorgebbarer, häufig unbekannter Eingang, der die Strecke meist unerwünscht beeinflusst (z. B. Lastmoment, Wind, Außentemperatur). Sie greift typischerweise **innerhalb oder am Ausgang der Strecke** ein.
+**F: Was ist der Unterschied zwischen Regler und Strecke?**
+A: Die **Strecke** ist physikalisch vorgegeben und **nicht** frei wählbar (das, was man hat). Der **Regler** wird **entworfen** (Struktur P/PI/PID und Parameter), um das Verhalten gezielt zu verbessern.
 
-### Der geschlossene Wirkungskreis
+**F: Warum braucht eine Regelung zwingend eine Messung der Regelgröße?**
+A: Ohne Messung von $y$ gibt es kein $e=w-y$ → der Regler kann nicht erkennen, ob eine Abweichung besteht, und Störungen/Modellfehler nicht ausgleichen. Die Messung schließt den Wirkungskreis.
 
-Der Begriff beschreibt die ringförmige Signalkette:
-$$w \;\to\; \underbrace{e=w-y}_{\text{Vergleich}} \;\to\; \text{Regler} \;\to\; u \;\to\; \text{Strecke} \;\to\; y \;\to\; \text{(Messung)} \;\to\; \text{zurück zum Vergleich}$$
-Jede Änderung von $y$ wirkt über die Rückführung auf sich selbst zurück – das ist der Kern der Regelung.
-
-### Grundbestandteile jedes Regelkreises
-
-1. **Regelstrecke (Prozess):** das zu beeinflussende System.
-2. **Stellglied (Aktor):** verstellt die Strecke, sorgt für Leistungsverstärkung.
-3. **Messglied (Sensor):** erfasst die Regelgröße $y$.
-4. **Regler:** bildet aus $e$ die Stellgröße $u$, formt die Dynamik.
-5. **Vergleichsstelle:** bildet $e = w - y$.
-
-### Regler vs. Strecke
-
-- **Strecke $G_S$:** physikalisch vorgegeben, **nicht** frei wählbar (das, was man hat).
-- **Regler $G_R$:** wird **entworfen** (Struktur P/PI/PID und Parameter), um das Verhalten gezielt zu verbessern.
-
-### Warum zwingend Messung?
-
-Ohne Messung von $y$ gibt es kein $e=w-y$ → der Regler kann nicht erkennen, ob eine Abweichung besteht, und kann Störungen/Modellfehler nicht ausgleichen. Die Messung schließt den Wirkungskreis.
-
-### Was passiert bei einer Störung?
-
-Tritt $z$ auf, verändert sich $y$. Über die Rückführung wächst $e=w-y$, der Regler verstellt $u$ entgegen und führt $y$ wieder zum Sollwert zurück. Bei einem I-Anteil im Regler verschwindet die bleibende Abweichung vollständig.
+**F: Was passiert im Regelkreis, wenn eine Störung auftritt?**
+A: $y$ ändert sich → der Fehler $e=w-y$ wächst → der Regler verstellt $u$ entgegen → $y$ wird zum Sollwert zurückgeführt. Mit I-Anteil im Regler verschwindet die bleibende Abweichung vollständig.
 
 ---
 
 ## 1.2 Beispiele von Regelungen
 
-### Fliehkraftregler der Dampfmaschine (James Watt)
-- **Geregelt:** Drehzahl der Maschine.
-- **Prinzip:** Rotierende Fliehgewichte heben sich mit steigender Drehzahl, schließen über ein Gestänge das Dampfventil → Drehzahl sinkt. Klassische mechanische Rückkopplung.
-- **Störung:** wechselnde Last; der Regler hält die Drehzahl konstant.
+**F: Wie funktioniert die Drehzahlregelung einer Dampfmaschine (Fliehkraftregler)?**
+A: Rotierende Fliehgewichte heben sich mit steigender Drehzahl, schließen über ein Gestänge das Dampfventil → weniger Dampf → Drehzahl sinkt. Eine rein mechanische Rückkopplung: Regelgröße = Drehzahl, Stellgröße = Ventilstellung, Störung = wechselnde Last.
 
-### Segway (inverses Pendel)
-- **Geregelt:** Neigungswinkel (Aufrechthaltung).
-- **Ohne Regelung instabil**, weil ein inverses Pendel einen Pol in der **rechten** $s$-Halbebene besitzt – kleinste Auslenkungen wachsen exponentiell. Erst die schnelle Rückführung (Neigungssensor → Motormoment) stabilisiert.
+**F: Welche Größe wird beim Segway geregelt und warum ist das System ohne Regelung instabil?**
+A: Geregelt wird der **Neigungswinkel** (Aufrechthaltung). Das inverse Pendel hat einen Pol in der **rechten** $s$-Halbebene → kleinste Auslenkungen wachsen exponentiell. Erst die schnelle Rückführung (Neigungssensor → Motormoment) stabilisiert es.
 
-### Kfz-Tempomat (Tutorium 1, A3)
-- **Geregelt:** Fahrzeuggeschwindigkeit.
-- **Zuordnung der Bestandteile:**
-  - Messeinrichtung: Geschwindigkeitsmessung + Steuergerät
-  - Stelleinrichtung: Motor / Drosselklappe
-  - Regler & Vergleichseinrichtung: Steuergerät
-  - Regelstrecke: Fahrzeug
-  - Führungsgröße: Wunschgeschwindigkeit
-  - **Störgrößen:** Luftwiderstand, Steigung, Radwiderstand
-  - Regelgröße: aktuelle Geschwindigkeit
+**F: Was wird bei einem Kfz-Tempomat geregelt und was sind typische Störgrößen?**
+A: Geregelt wird die **Fahrzeuggeschwindigkeit**. Typische Störgrößen: Luftwiderstand, Steigungswiderstand, Radwiderstand, Fahrereingriffe.
 
-### Füllstandsregelung
-- **Regelziel:** konstanter Füllstand trotz schwankendem Zu-/Abfluss. Stellgröße = Ventilstellung, Störung = Abflussschwankungen.
+**F: Was ist das Regelziel bei einer Füllstandsregelung?**
+A: Einen **konstanten Füllstand** trotz schwankendem Zu- bzw. Abfluss halten. Stellgröße = Ventilstellung, Störung = Abflussschwankungen.
 
-### Schüttgutregelung (Förderband)
-- **Besonderheit:** **Totzeit** – das Material braucht eine Transportzeit, bis eine Verstellung am Ausgang ankommt. Totzeiten erschweren die Regelung (Phasenabsenkung, siehe Lernzettel 3.8).
+**F: Wie funktioniert eine Schüttgutregelung und welche Besonderheiten hat sie?**
+A: Massenstrom/Füllstand auf einem Förderband wird geregelt. **Besonderheit: Totzeit** – das Material braucht eine Transportzeit, bis eine Verstellung am Ausgang ankommt. Totzeiten erschweren die Regelung (Phasenabsenkung → Stabilitätsproblem, siehe Lernzettel 3.8).
 
-### Gemeinsamkeit aller Beispiele
-Alle besitzen denselben Aufbau: **Messen → Vergleichen → Stellen → Rückführen**. Unabhängig von der Physik ist die regelungstechnische Struktur identisch (Standard-Regelkreis).
+**F: Welche Gemeinsamkeit haben alle Beispiele bezüglich des Regelkreis-Aufbaus?**
+A: Alle besitzen denselben Aufbau **Messen → Vergleichen → Stellen → Rückführen**. Unabhängig von der konkreten Physik ist die regelungstechnische Struktur identisch (Standard-Regelkreis).
+
+---
+---
+
+# TEIL B – Komplette Beispiele
+
+## ▣ Tutoriumsaufgabe (Tut 1, A3) — Tempomat: Bestandteile zuordnen & Blockschaltbild
+
+**Aufgabenstellung:** Ein Tempomat regelt die Geschwindigkeit eines Kraftfahrzeugs. Das Motorsteuergerät vergleicht gemessene Ist- und eingestellte Soll-Geschwindigkeit und steuert auf dieser Basis die Drosselklappe. (a) Ordne die Bestandteile einer Regelung dem Beispiel zu. (b) Stelle den Regelkreis als Blockschaltbild dar.
+
+**Lösung (a) – Zuordnung:**
+
+| Bestandteil | Tempomat |
+|---|---|
+| Messeinrichtung | Geschwindigkeitsmessung / Steuergerät |
+| Stelleinrichtung | Motor, Drosselklappe |
+| Regler (mit Vergleichs- & Korrektureinrichtung) | Steuergerät |
+| Regelstrecke | Fahrzeug |
+| Führungsgröße | gewünschte (Soll-)Geschwindigkeit |
+| Störgröße | Luftwiderstand, Steigung, Radwiderstand |
+| Regelgröße | aktuelle Geschwindigkeit |
+
+**Lösung (b) – Blockschaltbild (in Worten):**
+$$v_{soll}\to[\,e=v_{soll}-v\,]\to\underbrace{\text{Steuergerät}}_{\text{Regler}}\to\underbrace{\text{Motor/Drosselklappe}}_{\text{Stellglied}}\to\underbrace{\text{Fahrzeug}}_{\text{Strecke}}\to v\ (\text{mit Widerständen als Störung})\to\text{Messung}\to\text{zurück}.$$
+> **Ergebnis:** Klassischer geschlossener Wirkungskreis; die Widerstände greifen als Störgröße an der Strecke an und werden über die Rückführung ausgeregelt.
+
+---
+
+## ▣ Verständnisfragen (Richtig/Falsch) — mit Begründung
+
+**1. „Modellunsicherheiten lassen sich durch eine Steuerung beheben."** — **Falsch.** Eine Steuerung hat keine Rückführung; sie kann auf Abweichungen durch Modellfehler nicht reagieren. Dafür braucht es eine Regelung.
+
+**2. „Modellunsicherheiten lassen sich durch eine Regelung ausgleichen."** — **Richtig.** Die Rückführung misst den Istwert und korrigiert Abweichungen, egal woher sie kommen (Modellfehler oder Störung).
+
+**3. „Eine Steuerung kann auf bekannte Störungen reagieren."** — **Richtig.** Ist die Störung bekannt (gemessen/geschätzt), kann eine Steuerung sie über eine Störgrößenvorsteuerung berücksichtigen. Auf **unbekannte** Störungen kann sie nicht reagieren.
+
+**4. „Eine Steuerung ist ausreichend, um auch bei Störungen und Modellungenauigkeiten das gewünschte Verhalten zu erzielen."** — **Falsch.** Bei unbekannten Störungen/Modellfehlern ist eine Regelung nötig.
+
+**5. „Ist sowohl die Störgröße als auch das System vollständig bekannt, genügt eine Steuerung, um den Zustand genau einzustellen."** — **Richtig.** Bei perfektem Modell und bekannter Störung kann die Steuerung den nötigen Stellverlauf exakt berechnen.
 
 ---
 
 ## Kernaussagen (zum Merken)
 
 1. Regelung = geschlossener Kreis mit Messung; Steuerung = offener Weg ohne Messung.
-2. Nur die Regelung gleicht **unbekannte Störungen und Modellfehler** aus.
-3. $e = w - y$ ist die zentrale Größe; der Regler arbeitet auf sie hin.
-4. Jeder Regelkreis hat: Strecke, Stellglied, Messglied, Regler, Vergleichsstelle.
-5. Instabile Strecken (Segway) brauchen die Regelung sogar zwingend zur Stabilisierung.
+2. Nur die Regelung gleicht **unbekannte** Störungen und Modellfehler aus.
+3. $e=w-y$ ist die zentrale Größe; der Regler arbeitet auf sie hin.
+4. Jeder Regelkreis: Strecke, Stellglied, Messglied, Regler, Vergleichsstelle.
+5. Instabile Strecken (Segway) brauchen die Regelung sogar zur Stabilisierung.
