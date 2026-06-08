@@ -25,15 +25,13 @@ knowledge/
 
 ---
 
-## ════════════════════════════════════════
 ## QUALITÄTSSTANDARDS – NICHT VERHANDELBAR
-## ════════════════════════════════════════
 
 Das Dashboard muss das Niveau eines **sehr guten Lehrbuches kombiniert mit einer interaktiven Lernplattform** erreichen. Jede einzelne Seite muss folgende Standards erfüllen:
 
 ---
 
-### STANDARD 1: Mathematische Formeln
+### Standard 1: Mathematische Formeln
 
 **Jede Formel muss:**
 - Mit KaTeX korrekt gerendert werden ($$...$$ für Display, $...$ für Inline)
@@ -49,7 +47,7 @@ Das Dashboard muss das Niveau eines **sehr guten Lehrbuches kombiniert mit einer
 
 ---
 
-### STANDARD 2: Interaktive Diagramme (Pflicht pro Seite)
+### Standard 2: Interaktive Diagramme (Pflicht pro Seite)
 
 **Jede Aufgaben-Seite muss mindestens enthalten:**
 
@@ -80,7 +78,7 @@ Das Dashboard muss das Niveau eines **sehr guten Lehrbuches kombiniert mit einer
 
 ---
 
-### STANDARD 3: SVG-Blockschaltbilder (Pflicht)
+### Standard 3: SVG-Blockschaltbilder (Pflicht)
 
 **Jede Seite muss SVG-Blockschaltbilder enthalten** – keine ASCII-Art, keine Textbeschreibungen. SVG direkt in HTML einbetten.
 
@@ -99,7 +97,7 @@ Das Dashboard muss das Niveau eines **sehr guten Lehrbuches kombiniert mit einer
 
 ---
 
-### STANDARD 4: Vollständige Klausuraufgaben mit Lösung
+### Standard 4: Vollständige Klausuraufgaben mit Lösung
 
 **Jede Seite muss mindestens 2 vollständig durchgerechnete Klausuraufgaben enthalten:**
 
@@ -115,7 +113,7 @@ Die Aufgaben sollen **direkt aus den echten Klausuraufgaben** im `knowledge/Klau
 
 ---
 
-### STANDARD 5: Visualisierung von Systemverhalten
+### Standard 5: Visualisierung von Systemverhalten
 
 **Für jedes Übertragungsglied muss gezeigt werden:**
 - Sprungantwort (Zeitbereich)
@@ -131,7 +129,7 @@ Die Aufgaben sollen **direkt aus den echten Klausuraufgaben** im `knowledge/Klau
 
 ---
 
-### STANDARD 6: Konzeptuelle Erklärungen (Physikalisches Verständnis)
+### Standard 6: Konzeptuelle Erklärungen (Physikalisches Verständnis)
 
 **Vor jeder Formel kommt die intuitive Erklärung:**
 - Was passiert physikalisch?
@@ -142,7 +140,7 @@ Die Aufgaben sollen **direkt aus den echten Klausuraufgaben** im `knowledge/Klau
 
 ---
 
-### STANDARD 7: Technologie-Stack
+### Standard 7: Technologie-Stack
 
 ```
 Mathematik:    KaTeX (CDN) – alle Formeln mit $$ oder $
@@ -155,46 +153,44 @@ SVG:           Inline im HTML, viewBox, professionelle Darstellung
 
 ---
 
-## ════════════════════════════════════════
 ## SEITENSPEZIFISCHE ANFORDERUNGEN
-## ════════════════════════════════════════
 
-### Seite: Aufgabe 1 – Linearer Regelkreis (aufgabe1.html)
+### Seite: Aufgabe 1 – Linearer Regelkreis (`aufgabe1.html`)
 
 **Pflicht-Inhalte:**
 
-**Tab 1: Grundstruktur**
+#### Tab 1: Grundstruktur
 - SVG: Standard-Regelkreis vollständig beschriftet
 - SVG: Regelkreis mit Störgröße Z
 - Herleitung F_W(s) und F_Z(s) Schritt für Schritt
 - Bedeutung jedes Terms erklärt
 - Numerisches Beispiel: G_R = K_R, G_S = K_S/(1+Ts) → F_W ausrechnen
 
-**Tab 2: Hurwitz-Kriterium**
+#### Tab 2: Hurwitz-Kriterium
 - Herleitung des charakteristischen Polynoms aus F_W
 - Hurwitz-Matrix für n=2, n=3 mit Erklärung des Aufbauprinzips
 - Vollständiges Beispiel: PT1PT1PT1-Strecke, P-Regler → K_R-Bereich berechnen (alle Schritte)
 - Interaktiv: K_R-Schieberegler → Pole im Pol-Nullstellen-Diagramm wandern
 
-**Tab 3: Bode-Diagramm**
+#### Tab 3: Bode-Diagramm
 - Erklärung der asymptotischen Näherung mit geometrischer Anschauung
 - **Vergleichsplot (Plotly):** PT1 + PT2 + I-Glied + IPT1 im selben Bode-Diagramm (umschaltbar)
 - Schieberegler für T und K → sofortige Aktualisierung des Bode-Diagramms
 - Asymptotischer Verlauf als gestrichelte Linie, exakter Verlauf als durchgezogene Linie
 - **Vollständige Aufgabe:** Aus gegebenem Bode-Diagramm F_o(s) ablesen (mit Anleitung)
 
-**Tab 4: Stabilitätsreserven**
+#### Tab 4: Stabilitätsreserven
 - SVG: Bode-Diagramm mit eingezeichneten Stabilitätsreserven (φ_r, A_r als Pfeile)
 - SVG: Ortskurve mit Abstandsmaßen zum kritischen Punkt
 - Interaktiv: Schieberegler K_R → φ_r und A_r werden live neu berechnet und angezeigt
 - Vollständige Aufgabe: Stabilitätsreserven ablesen + bewerten
 
-**Tab 5: Totzeit**
+#### Tab 5: Totzeit
 - Plot: Phasenverlauf mit und ohne Totzeit im Vergleich (gleicher Betrag, unterschiedliche Phase)
 - Schieberegler T_t → zeigt wie Phasenreserve sinkt bis System instabil wird
 - Kritischer T_t-Wert wird automatisch berechnet und angezeigt
 
-**Tab 6: Regler-Entwurf**
+#### Tab 6: Regler-Entwurf
 - SVG: PI-Regler Struktur
 - Bode-Diagramm des PI-Reglers (zeigt Knickfrequenz 1/T_R)
 - Sprungantwort-Vergleich: P vs PI vs PID auf gleicher Strecke, alle Parameter einstellbar
@@ -202,53 +198,53 @@ SVG:           Inline im HTML, viewBox, professionelle Darstellung
 
 ---
 
-### Seite: Aufgabe 2 – Systemanalyse (aufgabe2.html)
+### Seite: Aufgabe 2 – Systemanalyse (`aufgabe2.html`)
 
 **Pflicht-Inhalte:**
 
-**Tab 1: Ortskurven verstehen**
+#### Tab 1: Ortskurven verstehen
 - **Interaktiver Ortskurven-Plot (Plotly):** Systemtyp wählbar (PT1, PT2, PT1PT1, IPT1, IPT1PT1)
 - Für jede Kurve: Startpunkt (ω→0), Endpunkt (ω→∞), Drehrichtung erklärt
 - Aus Ortskurve K und n ablesen: animierte Erklärung mit Markierungen
 - Vollständige Aufgabe: Gegebene Ortskurve → K und n bestimmen (Schritt für Schritt)
 
-**Tab 2: Nyquist-Kriterium**
+#### Tab 2: Nyquist-Kriterium
 - SVG: Schematische Darstellung des kritischen Punktes und Einschließen
 - Interaktiv: K_R erhöhen → Ortskurve verschiebt sich → visuell sehen wann (-1,0) eingeschlossen wird
 - Allgemeines Nyquist: Beispiel mit instabilem offenem Kreis
 
-**Tab 3: Bode → F_o(s) rekonstruieren**
+#### Tab 3: Bode → F_o(s) rekonstruieren
 - Schritt-für-Schritt-Anleitung mit konkretem Plot
 - Vollständige Aufgabe: Bode gegeben → F_o ablesen (PT1-Knick, I-Glied, Verstärkung)
 - PT2-Korrektur bei D < 1/√2 erklärt mit Beispiel-Plot
 
-**Tab 4: F_W rückwärts**
+#### Tab 4: F_W rückwärts
 - Algebraische Umformung vollständig gezeigt
 - Stabilitätsprüfung der ermittelten Strecke
 
 ---
 
-### Seite: Aufgabe 3 – Kaskadenregelung (aufgabe3.html)
+### Seite: Aufgabe 3 – Kaskadenregelung (`aufgabe3.html`)
 
 **Pflicht-Inhalte:**
 
-**Tab 1: Grundidee**
+#### Tab 1: Grundidee
 - SVG: Kaskadenstruktur mit Inner- und Außenkreis, Störung, alle Signale beschriftet
 - SVG: Vergleich Einzelregelung vs. Kaskadenregelung (Störverhalten)
 - Sprungantwort-Vergleich (Plotly): Mit und ohne Kaskade → Störverhalten visuell
 
-**Tab 2: Systemmodelle**
+#### Tab 2: Systemmodelle
 - SVG: Gleichstrommotor-Blockschaltbild vollständig (elektrischer + mechanischer Teil)
 - SVG: Hydraulikzylinder-Blockschaltbild
 - Alle Übertragungsfunktionen mit Herleitung aus physikalischen Gleichungen
 - Zahlenwerte für typische Parameter
 
-**Tab 3: Innenkreis (P-Regler)**
+#### Tab 3: Innenkreis (P-Regler)
 - Herleitung T_W = T_0/n vollständig mit Algebra
 - Interaktiv: n-Schieberegler → zeigt wie sich Sprungantwort des Innenkreises ändert
 - Vollständige Aufgabe: P-Regler-Auslegung mit echten Zahlenwerten
 
-**Tab 4: Kessler / Betragsoptimum**
+#### Tab 4: Kessler / Betragsoptimum
 - Herleitung der Kessler-Formel aus dem Betragsoptimum (Warum funktioniert das?)
 - K_R = T_1 / (2·K_S·T_Σ) vollständig erklärt (jede Variable, Einheit, Bedeutung)
 - T_R = T_1 erklärt über Polkompensation (SVG: Pol-Nullstellen-Diagramm zeigt Kürzung)
@@ -256,7 +252,7 @@ SVG:           Inline im HTML, viewBox, professionelle Darstellung
 - Vergleich D=1 vs D=1/√2: Sprungantworten nebeneinander mit Überschwingen markiert
 - Vollständige Aufgabe: Kompletter Kessler-Entwurf mit Zahlenwerten
 
-**Tab 5: Störgrößenaufschaltung**
+#### Tab 5: Störgrößenaufschaltung
 - SVG: Blockschaltbild der Aufschaltung
 - Herleitung G_K,SD = -G_Z/G_S1 (warum genau diese Formel?)
 - Sprungantwort-Vergleich (Plotly): Ideal / Stationär / Keine Kompensation – alle drei Kurven im selben Plot
@@ -264,17 +260,17 @@ SVG:           Inline im HTML, viewBox, professionelle Darstellung
 
 ---
 
-### Seite: Aufgabe 4 – Zustandsraum (aufgabe4.html)
+### Seite: Aufgabe 4 – Zustandsraum (`aufgabe4.html`)
 
 **Pflicht-Inhalte:**
 
-**Tab 1: Modellierung**
+#### Tab 1: Modellierung
 - SVG: Masse-Feder-Dämpfer mit Freischnitt und eingetragenen Kräften
 - SVG: RLC-Schaltkreis mit Kirchhoff-Beschriftung
 - Vollständige Herleitung: Newton-Gesetz → DGL → Zustandsraumform (jeder Schritt erklärt)
 - Vollständige Herleitung: Kirchhoff → DGL → Zustandsraumform
 
-**Tab 2: Eigenwerte und Stabilität**
+#### Tab 2: Eigenwerte und Stabilität
 - Geometrische Erklärung: s-Ebene mit linker/rechter Halbebene, Stabilitätsregionen
 - Interaktiver Pol-Nullstellen-Plot (Plotly): Eigenwerte verschieben → Sprungantwort ändert sich live
 - Zu jedem Eigenwerttyp die zugehörige Sprungantwort zeigen:
@@ -284,33 +280,33 @@ SVG:           Inline im HTML, viewBox, professionelle Darstellung
   - Rein imaginär → ungedämpfte Schwingung
 - Vollständiges Beispiel: 2×2-Matrix → Eigenwerte → Stabilitätsurteil
 
-**Tab 3: Modalform**
+#### Tab 3: Modalform
 - Eigenvektoren geometrisch erklärt (Richtung, in die Matrix streckt/staucht)
 - Vollständige Rechnung: A → Eigenwerte → Eigenvektoren → V → V⁻¹ → Λ (alle Schritte)
 - Bedeutung der Diagonalform: entkoppelte Gleichungen visualisiert
 
-**Tab 4: Zustandsregler**
+#### Tab 4: Zustandsregler
 - SVG: Blockschaltbild Zustandsregelung (Zustandsvektor zurückgeführt)
 - Koeffizientenvergleich vollständig gezeigt: Wunschpolynom aufstellen → vergleichen → r lösen
 - Interaktiv: Wunsch-Eigenwerte in s-Ebene verschieben → r^T wird berechnet → Sprungantwort live
 - Vollständige Aufgabe mit Zahlenwerten (n=2)
 
-**Tab 5: Vorfilter**
+#### Tab 5: Vorfilter
 - Warum ist Vorfilter nötig? Ohne vs. mit Vorfilter – Sprungantwort Vergleich
 - f = -[c^T · A_R^{-1} · b]^{-1} vollständig hergeleitet
 - Vollständige Rechnung: A_R^{-1} berechnen → f bestimmen (alle Schritte mit Zahlen)
 
 ---
 
-### Seite: Aufgabe 5 – Digitale Signalverarbeitung (aufgabe5.html)
+### Seite: Aufgabe 5 – Digitale Signalverarbeitung (`aufgabe5.html`)
 
 **Pflicht-Inhalte:**
 
-**Tab 1: Signalklassen**
+#### Tab 1: Signalklassen
 - Vier Grafiken (SVG oder Canvas): Analog, Abgetastet, Quantisiert, Digital – visuell nebeneinander
 - Jede Klasse: Darstellung, Definition, typische Anwendung
 
-**Tab 2: Abtastung & Shannon**
+#### Tab 2: Abtastung & Shannon
 - Interaktiver Aliasing-Simulator (Plotly):
   - Original-Sinussignal + Abtastpunkte + rekonstruiertes Signal
   - Schieberegler für f_sig und f_abt
@@ -318,12 +314,12 @@ SVG:           Inline im HTML, viewBox, professionelle Darstellung
   - Farblicher Wechsel: grün = kein Aliasing, rot = Aliasing
 - Spektrum-Visualisierung (Plotly): Zeigt Frequenzanteile vor und nach Abtastung
 
-**Tab 3: Quantisierung**
+#### Tab 3: Quantisierung
 - Visualisierung (Plotly): Analoges Signal + quantisiertes Signal + Quantisierungsfehler nebeneinander
 - Interaktiv: n-Bits-Schieberegler → Stufenzahl, Δ und e_max live berechnet
 - Vollständige Aufgabe: Quantisierungsrechnung mit Zahlen
 
-**Tab 4: Digitale Filter**
+#### Tab 4: Digitale Filter
 - Interaktiver Filter-Simulator (Plotly):
   - IIR-Filter: a_1-Schieberegler → Sprungantwort und Pol im Einheitskreis live
   - Bei |a_1| > 1: roter Hinweis "BIBO-instabil", Pol außerhalb Einheitskreis
@@ -331,14 +327,14 @@ SVG:           Inline im HTML, viewBox, professionelle Darstellung
 - Vollständige Aufgabe: Koeffizienten aus Sprungantwort bestimmen (Gleichungssystem lösen)
 - Euler-Diskretisierung: PT1 → Differenzengleichung vollständig hergeleitet
 
-**Tab 5: Anti-Aliasing-Filter**
+#### Tab 5: Anti-Aliasing-Filter
 - SVG: RC-Tiefpass-Schaltung + invertierender OPV-Tiefpass
 - Bode-Diagramm des PT1-Filters mit markierter Grenzfrequenz
 - Vollständige Aufgabe: Aus Bode-Diagramm T und K ablesen, f_g berechnen
 
 ---
 
-### Seite: Fragen-Modus (fragen.html)
+### Seite: Fragen-Modus (`fragen.html`)
 
 **Pflicht-Inhalte:**
 - **Alle** Fragen aus `knowledge/Fragen aus Tut/` und `knowledge/Klausuraufgaben/Fragen/` übernehmen
@@ -351,11 +347,10 @@ SVG:           Inline im HTML, viewBox, professionelle Darstellung
 
 ---
 
-## ════════════════════════════════════════
 ## DESIGN-STANDARDS
-## ════════════════════════════════════════
 
 ### Farben (verpflichtend)
+
 ```
 Aufgabe 1: #4f46e5 (Indigo)     – Linearer Regelkreis
 Aufgabe 2: #7c3aed (Violett)    – Systemanalyse
@@ -380,9 +375,7 @@ Fragen:    #0284c7 (Blau)       – Fragen-Modus
 
 ---
 
-## ════════════════════════════════════════
-## AUFGABENTYPEN IN DER KLAUSUR (Referenz)
-## ════════════════════════════════════════
+## AUFGABENTYPEN IN DER KLAUSUR
 
 ### Aufgabe 1 — Linearer Regelkreis (30 Punkte)
 - Blockschaltbild → F_o(s) bestimmen (auch Nicht-Standard-Strukturen)
@@ -424,9 +417,7 @@ Themen: Steuerung vs. Regelung, Totzeit, Hurwitz, Nyquist, ÜF-Gültigkeit, Zust
 
 ---
 
-## ════════════════════════════════════════
 ## VORLESUNGSÜBERSICHT
-## ════════════════════════════════════════
 
 1. Einführung – Begriff der Regelung, Beispiele (Dampfmaschine, Segway, Kfz, Schüttgut)
 2. Regelung und Steuerung – Antriebsregelung, Vorsteuerungen
