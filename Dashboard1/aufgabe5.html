@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aufgabe 5 – Digitale Signalverarbeitung | RT1</title>
+  <style>:root{--accent:#d97706;--accent-d:#92400e;}</style>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false,strict:false});"></script>
+  <script src="https://cdn.plot.ly/plotly-2.26.0.min.js"></script>
+</head>
+<body>
+<nav class="navbar">
+  <a class="nav-brand" href="index.html">RT1 Lernportal</a>
+  <div class="nav-links">
+    <a href="aufgabe1.html">Aufgabe 1</a><a href="aufgabe2.html">Aufgabe 2</a><a href="aufgabe3.html">Aufgabe 3</a>
+    <a href="aufgabe4.html">Aufgabe 4</a><a href="aufgabe5.html" class="active">Aufgabe 5</a>
+    <a href="fragen.html" class="nav-highlight">Fragen</a>
+  </div>
+</nav>
+<div class="hero hero-a5">
+  <div class="hero-inner">
+    <div class="hero-badge">20–28 Punkte · Aufgabe 5 · Lernzettel 6</div>
+    <h1>Digitale Signalverarbeitung</h1>
+    <p>Signalklassen, Abtastung &amp; Shannon-Theorem (Aliasing), Quantisierung, digitale Filter (IIR/FIR, BIBO) und Anti-Aliasing-Filter – mit interaktiven Simulatoren.</p>
+  </div>
+</div>
+<div class="tab-nav">
+  <button class="tab-btn active" onclick="showTab('klassen')">Signalklassen</button>
+  <button class="tab-btn" onclick="showTab('shannon')">Abtastung &amp; Shannon</button>
+  <button class="tab-btn" onclick="showTab('quant')">Quantisierung</button>
+  <button class="tab-btn" onclick="showTab('filter')">Digitale Filter</button>
+  <button class="tab-btn" onclick="showTab('anti')">Anti-Aliasing</button>
+</div>
+<div class="content-wrap">
+
+  <!-- SIGNALKLASSEN -->
+  <div class="tab-content active" id="tab-klassen">
+    <p class="lead">Einteilung nach <b>Zeit</b> (kontinuierlich/diskret) und <b>Wert</b> (kontinuierlich/diskret).</p>
+    <table class="tbl">
+      <tr><th>Signal</th><th>Zeit</th><th>Wert</th><th>entsteht durch</th></tr>
+      <tr><td><b>Analog</b></td><td>kontinuierlich</td><td>kontinuierlich</td><td>Originalsignal</td></tr>
+      <tr><td><b>Abgetastet</b></td><td>diskret</td><td>kontinuierlich</td><td>Abtastung</td></tr>
+      <tr><td><b>Quantisiert</b></td><td>kontinuierlich</td><td>diskret</td><td>Quantisierung</td></tr>
+      <tr><td><b>Digital</b></td><td>diskret</td><td>diskret</td><td>Abtastung + Quantisierung</td></tr>
+    </table>
+    <div class="box def"><span class="lbl">Verarbeitungskette</span>Sensor → Abtast-Halte-Glied → A/D-Wandler → digitaler Algorithmus (Software) → D/A-Wandler → Halteglied → Stellglied.</div>
+    <div class="box info"><span class="lbl">Abtastung vs. Quantisierung</span><b>Abtastung</b> diskretisiert die Zeit (Werte zu $t_k=kT$). <b>Quantisierung</b> diskretisiert den Wert (Runden auf Stufen).</div>
+    <div class="h2">Interaktiv: dieselbe Sinuskurve in allen vier Klassen</div>
+    <div class="lab"><div class="labtitle">Signalklassen-Vergleich</div>
+      <div id="kl-plot" class="plot tall"></div></div>
+  </div>
+
+  <!-- SHANNON -->
+  <div class="tab-content" id="tab-shannon">
+    <p class="lead">Shannon: $f_{abt}\ge2f_{sig}$. Nyquist-Frequenz $f_N=f_{abt}/2$. Darüber → <b>Aliasing</b>: hohe Frequenzen erscheinen als niedrige.</p>
+    <div class="eq">$$f_N=\frac{f_{abt}}{2},\qquad f_{alias}=|f_{sig}-f_{abt}|\ (\text{allg. Abstand zum nächsten Vielfachen von }f_{abt}).$$</div>
+    <div class="h2">Interaktiv: Aliasing-Simulator</div>
+    <p>Verstelle Signal- und Abtastfrequenz. Liegt $f_{sig}>f_N$, „erscheint" das abgetastete Signal als langsamere Alias-Frequenz (rot).</p>
+    <div class="lab"><div class="labtitle">Aliasing</div>
+      <div class="ctrls">
+        <div class="cg"><label>Signalfrequenz $f_{sig}$ (Hz)</label><input type="range" id="al-fs" min="0.5" max="9" step="0.1" value="2"><span class="val" id="al-fs-v">2.0</span></div>
+        <div class="cg"><label>Abtastfrequenz $f_{abt}$ (Hz)</label><input type="range" id="al-fa" min="2" max="20" step="0.5" value="10"><span class="val" id="al-fa-v">10</span></div>
+      </div>
+      <div class="pills"><div class="p">Nyquist $f_N$ <b id="al-fn">–</b></div><div class="p">Alias-Frequenz <b id="al-al">–</b></div></div>
+      <div class="verdict" id="al-vd"></div><div id="al-plot" class="plot"></div>
+    </div>
+    <div class="exam"><div class="exam-h"><div class="t">Abtastfrequenz &amp; Aliasing-Grenze</div><div class="badges"><span class="b">Klausur 01.03.2023 · 5.1/5.2</span></div></div>
+      <div class="exam-b"><div class="box result"><span class="lbl">Ergebnis</span>Abtastpunktabstand $0{,}1$ ms → $f_A=\frac1{10^{-4}}=10^4$ Hz. Aliasing ab $f_{sig}>\frac{f_A}{2}=5\cdot10^3$ Hz.</div></div>
+    </div>
+  </div>
+
+  <!-- QUANTISIERUNG -->
+  <div class="tab-content" id="tab-quant">
+    <p class="lead">Quantisierung rundet auf $2^n$ Stufen. Intervall und maximaler Fehler:</p>
+    <div class="eq">$$\Delta=\frac{x_{max}-x_{min}}{2^n-1},\qquad e_{max}=\frac{\Delta}{2},\qquad n\ge\log_2(N_{Stufen}).$$</div>
+    <div class="h2">Interaktiv: Quantisierung mit $n$ Bit</div>
+    <p>Spannungsbereich $\pm1$ V. Schiebe die Bit-Zahl und beobachte Stufung, $\Delta$ und $e_{max}$.</p>
+    <div class="lab"><div class="labtitle">Quantisierer</div>
+      <div class="ctrls"><div class="cg"><label>Auflösung $n$ (Bit)</label><input type="range" id="q-n" min="1" max="6" step="1" value="3"><span class="val" id="q-n-v">3</span></div></div>
+      <div class="pills"><div class="p">Stufen $2^n$ <b id="q-st">–</b></div><div class="p">$\Delta$ <b id="q-d">–</b></div><div class="p">$e_{max}$ <b id="q-e">–</b></div></div>
+      <div id="q-plot" class="plot"></div>
+    </div>
+    <div class="exam"><div class="exam-h"><div class="t">Quantisierungsintervall, Fehler &amp; Bits</div><div class="badges"><span class="b">Klausur 01.03.2023 · 5.3/5.4</span></div></div>
+      <div class="exam-b">
+        <div class="aufg">Werte $0{,}4$ V und $-0{,}6$ V, 4 Zwischenwerte gefordert; Bereich $\pm1$ V.</div>
+        <div class="solver">
+          <details class="sd"><summary><span class="ar">▸</span><span class="sn">Lösung</span></summary><div class="sc">$\Delta=\frac{|0{,}4-(-0{,}6)|}{4+1}=0{,}2$ V, $e_{max}=0{,}1$ V. Bits: $\frac{2}{0{,}2}=10\le2^n-1\Rightarrow2^n\ge11\Rightarrow n=4$. <div class="box result"><span class="lbl">Ergebnis</span>$\Delta=0{,}2$ V, $e_{max}=0{,}1$ V, $n=4$ Bit.</div></div></details>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FILTER -->
+  <div class="tab-content" id="tab-filter">
+    <p class="lead">Digitale Filter über Differenzengleichungen. <b>IIR</b> (mit Ausgaberückführung) ist BIBO-stabil ⇔ $|a_1|<1$; <b>FIR</b> immer stabil.</p>
+    <div class="eq">$$y_k=a_1 y_{k-1}+b_0 u_k,\qquad y_\infty=\frac{b_0}{1-a_1},\qquad\text{Euler-PT1: }T=\frac{\Delta t}{1-a_1},\ K=\frac{b_0}{1-a_1}.$$</div>
+    <div class="h2">Interaktiv: IIR-Filter 1. Ordnung &amp; BIBO-Stabilität</div>
+    <p>$y_k=a_1 y_{k-1}+b_0 u_k$ mit $b_0=0{,}2$, Sprunganregung. Bei $|a_1|\ge1$ klingt die Ausgabe auf (Pol außerhalb des Einheitskreises).</p>
+    <div class="lab"><div class="labtitle">IIR-Filter</div>
+      <div class="ctrls"><div class="cg"><label>Koeffizient $a_1$</label><input type="range" id="f-a" min="-1.4" max="1.4" step="0.05" value="0.8"><span class="val" id="f-a-v">0.80</span></div></div>
+      <div class="verdict" id="f-vd"></div>
+      <div class="two"><div id="f-step" class="plot" style="height:340px;"></div><div id="f-pole" class="plot" style="height:340px;"></div></div>
+    </div>
+    <table class="tbl"><tr><th>FIR</th><th>IIR</th></tr>
+      <tr><td>keine Ausgaberückführung; endliche Impulsantwort</td><td>mit Ausgaberückführung; unendliche Impulsantwort</td></tr>
+      <tr><td>immer BIBO-stabil; linearphasig möglich</td><td>kann instabil werden; effizienter (weniger Koeffizienten)</td></tr>
+    </table>
+    <div class="exam"><div class="exam-h"><div class="t">Filterkoeffizienten aus Sprungantwort</div><div class="badges"><span class="b">Klausur 01.03.2023 · 5.7</span></div></div>
+      <div class="exam-b">
+        <div class="aufg">Form $y_{k+1}=a_0 y_k+a_1 y_{k-1}-b_0 u_k$, Sprung $u=(0,1,1,\dots)$, abgelesen $y=(0;0;0{,}5;0{,}75;0{,}875)$.</div>
+        <div class="solver">
+          <details class="sd"><summary><span class="ar">▸</span><span class="sn">Lösung</span></summary><div class="sc">$y_2=0{,}5=-b_0\Rightarrow b_0=-0{,}5$. $y_3=0{,}75=a_0\cdot0{,}5+0{,}5\Rightarrow a_0=0{,}5$. $y_4=0{,}875=0{,}5\cdot0{,}75+0{,}5\Rightarrow a_1=0$. <div class="box result"><span class="lbl">Ergebnis</span>$y_{k+1}=0{,}5 y_k+0{,}5 u_k$ (stabil, $|a_0|<1$).</div></div></details>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ANTI-ALIASING -->
+  <div class="tab-content" id="tab-anti">
+    <p class="lead">Ein Anti-Aliasing-Filter ist ein analoges Tiefpassfilter <b>vor</b> der Abtastung mit Grenzfrequenz $f_g\le f_{abt}/2$.</p>
+    <div class="fig">
+      <svg viewBox="0 0 460 180" role="img" aria-label="OPV-Tiefpass">
+        <line x1="20" y1="70" x2="70" y2="70" stroke="#0f172a" stroke-width="2"/><text x="22" y="62" font-size="12" font-style="italic">u_e</text>
+        <rect x="70" y="60" width="46" height="20" fill="none" stroke="#0f172a" stroke-width="2"/><text x="93" y="98" font-size="12" font-style="italic">R_1</text>
+        <line x1="116" y1="70" x2="160" y2="70" stroke="#0f172a" stroke-width="2"/>
+        <path d="M160,40 L160,100 L215,70 Z" fill="#fffbeb" stroke="#d97706" stroke-width="2"/><text x="178" y="74" font-size="11">−</text>
+        <line x1="215" y1="70" x2="300" y2="70" stroke="#0f172a" stroke-width="2"/><text x="280" y="62" font-size="12" font-style="italic">u_a</text>
+        <line x1="135" y1="70" x2="135" y2="20" stroke="#0f172a" stroke-width="2"/><line x1="135" y1="20" x2="250" y2="20" stroke="#0f172a" stroke-width="2"/><line x1="250" y1="20" x2="250" y2="70" stroke="#0f172a" stroke-width="2"/>
+        <rect x="160" y="10" width="40" height="18" fill="none" stroke="#0f172a" stroke-width="2"/><text x="180" y="8" font-size="11" font-style="italic" text-anchor="middle">R_2</text>
+        <text x="220" y="38" font-size="11" font-style="italic">C</text><line x1="205" y1="33" x2="220" y2="33" stroke="#0f172a" stroke-width="2"/><line x1="205" y1="38" x2="220" y2="38" stroke="#0f172a" stroke-width="2"/>
+        <text x="320" y="70" font-size="13" font-style="italic">G=−(R₂/R₁)/(1+R₂C·s)</text>
+      </svg>
+      <div class="cap">Abb. 1 – Invertierender OPV-Tiefpass (PT1): $K=-R_2/R_1$, $T=R_2 C$, $f_g=\frac1{2\pi T}$.</div>
+    </div>
+    <div class="exam"><div class="exam-h"><div class="t">OPV-Tiefpass aus Bode bestimmen</div><div class="badges"><span class="b">Klausur 30.08.2024 · 5.4</span></div></div>
+      <div class="exam-b">
+        <div class="aufg">PT1 mit neg. Verstärkung. Aus Bode: Knick $\omega=0{,}5$, $|K|_{dB}=40$ dB; $R_2=40$.</div>
+        <div class="solver">
+          <details class="sd"><summary><span class="ar">▸</span><span class="sn">Lösung</span></summary><div class="sc">$T=1/\omega=2$ s; $|K|=10^{40/20}=100$, $K=-100$. $R_2 C=T\Rightarrow C=\frac{2}{40}=0{,}05$ F; $-R_2/R_1=-100\Rightarrow R_1=0{,}4$. <div class="box result"><span class="lbl">Ergebnis</span>$C=0{,}05$, $R_1=0{,}4$; Tiefpass → als Anti-Aliasing-Filter geeignet (da $f_g<f_{abt}/2$).</div></div></details>
+        </div>
+      </div>
+    </div>
+    <div class="exam"><div class="exam-h"><div class="t">Digitales Filter ↔ analoges PT1 (Euler)</div><div class="badges"><span class="b">Klausur 01.03.2023 · 5.5/5.6</span></div></div>
+      <div class="exam-b">
+        <div class="aufg">$y_{k+1}=0{,}9 y_k+0{,}1 u_k$ (PT1), $\Delta t=10^{-4}$ s.</div>
+        <div class="solver">
+          <details class="sd"><summary><span class="ar">▸</span><span class="sn">Lösung</span></summary><div class="sc">$\frac{\Delta t}{T}=1-a_1=0{,}1\Rightarrow T=10^{-3}$ s. Grenzfrequenz $f_g=\frac1{2\pi T}\approx159$ Hz $<\frac{f_A}{2}=5$ kHz → <div class="box result"><span class="lbl">Ergebnis</span>geeignet als Anti-Aliasing-Filter.</div></div></details>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<div class="footer"><a href="index.html">← Zur Übersicht</a> · Regelungstechnik 1 · Uni Paderborn</div>
+
+<script src="js/rt.js"></script>
+<script>
+/* Signalklassen */
+function rKl(){
+  var t=linspace(0,2,400),f=1.2;
+  var ana=t.map(function(x){return Math.sin(2*Math.PI*f*x);});
+  var Ts=0.1,ts=[],sv=[];for(var k=0;k*Ts<=2;k++){ts.push(k*Ts);sv.push(Math.sin(2*Math.PI*f*k*Ts));}
+  var q=function(v){return Math.round(v/0.25)*0.25;};
+  var qc=t.map(function(x){return q(Math.sin(2*Math.PI*f*x));});
+  var dig=sv.map(q);
+  Plotly.newPlot('kl-plot',[
+    {x:t,y:ana,mode:'lines',name:'analog',line:{color:'#94a3b8',width:2}},
+    {x:ts,y:sv,mode:'markers',name:'abgetastet',marker:{color:'#d97706',size:7}},
+    {x:t,y:qc,mode:'lines',name:'quantisiert',line:{color:'#0891b2',width:1.5,shape:'hv'}},
+    {x:ts,y:dig,mode:'markers',name:'digital',marker:{color:'#dc2626',size:9,symbol:'square'}}
+  ],Object.assign(plotLayout('t [s]','Amplitude'),{title:{text:'analog · abgetastet · quantisiert · digital',font:{size:13}},legend:{orientation:'h',y:1.12}}),{responsive:true});
+}
+/* Aliasing */
+function rAl(){
+  var fs=+document.getElementById('al-fs').value,fa=+document.getElementById('al-fa').value;
+  document.getElementById('al-fs-v').textContent=fs.toFixed(1);document.getElementById('al-fa-v').textContent=fa.toFixed(0);
+  var fN=fa/2;var kk=Math.round(fs/fa);var fal=Math.abs(fs-kk*fa);
+  document.getElementById('al-fn').textContent=fN.toFixed(1)+' Hz';document.getElementById('al-al').textContent=fal.toFixed(2)+' Hz';
+  var ok=fs<=fN;setVerdict(document.getElementById('al-vd'),ok,ok?('✓ Kein Aliasing – f_sig ≤ f_N ('+fN.toFixed(1)+' Hz). Rekonstruktion eindeutig.'):('✗ Aliasing! f_sig > f_N – erscheint als '+fal.toFixed(2)+' Hz.'));
+  var Tend=2,t=linspace(0,Tend,600);var orig=t.map(function(x){return Math.sin(2*Math.PI*fs*x);});
+  var ts=[],sv=[];for(var k=0;k/fa<=Tend;k++){ts.push(k/fa);sv.push(Math.sin(2*Math.PI*fs*k/fa));}
+  var alias=t.map(function(x){return Math.sin(2*Math.PI*fal*x);});
+  var tr=[
+    {x:t,y:orig,mode:'lines',name:'Originalsignal ('+fs.toFixed(1)+' Hz)',line:{color:'#94a3b8',width:1.5}},
+    {x:ts,y:sv,mode:'markers',name:'Abtastpunkte',marker:{color:'#d97706',size:8}}
+  ];
+  if(!ok)tr.push({x:t,y:alias,mode:'lines',name:'Alias ('+fal.toFixed(2)+' Hz)',line:{color:'#dc2626',width:2.5}});
+  Plotly.newPlot('al-plot',tr,Object.assign(plotLayout('t [s]','Amplitude'),{legend:{orientation:'h',y:1.12}}),{responsive:true});
+}
+/* Quantisierung */
+function rQ(){
+  var n=+document.getElementById('q-n').value;document.getElementById('q-n-v').textContent=n;
+  var lev=Math.pow(2,n),D=2/(lev-1),e=D/2;
+  document.getElementById('q-st').textContent=lev;document.getElementById('q-d').textContent=D.toFixed(3)+' V';document.getElementById('q-e').textContent=e.toFixed(3)+' V';
+  var t=linspace(0,2,500),ana=t.map(function(x){return Math.sin(Math.PI*x);});
+  var qz=ana.map(function(v){return Math.round(v/D)*D;});
+  Plotly.newPlot('q-plot',[
+    {x:t,y:ana,mode:'lines',name:'analog',line:{color:'#94a3b8',width:2}},
+    {x:t,y:qz,mode:'lines',name:'quantisiert ('+n+' Bit)',line:{color:'#d97706',width:2,shape:'hv'}}
+  ],Object.assign(plotLayout('t [s]','Spannung [V]'),{title:{text:lev+' Stufen, Δ='+D.toFixed(3)+' V',font:{size:13}},legend:{orientation:'h',y:1.12}}),{responsive:true});
+}
+/* IIR-Filter */
+function rF(){
+  var a1=+document.getElementById('f-a').value,b0=0.2;document.getElementById('f-a-v').textContent=a1.toFixed(2);
+  var N=30,y=[],k,yk=0;var ks=[];for(k=0;k<=N;k++){var uk=k>=1?1:0;yk=a1*yk+b0*uk;y.push(yk);ks.push(k);}
+  var ok=Math.abs(a1)<1;setVerdict(document.getElementById('f-vd'),ok,ok?('✓ BIBO-stabil – |a₁|='+Math.abs(a1).toFixed(2)+' < 1, Pol im Einheitskreis. y∞='+(b0/(1-a1)).toFixed(3)):('✗ BIBO-instabil – |a₁|='+Math.abs(a1).toFixed(2)+' ≥ 1, Pol außerhalb des Einheitskreises (Ausgabe klingt auf).'));
+  Plotly.newPlot('f-step',[{x:ks,y:y,mode:'lines+markers',line:{color:'#d97706',width:2},marker:{size:5}}],
+    Object.assign(plotLayout('k','y_k'),{title:{text:'Sprungantwort',font:{size:13}}}),{responsive:true});
+  var th=linspace(0,2*Math.PI,100);
+  Plotly.newPlot('f-pole',[
+    {x:th.map(Math.cos),y:th.map(Math.sin),mode:'lines',name:'Einheitskreis',line:{color:'#cbd5e1',width:1.5}},
+    {x:[a1],y:[0],mode:'markers',name:'Pol z=a₁',marker:{symbol:'x',size:15,color:ok?'#059669':'#dc2626',line:{width:3}}}
+  ],Object.assign(plotLayout('Re(z)','Im(z)'),{title:{text:'Pol in der z-Ebene',font:{size:13}},xaxis:{title:'Re(z)',range:[-1.6,1.6],gridcolor:'#eef2f7'},yaxis:{title:'Im(z)',range:[-1.6,1.6],scaleanchor:'x',gridcolor:'#eef2f7'},showlegend:false}),{responsive:true});
+}
+window.RT_RENDER={klassen:rKl,shannon:rAl,quant:rQ,filter:rF};
+document.getElementById('al-fs').addEventListener('input',rAl);document.getElementById('al-fa').addEventListener('input',rAl);
+document.getElementById('q-n').addEventListener('input',rQ);
+document.getElementById('f-a').addEventListener('input',rF);
+setTimeout(rKl,80);
+</script>
+</body>
+</html>

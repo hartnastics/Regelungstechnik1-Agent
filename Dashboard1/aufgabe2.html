@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aufgabe 2 – Systemanalyse | RT1</title>
+  <style>:root{--accent:#7c3aed;--accent-d:#5b21b6;}</style>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false,strict:false});"></script>
+  <script src="https://cdn.plot.ly/plotly-2.26.0.min.js"></script>
+</head>
+<body>
+<nav class="navbar">
+  <a class="nav-brand" href="index.html">RT1 Lernportal</a>
+  <div class="nav-links">
+    <a href="aufgabe1.html">Aufgabe 1</a><a href="aufgabe2.html" class="active">Aufgabe 2</a>
+    <a href="aufgabe3.html">Aufgabe 3</a><a href="aufgabe4.html">Aufgabe 4</a><a href="aufgabe5.html">Aufgabe 5</a>
+    <a href="fragen.html" class="nav-highlight">Fragen</a>
+  </div>
+</nav>
+<div class="hero hero-a2">
+  <div class="hero-inner">
+    <div class="hero-badge">20 Punkte · Aufgabe 2 · Lernzettel 3–4</div>
+    <h1>Systemanalyse</h1>
+    <p>Drei unabhängige Teilaufgaben: Ortskurven ($K$, $n$ bestimmen), Nyquist-Kriterium, Bode → $F_o(s)$ rekonstruieren, $F_W$ rückwärts auf die Strecke und stationäre Genauigkeit.</p>
+  </div>
+</div>
+<div class="tab-nav">
+  <button class="tab-btn active" onclick="showTab('ort')">Ortskurven</button>
+  <button class="tab-btn" onclick="showTab('nyq')">Nyquist-Kriterium</button>
+  <button class="tab-btn" onclick="showTab('rekon')">Bode → F_o</button>
+  <button class="tab-btn" onclick="showTab('rueck')">F_W rückwärts</button>
+  <button class="tab-btn" onclick="showTab('stat')">Stationäre Genauigkeit</button>
+</div>
+<div class="content-wrap">
+
+  <!-- ORTSKURVEN -->
+  <div class="tab-content active" id="tab-ort">
+    <p class="lead">Aus dem Verlauf einer gegebenen Ortskurve $F_o(j\omega)$ bestimmt man die Verstärkung $K$ und den Polüberschuss $n$.</p>
+    <div class="box def"><span class="lbl">Ablese-Regeln</span>
+      <b>Startpunkt</b> $\omega\to0$: $F_o(0)=K$ (reeller Wert auf der positiven reellen Achse, falls kein I-Anteil). <b>Endpunkt</b> $\omega\to\infty$: die Kurve läuft unter dem Winkel $-n\cdot90^\circ$ in den Ursprung → daraus $n$ (Polüberschuss = Nenner- minus Zählergrad). <b>Drehrichtung</b>: im Uhrzeigersinn (stabile Systeme, $K>0$).</div>
+    <table class="tbl">
+      <tr><th>Typ</th><th>Form der Ortskurve</th><th>Endwinkel</th></tr>
+      <tr><td>PT1</td><td>Halbkreis im 4. Quadranten</td><td>−90°</td></tr>
+      <tr><td>PT2 / PT1·PT1</td><td>läuft durch 2 Quadranten (Schlaufe)</td><td>−180°</td></tr>
+      <tr><td>PT1·PT1·PT1</td><td>durch 3 Quadranten</td><td>−270°</td></tr>
+      <tr><td>I·PT1</td><td>kommt aus $-j\infty$, Asymptote parallel zur Im-Achse</td><td>−180°</td></tr>
+    </table>
+
+    <div class="h2">Interaktiv: Ortskurve &amp; Ablesen von $K$, $n$</div>
+    <div class="lab">
+      <div class="labtitle">Ortskurve verschiedener Systemtypen</div>
+      <div class="ctrls">
+        <div class="cg"><label>Systemtyp</label><select id="o-typ">
+          <option value="PT1">PT1: K/(1+sT)</option>
+          <option value="PT1PT1" selected>PT1·PT1</option>
+          <option value="PT1PT1PT1">PT1·PT1·PT1</option>
+          <option value="IPT1">I·PT1</option>
+          <option value="IPT1PT1">I·PT1·PT1</option>
+        </select></div>
+        <div class="cg"><label>Verstärkung $K$</label><input type="range" id="o-K" min="1" max="10" step="0.5" value="5"><span class="val" id="o-K-v">5.0</span></div>
+      </div>
+      <div class="pills"><div class="p">Startpunkt $F_o(0)$ <b id="o-start">–</b></div><div class="p">Polüberschuss $n$ <b id="o-n">–</b></div><div class="p">Endwinkel <b id="o-ang">–</b></div></div>
+      <div id="o-plot" class="plot tall"></div>
+    </div>
+
+    <div class="exam">
+      <div class="exam-h"><div class="t">$K$ und $n$ aus zwei Ortskurven bestimmen</div><div class="badges"><span class="b">Klausur 30.08.2024 · 2.1</span></div></div>
+      <div class="exam-b">
+        <div class="aufg">$F_{o,1}=\frac{K}{(s+1{,}5)(s+4)s^n}$ (Ortskurve läuft durch 2 Quadranten, Endwinkel $-180^\circ$) und $F_{o,2}=\frac{K}{s^n+3s^{n-1}}$ (Integrator erkennbar, Endwinkel $-180^\circ$, $\omega_d=4$).</div>
+        <div class="solver">
+          <details class="sd"><summary><span class="ar">▸</span><span class="sn">$F_{o,1}$</span></summary><div class="sc">2 Quadranten, $-180^\circ$ → zwei PT1 → $n=0$. Aus $F_{o,1}(0)=10$: $\frac{K}{1{,}5\cdot4}=10\Rightarrow K=60$.</div></details>
+          <details class="sd"><summary><span class="ar">▸</span><span class="sn">$F_{o,2}$</span></summary><div class="sc">Integrator + Endwinkel $-180^\circ$ → $n=2$ (I·PT1). Mit $\omega_d=4$: $|F_{o,2}(4j)|=1=\frac{|K|}{|{-16+12j}|}=\frac{|K|}{20}\Rightarrow K=20$ (Vorzeichen aus Verlauf positiv).</div></details>
+          <details class="sd"><summary><span class="ar">▸</span><span class="sn">Ergebnis</span></summary><div class="sc"><div class="box result"><span class="lbl">Ergebnis</span>$F_{o,1}$: $n=0,\ K=60$. $F_{o,2}$: $n=2,\ K=20$.</div></div></details>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NYQUIST -->
+  <div class="tab-content" id="tab-nyq">
+    <p class="lead">Das Nyquist-Kriterium beurteilt die Stabilität des geschlossenen Kreises aus der Ortskurve des offenen Kreises.</p>
+    <div class="two">
+      <div class="box def"><span class="lbl">Speziell</span>Alle Pole von $F_o$ links der $j$-Achse (höchstens Pol bei 0): stabil ⇔ $(-1,0)$ wird <b>links liegen gelassen</b>.</div>
+      <div class="box def"><span class="lbl">Allgemein</span>$r_o$ Pole rechts, $a_o$ auf der $j$-Achse: stabil ⇔ $W=r_o\pi+a_o\frac\pi2$ (Umschlingung von $-1$).</div>
+    </div>
+    <div class="fig">
+      <svg viewBox="0 0 460 230" role="img" aria-label="Kritischer Punkt Nyquist">
+        <line x1="30" y1="120" x2="440" y2="120" stroke="#94a3b8"/><text x="425" y="138" font-size="12">Re</text>
+        <line x1="250" y1="20" x2="250" y2="220" stroke="#94a3b8"/><text x="258" y="30" font-size="12">Im</text>
+        <circle cx="250" cy="120" r="70" fill="none" stroke="#cbd5e1" stroke-dasharray="4 3"/><text x="300" y="80" font-size="11" fill="#94a3b8">Einheitskreis</text>
+        <text x="170" y="116" font-size="20" fill="#dc2626" font-weight="700">×</text><text x="140" y="150" font-size="12" fill="#dc2626">(−1, 0)</text>
+        <path d="M360,120 C360,200 250,215 185,165 C130,125 165,85 215,95 C245,101 250,110 250,120" fill="none" stroke="#7c3aed" stroke-width="2.5"/>
+        <text x="362" y="115" font-size="11" fill="#7c3aed">ω→0 (=K)</text>
+        <text x="60" y="205" font-size="11" fill="#64748b">stabil: Ortskurve lässt (−1,0) links liegen</text>
+      </svg>
+      <div class="cap">Abb. 1 – Spezielles Nyquist-Kriterium: Schneidet die Ortskurve die negative reelle Achse <b>rechts</b> von $-1$ (zwischen 0 und $-1$), bleibt der kritische Punkt „links liegen" → stabil.</div>
+    </div>
+    <div class="h2">Interaktiv: wann wird $(-1,0)$ eingeschlossen?</div>
+    <p>$F_o=\frac{K}{(s+1)(0{,}5s+1)(0{,}2s+1)}$. Erhöhe $K$ bis der kritische Punkt eingeschlossen wird.</p>
+    <div class="lab"><div class="labtitle">Ortskurve mit kritischem Punkt</div>
+      <div class="ctrls"><div class="cg"><label>$K$</label><input type="range" id="n-K" min="0.5" max="40" step="0.5" value="8"><span class="val" id="n-K-v">8.0</span></div></div>
+      <div class="verdict" id="n-vd"></div><div id="n-plot" class="plot tall"></div>
+    </div>
+    <div class="exam"><div class="exam-h"><div class="t">Drei Ortskurven prüfen (allgemeines Nyquist)</div><div class="badges"><span class="b">Klausur 23.08.2023 · 2.3</span></div></div>
+      <div class="exam-b"><div class="solver">
+        <details class="sd"><summary><span class="ar">▸</span><span class="sn">$F_{o,1}=\frac{5}{s(2s+3)}$</span></summary><div class="sc">1 Pol auf $j$-Achse → $r_o=0,a_o=1$, Soll $W=\frac\pi2=90^\circ$ = Ist → <b>stabil</b>.</div></details>
+        <details class="sd"><summary><span class="ar">▸</span><span class="sn">$F_{o,2}=\frac{s+14}{2(s+2)(s-3)^2}$</span></summary><div class="sc">2 Pole rechts → $r_o=2$, Soll $W=2\pi$, Ist $0$ → <b>instabil</b>.</div></details>
+        <details class="sd"><summary><span class="ar">▸</span><span class="sn">$F_{o,3}=\frac{100s+50}{s(s^2-4s+28)}$</span></summary><div class="sc">$s^2-4s+28=0\Rightarrow s=2\pm\sqrt{24}j$ (2 Pole rechts) + Pol bei 0 → $r_o=2,a_o=1$, Soll $W=2{,}5\pi$, Ist $\neq$ → <b>instabil</b>.</div></details>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- BODE → F_o -->
+  <div class="tab-content" id="tab-rekon">
+    <p class="lead">Aus einem gegebenen Bode-Diagramm rekonstruiert man $F_o(s)$.</p>
+    <div class="anl">
+      <div class="s"><div><b>Anfangssteigung</b> ablesen → Anzahl I-Anteile ($-20$ dB/Dek je I-Glied).</div></div>
+      <div class="s"><div><b>Anfangsverstärkung</b> $K$ aus dem Niveau (bzw. Schnitt mit $\omega=1$).</div></div>
+      <div class="s"><div><b>Knickfrequenzen</b> → Zeitkonstanten $T_k=1/\omega_k$. Steigungsänderung $-20$ → PT1, $-40$ → PT2, $+20$ → Zähler-Term.</div></div>
+      <div class="s"><div><b>PT2-Korrektur</b>: Überhöhung an der Knickfrequenz → $D<\frac1{\sqrt2}$; $D$ aus der Überhöhungshöhe bestimmen.</div></div>
+    </div>
+    <div class="exam"><div class="exam-h"><div class="t">$F_o(s)$ aus Bode mit PT2-Erkennung</div><div class="badges"><span class="b">Klausur 30.08.2024 · 2.3</span></div></div>
+      <div class="exam-b">
+        <div class="aufg">Bode mit Asymptoten gegeben: Niveau $40$ dB bei tiefen Frequenzen, Steigung $-40$ dB/Dek ab $\omega_1=0{,}1$, danach $-60$ dB/Dek ab $\omega_2=1$.</div>
+        <div class="solver">
+          <details class="sd"><summary><span class="ar">▸</span><span class="sn">Schritt 1</span> Verstärkung</summary><div class="sc">Horizontaler Beginn → $K_{ges}$ direkt: $40$ dB $\Rightarrow K=100$.</div></details>
+          <details class="sd"><summary><span class="ar">▸</span><span class="sn">Schritt 2</span> PT2</summary><div class="sc">Erster Knick $-40$ dB/Dek bei $\omega_1=0{,}1$ → PT2, $T_1=10$ s. Korrektur $-6$ dB an der Knickstelle → doppelter reeller Pol → $D=1$.</div></details>
+          <details class="sd"><summary><span class="ar">▸</span><span class="sn">Schritt 3</span> PT1</summary><div class="sc">Zweiter Knick $-60$ dB/Dek bei $\omega_2=1$ → PT1, $T_2=0{,}1$ s.</div></details>
+          <details class="sd"><summary><span class="ar">▸</span><span class="sn">Ergebnis</span></summary><div class="sc"><div class="box result"><span class="lbl">Ergebnis</span>$$F_o(s)=\frac{100}{(100s^2+20s+1)(0{,}1s+1)}.$$</div></div></details>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- F_W rückwärts -->
+  <div class="tab-content" id="tab-rueck">
+    <p class="lead">Aus der Führungsübertragungsfunktion $F_W$ rechnet man (bei bekanntem Regler) die Strecke $G_S$ heraus und prüft deren Stabilität.</p>
+    <div class="eq">$$F_W=\frac{F_o}{1+F_o}\ \Rightarrow\ F_o=\frac{F_W}{1-F_W}=\frac{Z_o}{N_o},\qquad G_S=\frac{F_o}{G_R}.$$</div>
+    <div class="box merk"><span class="lbl">Vorgehen</span>Beim Standardregelkreis ist $F_W=\frac{Z_o}{Z_o+N_o}$ → Zähler $Z_o$ und Nenner ablesen, $N_o=(\text{Nenner})-Z_o$ bilden, daraus $F_o=Z_o/N_o$, dann $G_S=F_o/G_R$ kürzen und Pole prüfen.</div>
+    <div class="exam"><div class="exam-h"><div class="t">$F_W$ rückwärts → ist die Strecke stabil?</div><div class="badges"><span class="b">Klausur 01.03.2023 · 2.1</span></div></div>
+      <div class="exam-b">
+        <div class="aufg">$F_W=\frac{20(0{,}5s+1)}{s(s+4)(3s-1)+20(0{,}5s+1)}$, PI-Regler $G_R=5\frac{0{,}5s+1}{s}$. Ist $G_S$ stabil?</div>
+        <div class="solver">
+          <details class="sd"><summary><span class="ar">▸</span><span class="sn">Schritt 1</span> $F_o$ aus $F_W$</summary><div class="sc">$Z_o=20(0{,}5s+1)$; $N_o=$ Nenner $-Z_o=s(s+4)(3s-1)$. Also $F_o=\frac{20(0{,}5s+1)}{s(s+4)(3s-1)}$.</div></details>
+          <details class="sd"><summary><span class="ar">▸</span><span class="sn">Schritt 2</span> $G_S=F_o/G_R$</summary><div class="sc">$$G_S=\frac{20(0{,}5s+1)}{s(s+4)(3s-1)}\cdot\frac{s}{5(0{,}5s+1)}=\frac{4}{(s+4)(3s-1)}.$$</div></details>
+          <details class="sd"><summary><span class="ar">▸</span><span class="sn">Ergebnis</span></summary><div class="sc"><div class="box result"><span class="lbl">Ergebnis</span>Pole $s=-4$ und $s=\frac13$. Ein Pol rechts der $j$-Achse → die Regelstrecke ist <b>instabil</b>.</div></div></details>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STATIONÄR -->
+  <div class="tab-content" id="tab-stat">
+    <p class="lead">Mit dem Endwertsatz prüft man, ob der gewünschte Endwert erreichbar ist.</p>
+    <div class="eq">$$e_\infty=\lim_{s\to0}s\,E(s)=\lim_{s\to0}\frac{s\,W(s)}{1+F_o(s)}\overset{W=w_0/s}{=}\frac{w_0}{1+F_o(0)}.$$</div>
+    <div class="box merk"><span class="lbl">Regel</span>$e_\infty=0$ ⇔ $F_o$ enthält einen <b>Integrator</b> (I-Anteil). Ohne I-Anteil bleibt $e_\infty=\frac{w_0}{1+F_o(0)}>0$.</div>
+    <div class="exam"><div class="exam-h"><div class="t">Erreichbarkeit einer Genauigkeit prüfen</div><div class="badges"><span class="b">Klausur 26.02.2025 · 2.3</span></div></div>
+      <div class="exam-b">
+        <div class="aufg">$F_o=\frac{K_R(3s+10)}{15s^3+40s^2+25s+40}$. Lässt sich $e_\infty<1\%$ erreichen?</div>
+        <div class="solver">
+          <details class="sd"><summary><span class="ar">▸</span><span class="sn">Schritt 1</span> $e_\infty$</summary><div class="sc">$F_o(0)=\frac{10K_R}{40}=\frac{K_R}{4}$. $e_\infty=\frac{w_0}{1+K_R/4}=\frac{40w_0}{10K_R+40}$.</div></details>
+          <details class="sd"><summary><span class="ar">▸</span><span class="sn">Schritt 2</span> Bedingung</summary><div class="sc">$\frac{40}{10K_R+40}<0{,}01\Rightarrow K_R>396$.</div></details>
+          <details class="sd"><summary><span class="ar">▸</span><span class="sn">Ergebnis</span></summary><div class="sc"><div class="box result"><span class="lbl">Ergebnis</span>Nötig $K_R>396$ – jedoch ist der Kreis dann (Hurwitz) längst instabil. Da kein Integrator in $F_o$, ist $e_\infty<1\%$ <b>nicht stabil realisierbar</b>.</div></div></details>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<div class="footer"><a href="index.html">← Zur Übersicht</a> · Regelungstechnik 1 · Uni Paderborn</div>
+
+<script src="js/rt.js"></script>
+<script>
+/* ---- Ortskurve verschiedener Typen ---- */
+function oResp(typ,K,w){
+  var mag,ph,T=1,T2=0.5;
+  if(typ==='PT1'){mag=K/Math.sqrt(1+w*w);ph=-Math.atan(w);}
+  else if(typ==='PT1PT1'){mag=K/(Math.sqrt(1+w*w)*Math.sqrt(1+(T2*w)*(T2*w)));ph=-Math.atan(w)-Math.atan(T2*w);}
+  else if(typ==='PT1PT1PT1'){mag=K/(Math.sqrt(1+w*w)*Math.sqrt(1+(T2*w)*(T2*w))*Math.sqrt(1+(0.2*w)*(0.2*w)));ph=-Math.atan(w)-Math.atan(T2*w)-Math.atan(0.2*w);}
+  else if(typ==='IPT1'){mag=K/(w*Math.sqrt(1+w*w));ph=-Math.PI/2-Math.atan(w);}
+  else if(typ==='IPT1PT1'){mag=K/(w*Math.sqrt(1+w*w)*Math.sqrt(1+(T2*w)*(T2*w)));ph=-Math.PI/2-Math.atan(w)-Math.atan(T2*w);}
+  return {re:mag*Math.cos(ph),im:mag*Math.sin(ph)};
+}
+var O_N={PT1:1,PT1PT1:2,PT1PT1PT1:3,IPT1:2,IPT1PT1:3};
+function rOrt(){
+  var typ=document.getElementById('o-typ').value,K=+document.getElementById('o-K').value;
+  document.getElementById('o-K-v').textContent=K.toFixed(1);
+  var w=logspace(-2,3,800),re=[],im=[];w.forEach(function(x){var p=oResp(typ,K,x);re.push(p.re);im.push(p.im);});
+  var hasI=typ.indexOf('I')===0;
+  document.getElementById('o-start').textContent=hasI?'−j∞ (Integrator)':K.toFixed(1);
+  document.getElementById('o-n').textContent=O_N[typ];
+  document.getElementById('o-ang').textContent=(-90*O_N[typ])+'°';
+  Plotly.newPlot('o-plot',[
+    {x:re,y:im,mode:'lines',name:'F_o(jω)',line:{color:'#7c3aed',width:2.5}},
+    {x:[hasI?null:K],y:[hasI?null:0],mode:'markers',name:'F_o(0)=K',marker:{color:'#059669',size:11}},
+    {x:[0],y:[0],mode:'markers',name:'Ursprung',marker:{color:'#64748b',size:7}}
+  ],Object.assign(plotLayout('Realteil','Imaginärteil'),{yaxis:{title:'Imaginärteil',scaleanchor:'x',gridcolor:'#eef2f7'},xaxis:{title:'Realteil',gridcolor:'#eef2f7'},legend:{x:.02,y:.02}}),{responsive:true});
+}
+/* ---- Nyquist mit krit. Punkt ---- */
+function rNyq(){
+  var K=+document.getElementById('n-K').value;document.getElementById('n-K-v').textContent=K.toFixed(1);
+  var w=logspace(-2,3,800),re=[],im=[];
+  w.forEach(function(x){var mag=K/(Math.sqrt(1+x*x)*Math.sqrt(1+Math.pow(0.5*x,2))*Math.sqrt(1+Math.pow(0.2*x,2)));var ph=-Math.atan(x)-Math.atan(0.5*x)-Math.atan(0.2*x);re.push(mag*Math.cos(ph));im.push(mag*Math.sin(ph));});
+  var Kk=12.6,ok=K<Kk;
+  setVerdict(document.getElementById('n-vd'),ok,ok?('✓ Stabil – (−1,0) wird links liegen gelassen (K < '+Kk+').'):('✗ Instabil – (−1,0) eingeschlossen (K > '+Kk+').'));
+  Plotly.newPlot('n-plot',[
+    {x:re,y:im,mode:'lines',name:'F_o(jω)',line:{color:'#7c3aed',width:2.5}},
+    {x:re,y:im.map(function(v){return -v;}),mode:'lines',name:'Spiegelung',line:{color:'#c4b5fd',width:1.3,dash:'dot'}},
+    {x:[-1],y:[0],mode:'markers',name:'(−1,0)',marker:{color:'#dc2626',size:14,symbol:'x'}}
+  ],Object.assign(plotLayout('Realteil','Imaginärteil'),{yaxis:{title:'Imaginärteil',scaleanchor:'x',gridcolor:'#eef2f7'},xaxis:{title:'Realteil',gridcolor:'#eef2f7'},legend:{x:.02,y:.98}}),{responsive:true});
+}
+window.RT_RENDER={ort:rOrt,nyq:rNyq};
+document.getElementById('o-typ').addEventListener('change',rOrt);
+document.getElementById('o-K').addEventListener('input',rOrt);
+document.getElementById('n-K').addEventListener('input',rNyq);
+setTimeout(rOrt,80);
+</script>
+</body>
+</html>
