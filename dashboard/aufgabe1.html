@@ -9,43 +9,84 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
-    onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});"></script>
+    onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false,strict:false,macros:{'\\deg':'^{\\circ}'}});"></script>
   <script src="https://cdn.plot.ly/plotly-2.26.0.min.js"></script>
   <style>
-    :root { --accent: #4f46e5; }
-    .ergebnis-box{background:#ecfdf5;border:1px solid #6ee7b7;border-left:4px solid #059669;border-radius:0 8px 8px 0;padding:14px 18px;margin:14px 0;}
-    .ergebnis-box .lbl{font-size:.7rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#047857;margin-bottom:6px;}
-    .klausur-box{border:1px solid #c7d2fe;border-radius:10px;margin:20px 0;overflow:hidden;background:#fff;}
-    .klausur-head{background:linear-gradient(135deg,#4338ca,#4f46e5);color:#fff;padding:11px 18px;font-weight:700;font-size:.92rem;display:flex;justify-content:space-between;align-items:center;gap:10px;}
-    .klausur-head .src{font-size:.72rem;font-weight:500;opacity:.9;background:rgba(255,255,255,.18);padding:3px 9px;border-radius:20px;white-space:nowrap;}
-    .klausur-body{padding:18px 20px;}
-    .var-table{width:100%;border-collapse:collapse;margin:14px 0;font-size:.88rem;}
-    .var-table th,.var-table td{border:1px solid #e2e8f0;padding:8px 12px;text-align:left;vertical-align:top;}
-    .var-table th{background:#f1f5f9;font-weight:700;color:#334155;}
-    .var-table td:first-child{font-family:'JetBrains Mono',monospace;white-space:nowrap;width:1%;color:#4f46e5;font-weight:600;}
-    .svg-wrap{background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:20px 18px;margin:18px 0;text-align:center;}
-    .svg-wrap svg{max-width:100%;height:auto;}
-    .svg-cap{font-size:.8rem;color:#64748b;margin-top:10px;font-style:italic;}
-    .plot-box{width:100%;height:480px;margin:6px 0;}
-    .plot-box.tall{height:560px;}
-    .anleitung{counter-reset:astep;margin:16px 0;display:flex;flex-direction:column;gap:0;}
-    .a-step{display:flex;gap:14px;align-items:flex-start;padding:12px 0;border-bottom:1px dashed #e2e8f0;}
-    .a-step:last-child{border-bottom:none;}
-    .a-step::before{counter-increment:astep;content:counter(astep);background:#dc2626;color:#fff;min-width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.82rem;flex-shrink:0;}
-    .a-step div{font-size:.9rem;color:#334155;}
-    .pill-row{display:flex;gap:12px;flex-wrap:wrap;margin:14px 0;}
-    .pill{background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:10px 16px;font-size:.9rem;}
-    .pill b{color:#4f46e5;font-family:'JetBrains Mono',monospace;}
-    .chk-row{display:flex;gap:18px;flex-wrap:wrap;align-items:center;}
-    .chk-row label{display:flex;align-items:center;gap:6px;font-size:.86rem;font-weight:600;color:#334155;cursor:pointer;}
-    .chk-row input{accent-color:#4f46e5;cursor:pointer;width:16px;height:16px;}
-    .legend-inline{display:flex;gap:18px;flex-wrap:wrap;font-size:.82rem;color:#475569;margin:8px 0;}
-    .legend-inline span{display:flex;align-items:center;gap:6px;}
-    .legend-inline i{width:22px;border-top-width:3px;border-top-style:solid;display:inline-block;}
-    .merk{background:#fffbeb;border:1px solid #fcd34d;border-left:4px solid #f59e0b;border-radius:0 8px 8px 0;padding:14px 18px;margin:16px 0;}
-    .merk .lbl{font-size:.7rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#b45309;margin-bottom:6px;}
-    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
-    @media(max-width:760px){.two-col{grid-template-columns:1fr;}}
+    :root{--accent:#4f46e5;--ink:#0f172a;}
+    .content-wrap{max-width:1160px;}
+    .lead{font-size:1.02rem;color:#334155;margin-bottom:6px;}
+    /* headings */
+    .h2{font-size:1.25rem;font-weight:800;color:var(--ink);margin:34px 0 14px;display:flex;align-items:center;gap:10px;}
+    .h2::before{content:'';width:6px;height:24px;border-radius:3px;background:linear-gradient(180deg,#6366f1,#4f46e5);}
+    .h3{font-size:1.02rem;font-weight:700;color:#1e293b;margin:22px 0 8px;}
+    /* callouts */
+    .box{border-radius:12px;padding:15px 18px;margin:14px 0;font-size:.94rem;}
+    .box .lbl{font-size:.68rem;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:7px;display:block;}
+    .merk{background:#fffbeb;border:1px solid #fcd34d;}.merk .lbl{color:#b45309;}
+    .info{background:#eff6ff;border:1px solid #bfdbfe;}.info .lbl{color:#1d4ed8;}
+    .warn{background:#fef2f2;border:1px solid #fecaca;}.warn .lbl{color:#b91c1c;}
+    .def{background:#f5f3ff;border:1px solid #ddd6fe;}.def .lbl{color:#6d28d9;}
+    .result{background:#ecfdf5;border:1px solid #6ee7b7;border-left:5px solid #059669;border-radius:0 10px 10px 0;}.result .lbl{color:#047857;}
+    /* equation block */
+    .eq{background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:6px 14px;margin:12px 0;overflow-x:auto;}
+    /* tables */
+    .tbl{width:100%;border-collapse:collapse;margin:14px 0;font-size:.88rem;}
+    .tbl th,.tbl td{border:1px solid #e2e8f0;padding:9px 12px;text-align:left;vertical-align:top;}
+    .tbl th{background:#eef2ff;font-weight:700;color:#312e81;}
+    .tbl td.m,.tbl th.m{font-family:'JetBrains Mono',monospace;}
+    .tbl tr:nth-child(even) td{background:#fafbff;}
+    /* SVG block diagram wrapper */
+    .fig{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:18px;margin:16px 0;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,.04);}
+    .fig svg{max-width:100%;height:auto;}
+    .fig .cap{font-size:.8rem;color:#64748b;margin-top:10px;font-style:italic;}
+    /* exam card */
+    .exam{border:1px solid #c7d2fe;border-radius:16px;overflow:hidden;margin:24px 0;box-shadow:0 6px 22px rgba(79,70,229,.10);}
+    .exam-h{background:linear-gradient(135deg,#312e81 0%,#4f46e5 100%);color:#fff;padding:16px 22px;}
+    .exam-h .t{font-weight:800;font-size:1.08rem;line-height:1.3;}
+    .exam-h .badges{display:flex;gap:8px;margin-top:9px;flex-wrap:wrap;}
+    .exam-h .b{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.28);padding:3px 11px;border-radius:30px;font-size:.72rem;font-weight:600;}
+    .exam-b{padding:20px 22px;}
+    .aufg{background:#eef2ff;border-left:4px solid #6366f1;border-radius:0 8px 8px 0;padding:13px 16px;margin:4px 0 16px;font-size:.93rem;}
+    .givens{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin:14px 0;}
+    .givens div{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:9px 12px;font-size:.85rem;}
+    .subt{font-weight:700;color:#312e81;margin:20px 0 4px;font-size:.96rem;padding:6px 12px;background:#f1f5ff;border-radius:8px;}
+    /* step-by-step reveal solver */
+    .solver{border:1px solid #e5e9f2;border-radius:12px;overflow:hidden;margin:12px 0;}
+    details.sd{border-top:1px solid #eef2f7;background:#fff;}
+    details.sd:first-child{border-top:none;}
+    details.sd>summary{list-style:none;cursor:pointer;padding:12px 16px;display:flex;gap:11px;align-items:center;font-weight:600;color:#3730a3;background:#f7f8ff;transition:background .15s;user-select:none;}
+    details.sd>summary:hover{background:#eef1ff;}
+    details.sd>summary::-webkit-details-marker{display:none;}
+    details.sd>summary .ar{color:#6366f1;font-size:.9rem;transition:transform .2s;}
+    details.sd[open]>summary .ar{transform:rotate(90deg);}
+    details.sd>summary .sn{background:#4f46e5;color:#fff;border-radius:7px;padding:2px 10px;font-size:.74rem;font-weight:700;white-space:nowrap;}
+    .sc{padding:6px 18px 16px 18px;font-size:.93rem;color:#334155;}
+    .reveal-hint{font-size:.78rem;color:#64748b;font-style:italic;margin:2px 0 0;}
+    /* interactive panel */
+    .lab{background:linear-gradient(135deg,#fafbff,#f1f5ff);border:1px solid #dbe1f3;border-radius:14px;padding:18px;margin:18px 0;}
+    .lab .labtitle{font-weight:800;color:#312e81;font-size:.98rem;margin-bottom:4px;display:flex;align-items:center;gap:8px;}
+    .lab .labtitle::before{content:'🎛';}
+    .ctrls{display:flex;flex-wrap:wrap;gap:16px;margin:14px 0;align-items:flex-end;}
+    .cg{display:flex;flex-direction:column;gap:5px;min-width:150px;flex:1;}
+    .cg label{font-size:.78rem;font-weight:600;color:#475569;}
+    .cg input[type=range]{width:100%;accent-color:#4f46e5;cursor:pointer;}
+    .cg .val{font-size:.85rem;font-weight:700;color:#4f46e5;font-family:'JetBrains Mono',monospace;text-align:right;}
+    .chk{display:flex;gap:16px;flex-wrap:wrap;align-items:center;}
+    .chk label{display:flex;align-items:center;gap:6px;font-size:.85rem;font-weight:600;color:#334155;cursor:pointer;}
+    .chk input{width:16px;height:16px;accent-color:#4f46e5;cursor:pointer;}
+    .pills{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0;}
+    .pills .p{background:#fff;border:1px solid #dbe1f3;border-radius:8px;padding:8px 14px;font-size:.86rem;}
+    .pills .p b{color:#4f46e5;font-family:'JetBrains Mono',monospace;}
+    .verdict{border-radius:9px;padding:11px 16px;margin:8px 0;font-size:.9rem;font-weight:600;}
+    .plot{width:100%;height:470px;margin:6px 0;}
+    .plot.tall{height:560px;}
+    .leg{display:flex;gap:16px;flex-wrap:wrap;font-size:.8rem;color:#475569;margin:6px 0;}
+    .leg span{display:flex;align-items:center;gap:6px;}.leg i{width:22px;border-top:3px solid;display:inline-block;}
+    .anl{counter-reset:as;margin:14px 0;}
+    .anl .s{display:flex;gap:13px;align-items:flex-start;padding:11px 0;border-bottom:1px dashed #e2e8f0;}
+    .anl .s:last-child{border-bottom:none;}
+    .anl .s::before{counter-increment:as;content:counter(as);background:#0891b2;color:#fff;min-width:25px;height:25px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.8rem;flex-shrink:0;}
+    .two{display:grid;grid-template-columns:1fr 1fr;gap:16px;}@media(max-width:760px){.two{grid-template-columns:1fr;}}
   </style>
 </head>
 <body>
@@ -66,7 +107,7 @@
   <div class="hero-inner">
     <div class="hero-badge">30 Punkte · Aufgabe 1</div>
     <h1>Der lineare Regelkreis</h1>
-    <p>Struktur und Gleichungen des Regelkreises, Stabilität mit dem Hurwitz-Kriterium, Bode-Diagramm und das spezielle Nyquist-Kriterium, Stabilitätsreserven, Totzeit und Reglerentwurf – Schritt für Schritt und interaktiv.</p>
+    <p>Die komplette Klausur-Pipeline: Blockschaltbild → Standardform → $F_o,F_W,F_Z$ → Hurwitz-Stabilität → Bode-Diagramm → Stabilitätsreserven → Totzeit → Reglerentwurf. Mit echten Klausuraufgaben, aufklappbaren Rechenwegen und interaktiven Simulationen.</p>
   </div>
 </div>
 
@@ -81,829 +122,604 @@
     <button class="tab-btn" onclick="showTab('regler')">6 · Regler-Entwurf</button>
   </div>
 
-  <!-- ═══════════════════════════════ TAB 1: GRUNDSTRUKTUR ═══════════════════════════════ -->
+  <!-- ════════════════════════ TAB 1 ════════════════════════ -->
   <div class="tab-content active" id="tab-grundstruktur">
-    <div class="section-title">Grundstruktur und Gleichungen des Regelkreises</div>
+    <p class="lead">Aufgabe 1 prüft in jeder Klausur dieselbe Kette: aus einem gegebenen (oft <em>nicht</em>-standardisierten) Blockschaltbild den offenen Kreis $F_o(s)$ und daraus $F_W,F_Z$ bestimmen, Stabilität untersuchen, das Bode-Diagramm zeichnen und Reserven sowie Totzeit bewerten.</p>
 
-    <div class="merk">
-      <div class="lbl">Kernidee zuerst</div>
-      Eine <b>Regelung</b> misst die Regelgröße $y$ fortlaufend, vergleicht sie mit dem Sollwert $w$ und korrigiert über den Regler so lange nach, bis die Abweichung verschwindet. Im Gegensatz zur reinen <b>Steuerung</b> kann sie damit <b>unbekannte Störungen</b> und <b>Modellfehler</b> ausgleichen – das ist der ganze Grund, warum man den Aufwand der Rückführung betreibt.
+    <div class="box info"><span class="lbl">Welche Teilaufgaben kommen vor?</span>
+      Auswertung aller Klausuren 2022–2025 (Aufgabe 1). Diese Seite arbeitet genau diese Typen ab:
+      <table class="tbl" style="margin-top:10px;">
+        <tr><th>Teilaufgaben-Typ</th><th>Tab</th><th>Klausuren (Beispiele)</th></tr>
+        <tr><td>Blockschaltbild zeichnen / in Standardform umformen, virtuelle Größen</td><td>1</td><td>2024-08, 2025-02, 2025-08, 2022-09</td></tr>
+        <tr><td>$G_M,G_{S2}$ für Standardform bestimmen</td><td>1</td><td>2022-09</td></tr>
+        <tr><td>$F_o(s)$ normiert, Stabilität des offenen Kreises</td><td>1</td><td>alle</td></tr>
+        <tr><td>$F_W(s)$ und $F_Z(s)$ herleiten</td><td>1</td><td>alle</td></tr>
+        <tr><td>Reglertyp aus Bode/Beschreibung erkennen</td><td>1/6</td><td>2023-03, 2025-08</td></tr>
+        <tr><td>$K_R$-(und $K_D$-)Bereich mit Hurwitz</td><td>2</td><td>2022-09, 2024-08, 2025-02/08</td></tr>
+        <tr><td>asympt. Amplitudengang zeichnen + korrigieren, Eckfrequenzen</td><td>3</td><td>2023-03/08, 2024-02, 2025-02</td></tr>
+        <tr><td>Ausgangssignal $y(t)$ aus Bode (Sinus-Anregung)</td><td>3</td><td>2023-08, 2024-02</td></tr>
+        <tr><td>Amplituden- &amp; Phasenreserve ablesen</td><td>4</td><td>2023-08, 2024-02, 2025-02</td></tr>
+        <tr><td>Totzeit: Auswirkung auf Frequenzgang/Stabilität</td><td>5</td><td>2023-08, 2024-02/08</td></tr>
+        <tr><td>stationärer Fehler (Endwertsatz), PD-Regler qualitativ</td><td>6</td><td>2023-03, 2024-02, 2025-02</td></tr>
+      </table>
     </div>
 
-    <h2 class="sub-heading">Der Standard-Regelkreis</h2>
-    <p>Durch Strukturbildumformung (Messglied über den Vergleichspunkt schieben, Stellglied zur Strecke schlagen) wird jeder Regelkreis auf die <b>Standardform</b> gebracht: Die gesamte Dynamik steckt im Vorwärtszweig $F_o(s)$, der Rückwärtszweig hat den Faktor 1 und die Störung greift am Streckenausgang an.</p>
+    <div class="box merk"><span class="lbl">Kernidee</span>
+      Eine <b>Regelung</b> misst $y$ fortlaufend, bildet $e=w-y$ und korrigiert nach. Nur so lassen sich <b>unbekannte Störungen</b> und <b>Modellfehler</b> ausgleichen – eine reine Steuerung kann das nicht.
+    </div>
 
-    <div class="svg-wrap">
+    <div class="h2">Der Standard-Regelkreis</div>
+    <div class="fig">
       <svg viewBox="0 0 760 200" role="img" aria-label="Standard-Regelkreis">
-        <defs>
-          <marker id="arr1" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#0f172a"/></marker>
-        </defs>
-        <line x1="20" y1="90" x2="86" y2="90" stroke="#0f172a" stroke-width="2" marker-end="url(#arr1)"/>
-        <text x="30" y="80" font-size="15" font-style="italic">w(t)</text>
-        <circle cx="100" cy="90" r="15" fill="#fff" stroke="#0f172a" stroke-width="2"/>
-        <text x="95" y="86" font-size="14">+</text>
-        <text x="84" y="118" font-size="14">−</text>
-        <line x1="115" y1="90" x2="196" y2="90" stroke="#0f172a" stroke-width="2" marker-end="url(#arr1)"/>
-        <text x="140" y="80" font-size="15" font-style="italic">e(t)</text>
-        <rect x="200" y="65" width="90" height="50" rx="6" fill="#eef2ff" stroke="#4f46e5" stroke-width="2"/>
-        <text x="245" y="96" font-size="17" text-anchor="middle" font-style="italic">G_R(s)</text>
-        <line x1="290" y1="90" x2="376" y2="90" stroke="#0f172a" stroke-width="2" marker-end="url(#arr1)"/>
-        <text x="320" y="80" font-size="15" font-style="italic">u(t)</text>
-        <rect x="380" y="65" width="90" height="50" rx="6" fill="#eef2ff" stroke="#4f46e5" stroke-width="2"/>
-        <text x="425" y="96" font-size="17" text-anchor="middle" font-style="italic">G_S(s)</text>
-        <line x1="470" y1="90" x2="700" y2="90" stroke="#0f172a" stroke-width="2" marker-end="url(#arr1)"/>
-        <text x="660" y="80" font-size="15" font-style="italic">y(t)</text>
+        <defs><marker id="a1" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#0f172a"/></marker></defs>
+        <line x1="20" y1="90" x2="86" y2="90" stroke="#0f172a" stroke-width="2" marker-end="url(#a1)"/><text x="28" y="80" font-size="15" font-style="italic">w(t)</text>
+        <circle cx="100" cy="90" r="15" fill="#fff" stroke="#0f172a" stroke-width="2"/><text x="95" y="86" font-size="14">+</text><text x="83" y="118" font-size="14">−</text>
+        <line x1="115" y1="90" x2="196" y2="90" stroke="#0f172a" stroke-width="2" marker-end="url(#a1)"/><text x="142" y="80" font-size="15" font-style="italic">e(t)</text>
+        <rect x="200" y="65" width="90" height="50" rx="7" fill="#eef2ff" stroke="#4f46e5" stroke-width="2"/><text x="245" y="96" font-size="17" text-anchor="middle" font-style="italic">G_R(s)</text>
+        <line x1="290" y1="90" x2="376" y2="90" stroke="#0f172a" stroke-width="2" marker-end="url(#a1)"/><text x="322" y="80" font-size="15" font-style="italic">u(t)</text>
+        <rect x="380" y="65" width="90" height="50" rx="7" fill="#eef2ff" stroke="#4f46e5" stroke-width="2"/><text x="425" y="96" font-size="17" text-anchor="middle" font-style="italic">G_S(s)</text>
+        <line x1="470" y1="90" x2="700" y2="90" stroke="#0f172a" stroke-width="2" marker-end="url(#a1)"/><text x="660" y="80" font-size="15" font-style="italic">y(t)</text>
         <circle cx="600" cy="90" r="4" fill="#0f172a"/>
-        <line x1="600" y1="90" x2="600" y2="165" stroke="#0f172a" stroke-width="2"/>
-        <line x1="600" y1="165" x2="100" y2="165" stroke="#0f172a" stroke-width="2"/>
-        <line x1="100" y1="165" x2="100" y2="107" stroke="#0f172a" stroke-width="2" marker-end="url(#arr1)"/>
-        <text x="300" y="182" font-size="13" fill="#475569">Rückführung (Faktor 1)</text>
-        <text x="205" y="40" font-size="13" fill="#4f46e5" font-weight="700">Regler</text>
-        <text x="370" y="40" font-size="13" fill="#4f46e5" font-weight="700">Strecke (inkl. Stell-/Messglied)</text>
+        <line x1="600" y1="90" x2="600" y2="165" stroke="#0f172a" stroke-width="2"/><line x1="600" y1="165" x2="100" y2="165" stroke="#0f172a" stroke-width="2"/><line x1="100" y1="165" x2="100" y2="107" stroke="#0f172a" stroke-width="2" marker-end="url(#a1)"/>
+        <text x="300" y="183" font-size="12" fill="#64748b">Rückführung (Faktor 1)</text>
+        <text x="207" y="40" font-size="12" fill="#4f46e5" font-weight="700">Regler</text><text x="368" y="40" font-size="12" fill="#4f46e5" font-weight="700">Strecke (inkl. Stell-/Messglied)</text>
       </svg>
-      <div class="svg-cap">Abb. 1 – Standard-Regelkreis: Vergleichsstelle, Regler $G_R(s)$, Strecke $G_S(s)$, Rückführung mit Faktor 1.</div>
+      <div class="cap">Abb. 1 – Standard-Regelkreis. Merkmale: <b>freier Rückwärtszweig (Faktor 1)</b> und <b>Störeingriff am Streckenausgang</b>.</div>
     </div>
 
-    <p>Die <b>Übertragungsfunktion des offenen Kreises</b> ist das Produkt aller Glieder im aufgetrennten Kreis:</p>
-    <div class="formula-box">
-      <div class="formula-label">Offener Kreis</div>
-      $$F_o(s) = G_R(s)\cdot G_S(s) = \frac{Z_o(s)}{N_o(s)}$$
+    <div class="h3">Herleitung von $F_W(s)$ und $F_Z(s)$</div>
+    <div class="solver">
+      <details class="sd"><summary><span class="ar">▸</span><span class="sn">Schritt 1</span> Grundgleichungen aufstellen</summary>
+        <div class="sc">Mit dem offenen Kreis $F_o=G_RG_S=\frac{Z_o}{N_o}$ gilt $e=w-y$ und $y=F_o\,e + z$ (Störung additiv am Ausgang).</div></details>
+      <details class="sd"><summary><span class="ar">▸</span><span class="sn">Schritt 2</span> Führungsverhalten ($z=0$)</summary>
+        <div class="sc">$y=F_o(w-y)\Rightarrow y(1+F_o)=F_o w$:
+        <div class="eq">$$F_W(s)=\frac{Y}{W}\Big|_{z=0}=\frac{F_o}{1+F_o}=\frac{Z_o}{N_o+Z_o}$$</div></div></details>
+      <details class="sd"><summary><span class="ar">▸</span><span class="sn">Schritt 3</span> Störverhalten ($w=0$)</summary>
+        <div class="sc">$y=z-F_o y\Rightarrow y(1+F_o)=z$:
+        <div class="eq">$$F_Z(s)=\frac{Y}{Z}\Big|_{w=0}=\frac{1}{1+F_o}=\frac{N_o}{N_o+Z_o}$$</div>
+        Greift die Störung innerhalb der Strecke an, lautet sie allgemein $F_Z=\dfrac{-G_{S2}}{1+F_o}$ (mit dem Streckenteil $G_{S2}$ hinter dem Störeingriff).</div></details>
     </div>
+    <div class="box merk"><span class="lbl">Merksatz</span> $F_W$ und $F_Z$ besitzen <b>denselben Nenner</b> $N_o+Z_o$ — das ist die <b>charakteristische Gleichung</b> $1+F_o(s)=0$. Stabilität prüft man immer an ihr.</div>
 
-    <h2 class="sub-heading">Regelkreis mit Störgröße $Z$</h2>
-    <div class="svg-wrap">
-      <svg viewBox="0 0 760 230" role="img" aria-label="Regelkreis mit Störung">
-        <defs>
-          <marker id="arr2" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#0f172a"/></marker>
-        </defs>
-        <line x1="20" y1="100" x2="86" y2="100" stroke="#0f172a" stroke-width="2" marker-end="url(#arr2)"/>
-        <text x="30" y="90" font-size="15" font-style="italic">w(t)</text>
-        <circle cx="100" cy="100" r="15" fill="#fff" stroke="#0f172a" stroke-width="2"/>
-        <text x="95" y="96" font-size="14">+</text><text x="83" y="128" font-size="14">−</text>
-        <line x1="115" y1="100" x2="196" y2="100" stroke="#0f172a" stroke-width="2" marker-end="url(#arr2)"/>
-        <text x="140" y="90" font-size="15" font-style="italic">e(t)</text>
-        <rect x="200" y="75" width="80" height="50" rx="6" fill="#eef2ff" stroke="#4f46e5" stroke-width="2"/>
-        <text x="240" y="106" font-size="16" text-anchor="middle" font-style="italic">G_R</text>
-        <line x1="280" y1="100" x2="346" y2="100" stroke="#0f172a" stroke-width="2" marker-end="url(#arr2)"/>
-        <rect x="350" y="75" width="80" height="50" rx="6" fill="#eef2ff" stroke="#4f46e5" stroke-width="2"/>
-        <text x="390" y="106" font-size="16" text-anchor="middle" font-style="italic">G_S</text>
-        <line x1="430" y1="100" x2="486" y2="100" stroke="#0f172a" stroke-width="2" marker-end="url(#arr2)"/>
-        <circle cx="500" cy="100" r="15" fill="#fff" stroke="#dc2626" stroke-width="2"/>
-        <text x="495" y="96" font-size="14">+</text><text x="508" y="92" font-size="14">+</text>
-        <line x1="500" y1="35" x2="500" y2="83" stroke="#dc2626" stroke-width="2" marker-end="url(#arr2)"/>
-        <text x="486" y="28" font-size="15" font-style="italic" fill="#dc2626">z(t)</text>
-        <line x1="515" y1="100" x2="700" y2="100" stroke="#0f172a" stroke-width="2" marker-end="url(#arr2)"/>
-        <text x="660" y="90" font-size="15" font-style="italic">y(t)</text>
-        <circle cx="610" cy="100" r="4" fill="#0f172a"/>
-        <line x1="610" y1="100" x2="610" y2="195" stroke="#0f172a" stroke-width="2"/>
-        <line x1="610" y1="195" x2="100" y2="195" stroke="#0f172a" stroke-width="2"/>
-        <line x1="100" y1="195" x2="100" y2="117" stroke="#0f172a" stroke-width="2" marker-end="url(#arr2)"/>
+    <div class="h2">Nicht-Standard → Standardform umformen</div>
+    <p>In den meisten Klausuren liegt <em>kein</em> Standardregelkreis vor: ein Messglied $G_M\neq1$ steht im Rückwärtszweig oder die Störung greift vor der Strecke an. Vorgehen: $G_M$ über den Vergleichspunkt schieben und eine <b>virtuelle Führungsgröße</b> $\tilde w=G_M\,w$ bzw. virtuelle Störung $\tilde z$ einführen.</p>
+    <div class="fig">
+      <svg viewBox="0 0 760 210" role="img" aria-label="Messglied verschieben">
+        <defs><marker id="a2" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#0f172a"/></marker></defs>
+        <line x1="20" y1="80" x2="86" y2="80" stroke="#0f172a" stroke-width="2" marker-end="url(#a2)"/><text x="26" y="70" font-size="14" font-style="italic">w</text>
+        <circle cx="100" cy="80" r="14" fill="#fff" stroke="#0f172a" stroke-width="2"/><text x="95" y="84" font-size="13">+</text><text x="84" y="106" font-size="13">−</text>
+        <line x1="114" y1="80" x2="180" y2="80" stroke="#0f172a" stroke-width="2" marker-end="url(#a2)"/>
+        <rect x="184" y="58" width="70" height="44" rx="6" fill="#eef2ff" stroke="#4f46e5" stroke-width="2"/><text x="219" y="85" font-size="14" text-anchor="middle" font-style="italic">G_R</text>
+        <line x1="254" y1="80" x2="300" y2="80" stroke="#0f172a" stroke-width="2" marker-end="url(#a2)"/>
+        <rect x="304" y="58" width="70" height="44" rx="6" fill="#eef2ff" stroke="#4f46e5" stroke-width="2"/><text x="339" y="85" font-size="14" text-anchor="middle" font-style="italic">G_St</text>
+        <line x1="374" y1="80" x2="420" y2="80" stroke="#0f172a" stroke-width="2" marker-end="url(#a2)"/>
+        <rect x="424" y="58" width="70" height="44" rx="6" fill="#eef2ff" stroke="#4f46e5" stroke-width="2"/><text x="459" y="85" font-size="14" text-anchor="middle" font-style="italic">G_S</text>
+        <line x1="494" y1="80" x2="690" y2="80" stroke="#0f172a" stroke-width="2" marker-end="url(#a2)"/><text x="655" y="70" font-size="14" font-style="italic">y</text>
+        <circle cx="600" cy="80" r="4" fill="#0f172a"/>
+        <line x1="600" y1="80" x2="600" y2="160" stroke="#0f172a" stroke-width="2"/>
+        <rect x="520" y="138" width="70" height="44" rx="6" fill="#fee2e2" stroke="#dc2626" stroke-width="2"/><text x="555" y="165" font-size="14" text-anchor="middle" font-style="italic" fill="#b91c1c">G_M</text>
+        <line x1="600" y1="160" x2="590" y2="160" stroke="#0f172a" stroke-width="2"/><line x1="520" y1="160" x2="100" y2="160" stroke="#0f172a" stroke-width="2"/><line x1="100" y1="160" x2="100" y2="94" stroke="#0f172a" stroke-width="2" marker-end="url(#a2)"/>
+        <text x="300" y="200" font-size="12" fill="#64748b">Messglied G_M im Rückwärtszweig → durch Verschieben entsteht der äquivalente Standardregelkreis mit $\tilde w$</text>
       </svg>
-      <div class="svg-cap">Abb. 2 – Standard-Regelkreis mit additiver Störgröße $z(t)$ am Streckenausgang.</div>
+      <div class="cap">Abb. 2 – Liegt $G_M\neq1$ im Rückwärtszweig, wird es nach vorne verschoben; die fiktive Eingangsgröße ist $\tilde w = G_M\,w$.</div>
     </div>
 
-    <h2 class="sub-heading">Herleitung von $F_W(s)$ – Schritt für Schritt</h2>
-    <div class="steps">
-      <div class="step"><div class="step-num">1</div><div class="step-body">Grundgleichungen (mit $z=0$): Regeldifferenz und Streckenausgang:<br>$$e = w - y,\qquad y = F_o(s)\,e$$</div></div>
-      <div class="step"><div class="step-num">2</div><div class="step-body">Erste Gleichung einsetzen:<br>$$y = F_o\,(w - y) = F_o\,w - F_o\,y$$</div></div>
-      <div class="step"><div class="step-num">3</div><div class="step-body">Nach $y$ sortieren:<br>$$y\,(1+F_o) = F_o\,w$$</div></div>
-      <div class="step"><div class="step-num">4</div><div class="step-body">Nach der Führungsübertragungsfunktion auflösen:<br>$$F_W(s) = \frac{Y(s)}{W(s)}\bigg|_{z=0} = \frac{F_o(s)}{1+F_o(s)} = \frac{Z_o(s)}{N_o(s)+Z_o(s)}$$</div></div>
-    </div>
+    <!-- ===== FULL EXAM PROBLEM (backbone) ===== -->
+    <div class="exam">
+      <div class="exam-h">
+        <div class="t">Klausuraufgabe 1 — Positionsregelung mit instabiler Strecke</div>
+        <div class="badges"><span class="b">Klausur 30.08.2024</span><span class="b">30 Punkte</span><span class="b">Teil 1/2 (Forts. in Tab 2 &amp; 4)</span></div>
+      </div>
+      <div class="exam-b">
+        <div class="aufg">Ein technisches System besteht aus Regler $G_R(s)$, Stellglied $G_{St}(s)$, Regelstrecke $G_S(s)$ und Messglied $G_M(s)$. $G_R$ ist ein P-Regler mit Verstärkung $K_R$.</div>
+        <div class="fig">
+          <svg viewBox="0 0 720 200" role="img" aria-label="Blockschaltbild Klausur 2024-08">
+            <defs><marker id="a3" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#0f172a"/></marker></defs>
+            <line x1="14" y1="74" x2="70" y2="74" stroke="#0f172a" stroke-width="2" marker-end="url(#a3)"/><text x="18" y="65" font-size="13" font-style="italic">w</text>
+            <circle cx="84" cy="74" r="13" fill="#fff" stroke="#0f172a" stroke-width="2"/><text x="79" y="78" font-size="12">+</text><text x="68" y="99" font-size="12">−</text>
+            <line x1="97" y1="74" x2="150" y2="74" stroke="#0f172a" stroke-width="2" marker-end="url(#a3)"/><text x="112" y="66" font-size="12" font-style="italic">e</text>
+            <rect x="154" y="54" width="74" height="40" rx="6" fill="#eef2ff" stroke="#4f46e5" stroke-width="2"/><text x="191" y="79" font-size="13" text-anchor="middle" font-style="italic">K_R</text>
+            <line x1="228" y1="74" x2="270" y2="74" stroke="#0f172a" stroke-width="2" marker-end="url(#a3)"/>
+            <rect x="274" y="54" width="80" height="40" rx="6" fill="#eef2ff" stroke="#4f46e5" stroke-width="2"/><text x="314" y="79" font-size="12" text-anchor="middle" font-style="italic">G_St</text>
+            <line x1="354" y1="74" x2="396" y2="74" stroke="#0f172a" stroke-width="2" marker-end="url(#a3)"/>
+            <circle cx="410" cy="74" r="13" fill="#fff" stroke="#dc2626" stroke-width="2"/><text x="405" y="78" font-size="12">+</text><text x="418" y="66" font-size="12">+</text>
+            <line x1="410" y1="20" x2="410" y2="59" stroke="#dc2626" stroke-width="2" marker-end="url(#a3)"/><text x="400" y="15" font-size="12" font-style="italic" fill="#dc2626">z</text>
+            <line x1="423" y1="74" x2="455" y2="74" stroke="#0f172a" stroke-width="2" marker-end="url(#a3)"/>
+            <rect x="459" y="54" width="80" height="40" rx="6" fill="#eef2ff" stroke="#4f46e5" stroke-width="2"/><text x="499" y="79" font-size="12" text-anchor="middle" font-style="italic">G_S</text>
+            <line x1="539" y1="74" x2="690" y2="74" stroke="#0f172a" stroke-width="2" marker-end="url(#a3)"/><text x="655" y="66" font-size="13" font-style="italic">y</text>
+            <circle cx="600" cy="74" r="4" fill="#0f172a"/><line x1="600" y1="74" x2="600" y2="150" stroke="#0f172a" stroke-width="2"/>
+            <rect x="365" y="130" width="80" height="40" rx="6" fill="#fee2e2" stroke="#dc2626" stroke-width="2"/><text x="405" y="155" font-size="12" text-anchor="middle" font-style="italic" fill="#b91c1c">G_M</text>
+            <line x1="600" y1="150" x2="445" y2="150" stroke="#0f172a" stroke-width="2" marker-end="url(#a3)"/><line x1="365" y1="150" x2="84" y2="150" stroke="#0f172a" stroke-width="2"/><line x1="84" y1="150" x2="84" y2="87" stroke="#0f172a" stroke-width="2" marker-end="url(#a3)"/>
+          </svg>
+          <div class="cap">Original-Struktur der Klausur: Störung $z$ zwischen Stellglied und Strecke, Messglied $G_M$ in der Rückführung.</div>
+        </div>
+        <div class="givens">
+          <div>$G_{St}(s)=\dfrac{3}{s+4}$</div>
+          <div>$G_S(s)=\dfrac{4}{6(s-1)}$</div>
+          <div>$G_M(s)=\dfrac{3}{s+2}$</div>
+          <div>$G_R(s)=K_R$ (P-Regler)</div>
+        </div>
 
-    <h2 class="sub-heading">Herleitung von $F_Z(s)$</h2>
-    <p>Mit $w=0$ und additiver Störung am Ausgang gilt $y = z + F_o\,e$ und $e = -y$:</p>
-    <div class="formula-box">
-      <div class="formula-label">Störübertragungsfunktion</div>
-      $$y = z - F_o\,y \;\Rightarrow\; F_Z(s)=\frac{Y(s)}{Z(s)}\bigg|_{w=0}=\frac{1}{1+F_o(s)}=\frac{N_o(s)}{N_o(s)+Z_o(s)}$$
-      <p style="margin-top:10px;font-size:.86rem;color:#475569;">Greift die Störung <i>nicht</i> am Ausgang, sondern innerhalb der Strecke an, lautet sie allgemein $F_Z=\dfrac{-G_{S2}}{1+F_o}$ (Vorzeichen und genaue Form hängen vom Eingriffsort ab – siehe Klausuraufgaben).</p>
-    </div>
+        <div class="subt">1.1 In Standardform umformen &amp; $F_o(s)$ angeben</div>
+        <div class="solver">
+          <details class="sd"><summary><span class="ar">▸</span><span class="sn">Lösung 1</span> $G_M$ nach vorne verschieben</summary>
+            <div class="sc">Das Messglied wird über die Summationsstelle gezogen; es entsteht die virtuelle Führungsgröße $\tilde w=G_M w$ und (nach Verschieben des Störeingriffs hinter $G_S$) die virtuelle Störung $\tilde z$. Merkmale Standardregelkreis: <b>freie Rückführung</b> und <b>Störeingriff hinter der Streckendynamik</b>.</div></details>
+          <details class="sd"><summary><span class="ar">▸</span><span class="sn">Lösung 2</span> Offenen Kreis berechnen</summary>
+            <div class="sc">Der offene Kreis ist das Produkt aller Glieder im Schleifenzug:
+            <div class="eq">$$F_o=G_M\,G_R\,G_S\,G_{St}=\frac{3}{s+2}\cdot K_R\cdot\frac{4}{6(s-1)}\cdot\frac{3}{s+4}=\frac{6K_R}{(s+2)(s-1)(s+4)}$$</div></div></details>
+        </div>
 
-    <div class="merk">
-      <div class="lbl">Merksatz</div>
-      <b>$F_W$ und $F_Z$ haben denselben Nenner</b> $N_o+Z_o$ – die <b>charakteristische Gleichung</b> $1+F_o(s)=0$. Stabilität wird deshalb immer an diesem Nenner geprüft.
-    </div>
+        <div class="subt">1.2 Stabilität des offenen Kreises</div>
+        <div class="solver">
+          <details class="sd"><summary><span class="ar">▸</span><span class="sn">Lösung</span> Pole prüfen</summary>
+            <div class="sc">Pole von $F_o$: $s=-2,\;s=+1,\;s=-4$. Der Pol bei $s=+1$ liegt <b>rechts</b> der $j$-Achse.
+            <div class="box result"><span class="lbl">Ergebnis</span>Der <b>offene</b> Regelkreis ist <b>instabil</b> (Pol bei $s=+1$). Erst die Rückführung kann den Kreis stabilisieren – das untersuchen wir mit Hurwitz in Tab 2.</div></div></details>
+        </div>
 
-    <h2 class="sub-heading">Bedeutung jeder Größe</h2>
-    <table class="var-table">
-      <tr><th>Größe</th><th>Bedeutung</th><th>Rolle / Einheit</th></tr>
-      <tr><td>w(t)</td><td>Führungsgröße (Sollwert)</td><td>Eingang, gewünschter Wert von $y$</td></tr>
-      <tr><td>e(t)</td><td>Regeldifferenz $e=w-y$</td><td>Eingang des Reglers</td></tr>
-      <tr><td>u(t)</td><td>Stellgröße</td><td>Ausgang des Reglers, Eingang der Strecke</td></tr>
-      <tr><td>y(t)</td><td>Regelgröße (Istwert)</td><td>Ausgang der Strecke</td></tr>
-      <tr><td>z(t)</td><td>Störgröße</td><td>unerwünschter, oft unbekannter Eingang</td></tr>
-      <tr><td>G_R(s)</td><td>Regler</td><td>formt die Dynamik (P, I, PI, PD, PID)</td></tr>
-      <tr><td>G_S(s)</td><td>Regelstrecke</td><td>inkl. Stell- und Messglied</td></tr>
-      <tr><td>F_o(s)</td><td>offener Kreis $=G_RG_S$</td><td>Basis aller Stabilitätskriterien</td></tr>
-    </table>
-
-    <h2 class="sub-heading">Numerisches Beispiel</h2>
-    <div class="example-box">
-      <p>Gegeben: P-Regler $G_R=K_R=2$ und PT1-Strecke $G_S=\dfrac{K_S}{1+Ts}$ mit $K_S=1,\;T=1\,$s.</p>
-      <p><b>Offener Kreis:</b> $F_o=G_RG_S=\dfrac{2}{1+s}$.</p>
-      <p><b>Führungsübertragungsfunktion:</b></p>
-      $$F_W=\frac{F_o}{1+F_o}=\frac{\tfrac{2}{1+s}}{1+\tfrac{2}{1+s}}=\frac{2}{(1+s)+2}=\frac{2}{s+3}$$
-      <p>Das ist wieder ein PT1-Glied mit Verstärkung $\tfrac{2}{3}$ und Zeitkonstante $\tfrac{1}{3}\,$s.</p>
-      <div class="ergebnis-box">
-        <div class="lbl">Ergebnis &amp; Interpretation</div>
-        $F_W(s)=\dfrac{2}{s+3}$, also $F_W(0)=\tfrac{2}{3}\approx 0{,}67$. Der geschlossene Kreis ist <b>schneller</b> als die Strecke (Zeitkonstante von $1$ s auf $0{,}33$ s gesunken), erreicht aber wegen des fehlenden I-Anteils <b>nur 67 %</b> des Sollwerts → bleibende Regelabweichung von 33 %.
+        <div class="subt">1.3 Führungs- und Störübertragungsfunktion</div>
+        <div class="solver">
+          <details class="sd"><summary><span class="ar">▸</span><span class="sn">Lösung</span> $F_W$ und $F_Z$ aufstellen</summary>
+            <div class="sc">Wegen $G_M\neq1$ gilt $F_W=\frac{1}{G_M}\cdot\frac{F_o}{1+F_o}$ (Rücktransformation der virtuellen Größe):
+            <div class="eq">$$F_W=\frac{2K_R(s+2)}{(s+2)(s+4)(s-1)+6K_R},\qquad F_Z=\frac{-G_S\,N_o}{N_o+Z_o}=\frac{-4(s+2)(s+4)}{6\big[(s+2)(s-1)(s+4)+6K_R\big]}$$</div>
+            Beide haben denselben Nenner $N_o+Z_o=(s+2)(s+4)(s-1)+6K_R$.</div></details>
+        </div>
+        <p style="margin-top:14px;font-size:.9rem;color:#475569;">➜ Weiter in <b>Tab 2</b>: Für welche $K_R$ ist der geschlossene Kreis stabil? · <b>Tab 4</b>: Reserven für $K_R=2$.</p>
       </div>
     </div>
-  </div><!-- end grundstruktur -->
+  </div>
 
-  <!-- ═══════════════════════════════ TAB 2: HURWITZ ═══════════════════════════════ -->
+  <!-- ════════════════════════ TAB 2: HURWITZ ════════════════════════ -->
   <div class="tab-content" id="tab-hurwitz">
-    <div class="section-title">Hurwitz-Kriterium</div>
+    <p class="lead">Das Hurwitz-Kriterium beantwortet ohne Polberechnung die Frage: „Für welche Parameter ist der geschlossene Kreis stabil?" – die häufigste Rechenaufgabe in Aufgabe 1.</p>
 
-    <div class="tip-box"><b>Klausur:</b> „Für welchen Wertebereich von $K_R$ ist der geschlossene Regelkreis stabil?" → Nenner von $F_W$ aufstellen, Hurwitz-Determinanten bilden, Bedingungen lösen.</div>
+    <div class="h2">Theorie</div>
+    <p>Ein rationales System ist genau dann stabil, wenn alle Pole negativen Realteil haben. Geprüft wird am Nennerpolynom von $F_W$ bzw. $F_Z$ (charakteristische Gleichung):</p>
+    <div class="eq">$$N(s)=N_o(s)+Z_o(s)=a_0s^n+a_1s^{n-1}+\dots+a_{n-1}s+a_n\stackrel{!}{=}0$$</div>
+    <div class="box warn"><span class="lbl">Notwendige Bedingung zuerst</span>Alle Koeffizienten müssen vorhanden und vom <b>gleichen Vorzeichen</b> sein. Fehlt einer oder wechselt das Vorzeichen → sofort instabil. Bis Ordnung $n\le2$ ist dies sogar <b>hinreichend</b>.</div>
 
-    <h2 class="sub-heading">Vom Regelkreis zum charakteristischen Polynom</h2>
-    <p>Ein rationales System ist genau dann stabil, wenn <b>alle Pole</b> einen negativen Realteil haben. Statt die Pole zu berechnen, prüft das Hurwitz-Kriterium die Vorzeichen direkt am Nennerpolynom der Führungs-/Störübertragungsfunktion:</p>
-    <div class="formula-box">
-      <div class="formula-label">Charakteristische Gleichung</div>
-      $$N(s)=N_o(s)+Z_o(s)=a_0 s^n + a_1 s^{n-1}+\dots+a_{n-1} s + a_n \stackrel{!}{=}0$$
-    </div>
-
-    <div class="warning-box"><b>Notwendige Bedingung zuerst:</b> Alle Koeffizienten müssen vorhanden und vom <b>gleichen Vorzeichen</b> sein. Fehlt ein Koeffizient oder wechselt das Vorzeichen → sofort instabil (keine Hurwitz-Rechnung nötig). Für Systeme bis Ordnung $n\le 2$ ist diese Bedingung sogar <b>hinreichend</b>.</div>
-
-    <h2 class="sub-heading">Aufbau der Hurwitz-Matrix</h2>
-    <p>Die Hurwitz-Matrix wird spaltenweise mit absteigenden Koeffizienten gefüllt, der Rest mit Nullen. Die „nordwestlichen" Unterdeterminanten $H_1,\dots,H_n$ müssen <b>alle positiv</b> sein.</p>
-    <div class="two-col">
-      <div class="formula-box"><div class="formula-label">n = 2</div>
-        $$N=a_0s^2+a_1s+a_2$$
-        $$H_1=a_1>0,\quad H_2=\begin{vmatrix}a_1&0\\a_0&a_2\end{vmatrix}=a_1a_2>0$$
-        <p style="font-size:.85rem;color:#475569;">⇒ einfach: alle Koeffizienten $>0$.</p>
-      </div>
-      <div class="formula-box"><div class="formula-label">n = 3</div>
-        $$N=a_0s^3+a_1s^2+a_2s+a_3$$
+    <div class="two">
+      <div class="box def"><span class="lbl">Hurwitz für n = 3</span>
         $$H=\begin{pmatrix}a_1&a_3&0\\a_0&a_2&0\\0&a_1&a_3\end{pmatrix}$$
-        $$H_1=a_1,\;\; H_2=a_1a_2-a_0a_3,\;\; H_3=a_3H_2$$
-        <p style="font-size:.85rem;color:#475569;">⇒ Kernbedingung: $\;a_1a_2>a_0a_3\;$ (bei allen $a_i>0$).</p>
-      </div>
+        $$H_1=a_1,\;H_2=a_1a_2-a_0a_3,\;H_3=a_3H_2$$
+        Kernbedingung (bei $a_i>0$): $\;a_1a_2>a_0a_3$.</div>
+      <div class="box def"><span class="lbl">Hurwitz für n = 4</span>
+        $$H_2=a_1a_2-a_0a_3,$$ $$H_3=a_1a_2a_3-a_1^2a_4-a_0a_3^2$$ $$H_4=a_4\,H_3$$
+        Alle $H_1\dots H_4>0$ ⇒ stabil.</div>
     </div>
 
-    <!-- Interactive pole-zero -->
-    <h2 class="sub-heading">Interaktiv: Pole wandern mit $K_R$</h2>
-    <p>Strecke = drei gleiche PT1-Glieder $G_S=\dfrac{1}{(1+s)^3}$, P-Regler $G_R=K_R$. Charakteristisches Polynom: $(1+s)^3+K_R = s^3+3s^2+3s+(1+K_R)$. Verschiebe $K_R$ und beobachte, wie die Pole nach rechts über die imaginäre Achse wandern (Root-Locus-Andeutung).</p>
-    <div class="demo-controls">
-      <div class="control-group">
-        <label>Reglerverstärkung $K_R$</label>
-        <input type="range" id="kr-pz" min="0" max="15" step="0.1" value="2">
-        <span class="control-val" id="kr-pz-val">2.0</span>
-      </div>
+    <div class="h2">Interaktiv: Pole wandern (Root-Locus der Klausuraufgabe 30.08.2024)</div>
+    <p>Geschlossener Kreis aus der Klausuraufgabe: charakteristisches Polynom $(s+2)(s+4)(s-1)+6K_R=s^3+5s^2+2s+(6K_R-8)$. Schiebe $K_R$ und sieh zu, wie die instabile Strecke (Pol bei $+1$) stabilisiert wird – und ab $K_R=3$ wieder instabil wird.</p>
+    <div class="lab">
+      <div class="labtitle">Pol-Nullstellen-Diagramm</div>
+      <div class="ctrls"><div class="cg"><label>Reglerverstärkung $K_R$</label><input type="range" id="kr-pz" min="0" max="4" step="0.05" value="2"><span class="val" id="kr-pz-val">2.00</span></div></div>
+      <div class="verdict" id="pz-verdict"></div>
+      <div id="pz-plot" class="plot"></div>
     </div>
-    <div id="pz-verdict" style="border-radius:8px;padding:12px 18px;margin:8px 0;font-size:.92rem;font-weight:600;"></div>
-    <div id="pz-plot" class="plot-box"></div>
-    <div class="merk"><div class="lbl">Stabilitätsgrenze</div>
-      Hurwitz $n=3$: $a_1a_2>a_0a_3 \Rightarrow 3\cdot3>(1+K_R)\cdot1 \Rightarrow K_R<8$. Bei $K_R=8$ liegt ein Polpaar exakt auf der imaginären Achse bei $s=\pm j\sqrt{3}$ (Dauerschwingung), darüber wird der Kreis instabil.
-    </div>
+    <div class="box merk"><span class="lbl">Stabilitätsfenster</span>$a_3=6K_R-8>0\Rightarrow K_R>\tfrac43$ &nbsp;und&nbsp; $H_2=a_1a_2-a_0a_3=10-(6K_R-8)=18-6K_R>0\Rightarrow K_R<3$. ⇒ stabil für $\;\tfrac43<K_R<3$. Bei $K_R=3$ liegt ein Polpaar auf der $j$-Achse ($s=\pm j\sqrt2$).</div>
 
-    <!-- Worked examples for all regler types -->
-    <h2 class="sub-heading">Hurwitz für alle Reglertypen – durchgerechnet</h2>
+    <div class="h2">Durchgerechnete Klausuraufgaben (alle Reglertypen)</div>
 
-    <div class="klausur-box">
-      <div class="klausur-head"><span>Klausuraufgabe – P-Regler</span><span class="src">Tutorium 2 · A1</span></div>
-      <div class="klausur-body">
-        <p><b>Aufgabe:</b> $G_R=K_R$, $G_S=\dfrac{0{,}1}{(s^2+4s+3)(s+1)}$. Für welche $K_R$ ist der geschlossene Kreis stabil?</p>
-        <div class="steps">
-          <div class="step"><div class="step-num">1</div><div class="step-body">Charakteristisches Polynom $N=N_o+Z_o$:<br>$(s^2+4s+3)(s+1)+0{,}1K_R = s^3+5s^2+7s+(3+0{,}1K_R)$</div></div>
-          <div class="step"><div class="step-num">2</div><div class="step-body">Koeffizienten: $a_0=1,\;a_1=5,\;a_2=7,\;a_3=3+0{,}1K_R$.</div></div>
-          <div class="step"><div class="step-num">3</div><div class="step-body">$H_2=a_1a_2-a_0a_3 = 5\cdot7-(3+0{,}1K_R)=32-0{,}1K_R>0 \Rightarrow K_R<320$</div></div>
-          <div class="step"><div class="step-num">4</div><div class="step-body">$a_3=3+0{,}1K_R>0 \Rightarrow K_R>-30$</div></div>
+    <div class="exam">
+      <div class="exam-h"><div class="t">Hurwitz mit P-Regler — $K_R$-Bereich</div><div class="badges"><span class="b">30.08.2024 · 1.4</span></div></div>
+      <div class="exam-b">
+        <div class="aufg">Für welche $K_R$ ist der geschlossene Kreis aus Teil 1.3 stabil? Nenner $N_W=(s+2)(s+4)(s-1)+6K_R$.</div>
+        <div class="solver">
+          <details class="sd"><summary><span class="ar">▸</span><span class="sn">Schritt 1</span> Nenner ausmultiplizieren</summary><div class="sc">$(s+2)(s+4)=s^2+6s+8$, mal $(s-1)$: $s^3+5s^2+2s-8$. Mit $+6K_R$:<div class="eq">$$N_W=s^3+5s^2+2s+(6K_R-8),\quad a_0=1,a_1=5,a_2=2,a_3=6K_R-8$$</div></div></details>
+          <details class="sd"><summary><span class="ar">▸</span><span class="sn">Schritt 2</span> Notwendige Bedingung</summary><div class="sc">$a_3=6K_R-8>0\Rightarrow K_R>\tfrac{8}{6}=\tfrac43\approx1{,}33$.</div></details>
+          <details class="sd"><summary><span class="ar">▸</span><span class="sn">Schritt 3</span> Hurwitz-Determinante $H_2$</summary><div class="sc">$H_2=a_1a_2-a_0a_3=5\cdot2-1\cdot(6K_R-8)=18-6K_R>0\Rightarrow K_R<3$.</div></details>
+          <details class="sd"><summary><span class="ar">▸</span><span class="sn">Ergebnis</span></summary><div class="sc"><div class="box result"><span class="lbl">Ergebnis</span>Stabil für $\;\dfrac43<K_R<3$. Die instabile Strecke ($s=+1$) wird also nur in einem <b>begrenzten</b> Verstärkungsfenster stabilisiert.</div></div></details>
         </div>
-        <div class="ergebnis-box"><div class="lbl">Ergebnis</div>$-30 < K_R < 320$ &nbsp;→ praktisch $0<K_R<320$.</div>
       </div>
     </div>
 
-    <div class="klausur-box">
-      <div class="klausur-head"><span>Klausuraufgabe – PI-Regler</span><span class="src">Tutorium 2 · A5</span></div>
-      <div class="klausur-body">
-        <p><b>Aufgabe:</b> $G_S=\dfrac{0{,}1}{4s^2+5s+1}$, PI-Regler $G_R=\dfrac{K_R(s+1)}{s}$. Es ergibt sich</p>
-        $$F_W=\frac{0{,}1K_R(s+1)}{4s^3+5s^2+(0{,}1K_R+1)s+0{,}1K_R}$$
-        <div class="steps">
-          <div class="step"><div class="step-num">1</div><div class="step-body">Koeffizienten: $a_0=4,\;a_1=5,\;a_2=0{,}1K_R+1,\;a_3=0{,}1K_R$.</div></div>
-          <div class="step"><div class="step-num">2</div><div class="step-body">Notwendig: $a_3=0{,}1K_R>0\Rightarrow K_R>0$ und $a_2>0\Rightarrow K_R>-10$.</div></div>
-          <div class="step"><div class="step-num">3</div><div class="step-body">$H_2=a_1a_2-a_0a_3=5(0{,}1K_R+1)-4\cdot0{,}1K_R=0{,}1K_R+5>0\Rightarrow K_R>-50$.</div></div>
-          <div class="step"><div class="step-num">4</div><div class="step-body">$H_3=a_3\cdot H_2>0$ ist erfüllt, sobald $K_R>0$.</div></div>
+    <div class="exam">
+      <div class="exam-h"><div class="t">Hurwitz mit PD-Regler (zwei Parameter)</div><div class="badges"><span class="b">05.09.2022 · A1</span></div></div>
+      <div class="exam-b">
+        <div class="aufg">Idealer PD-Regler $G_R=K_R+K_Ds$, offener Kreis $F_o=\dfrac{20(K_R+K_Ds)}{(0{,}25s+1)(2s+1)(2s-1)}$. Für welche $K_R,K_D$ stabil?</div>
+        <div class="solver">
+          <details class="sd"><summary><span class="ar">▸</span><span class="sn">Schritt 1</span> Nenner von $F_W$</summary><div class="sc">$(2s+1)(2s-1)=4s^2-1$, $(0{,}25s+1)(4s^2-1)=s^3+4s^2-0{,}25s-1$. Plus Zähler $20(K_R+K_Ds)$:<div class="eq">$$N=s^3+4s^2+(20K_D-0{,}25)s+(20K_R-1)$$</div></div></details>
+          <details class="sd"><summary><span class="ar">▸</span><span class="sn">Schritt 2</span> Notwendige Bedingungen</summary><div class="sc">$a_3=20K_R-1>0\Rightarrow K_R>\tfrac1{20}$; $\;a_2=20K_D-0{,}25>0\Rightarrow K_D>\tfrac1{80}$.</div></details>
+          <details class="sd"><summary><span class="ar">▸</span><span class="sn">Schritt 3</span> $H_2$</summary><div class="sc">$H_2=a_1a_2-a_0a_3=4(20K_D-0{,}25)-(20K_R-1)=80K_D-20K_R>0\Rightarrow K_D>\tfrac{K_R}{4}$.</div></details>
+          <details class="sd"><summary><span class="ar">▸</span><span class="sn">Ergebnis</span></summary><div class="sc"><div class="box result"><span class="lbl">Ergebnis</span>Stabil für $\;K_R>\tfrac1{20}\;$ und $\;K_D>\dfrac{K_R}{4}$. Der D-Anteil $K_D$ stabilisiert die Strecke mit dem Pol bei $s=+0{,}5$.</div></div></details>
         </div>
-        <div class="ergebnis-box"><div class="lbl">Ergebnis</div>Stabil für <b>$K_R>0$</b>. Der I-Anteil sorgt zusätzlich für stationäre Genauigkeit.</div>
       </div>
     </div>
 
-    <div class="klausur-box">
-      <div class="klausur-head"><span>Klausuraufgabe – PD-Regler (zwei Parameter)</span><span class="src">Klausur 05.09.2022 · A1</span></div>
-      <div class="klausur-body">
-        <p><b>Aufgabe:</b> idealer PD-Regler $G_R=K_R+K_D s$, offener Kreis</p>
-        $$F_o=\frac{20\,(K_R+K_D s)}{(0{,}25s+1)(2s+1)(2s-1)}$$
-        <p>Für welche $K_R,K_D$ ist der geschlossene Kreis stabil?</p>
-        <div class="steps">
-          <div class="step"><div class="step-num">1</div><div class="step-body">$(2s+1)(2s-1)=4s^2-1$, also $(0{,}25s+1)(4s^2-1)=s^3+4s^2-0{,}25s-1$.</div></div>
-          <div class="step"><div class="step-num">2</div><div class="step-body">Nenner von $F_W$: $N=s^3+4s^2+(20K_D-0{,}25)s+(20K_R-1)$.<br>$a_0=1,\;a_1=4,\;a_2=20K_D-0{,}25,\;a_3=20K_R-1$.</div></div>
-          <div class="step"><div class="step-num">3</div><div class="step-body">Notwendig $a_3>0\Rightarrow K_R>\tfrac{1}{20}$ und $a_2>0\Rightarrow K_D>\tfrac{1}{80}$.</div></div>
-          <div class="step"><div class="step-num">4</div><div class="step-body">$H_2=a_1a_2-a_0a_3=4(20K_D-0{,}25)-(20K_R-1)=80K_D-20K_R>0\Rightarrow K_D>\tfrac{K_R}{4}$.</div></div>
+    <div class="exam">
+      <div class="exam-h"><div class="t">Hurwitz mit PI-Regler &amp; reines $n=4$-Beispiel</div><div class="badges"><span class="b">Tutorium 2 · A5 / A2</span></div></div>
+      <div class="exam-b">
+        <div class="subt">PI-Regler: $F_W=\dfrac{0{,}1K_R(s+1)}{4s^3+5s^2+(0{,}1K_R+1)s+0{,}1K_R}$</div>
+        <div class="solver">
+          <details class="sd"><summary><span class="ar">▸</span><span class="sn">Lösung</span> $K_R$-Bereich</summary><div class="sc">$a_0=4,a_1=5,a_2=0{,}1K_R+1,a_3=0{,}1K_R$. Notwendig $K_R>0$. $H_2=5(0{,}1K_R+1)-4(0{,}1K_R)=0{,}1K_R+5>0$ stets. <div class="box result"><span class="lbl">Ergebnis</span>Stabil für $\;K_R>0$ — der I-Anteil sichert zusätzlich stationäre Genauigkeit.</div></div></details>
         </div>
-        <div class="ergebnis-box"><div class="lbl">Ergebnis</div>Stabil für $\;K_R>\tfrac{1}{20}\;$ <b>und</b> $\;K_D>\dfrac{K_R}{4}$. Der D-Anteil stabilisiert die ansonsten instabile Strecke (Pol bei $s=+0{,}5$).</div>
+        <div class="subt">Reines $n=4$: $N(s)=s^4+8s^3+19s^2+14s+8$</div>
+        <div class="solver">
+          <details class="sd"><summary><span class="ar">▸</span><span class="sn">Lösung</span> Alle vier Determinanten</summary><div class="sc">$a_0{=}1,a_1{=}8,a_2{=}19,a_3{=}14,a_4{=}8$.<br>$H_1=8>0$; $H_2=8\cdot19-1\cdot14=138>0$; $H_3=a_1a_2a_3-a_1^2a_4-a_0a_3^2=8\cdot19\cdot14-64\cdot8-196=2128-512-196=1420>0$; $H_4=a_4H_3=8\cdot1420=11360>0$. <div class="box result"><span class="lbl">Ergebnis</span>Alle $H_i>0$ ⇒ <b>stabil</b>.</div></div></details>
+        </div>
       </div>
     </div>
-  </div><!-- end hurwitz -->
+  </div>
 
-  <!-- ═══════════════════════════════ TAB 3: BODE ═══════════════════════════════ -->
+  <!-- ════════════════════════ TAB 3: BODE ════════════════════════ -->
   <div class="tab-content" id="tab-bode">
-    <div class="section-title">Bode-Diagramm</div>
+    <p class="lead">Im Bode-Diagramm <b>addieren</b> sich Betrag (in dB) und Phase der Grundglieder, weil sich die Frequenzgänge multiplizieren. Damit zeichnet man $F_o(j\omega)$ asymptotisch und liest umgekehrt $F_o$ aus einem gegebenen Diagramm ab.</p>
 
-    <p>Das Bode-Diagramm zeigt Betrag (in dB) und Phase über der logarithmischen Frequenzachse. Weil sich bei einer Reihenschaltung die Frequenzgänge <b>multiplizieren</b>, <b>addieren</b> sich Betrag (dB) und Phase – man setzt das Diagramm aus den Grundgliedern zusammen.</p>
-
-    <h2 class="sub-heading">Asymptotische Näherung – geometrische Anschauung</h2>
-    <div class="card-grid">
-      <div class="info-card"><h3>PT1: $\frac{K}{1+sT}$</h3><p>0 dB-Plateau bis zur Knickfrequenz $\omega=1/T$, danach Abfall mit <b>−20 dB/Dek</b>. Phase $0°\to-90°$, bei $1/T$ genau $-45°$.</p></div>
-      <div class="info-card"><h3>PT2: $\frac{K}{1+2D\frac{s}{\omega_0}+\frac{s^2}{\omega_0^2}}$</h3><p>Abfall <b>−40 dB/Dek</b> ab $\omega_0$. Bei kleinem $D$ Resonanzüberhöhung. Phase $0°\to-180°$.</p></div>
-      <div class="info-card"><h3>I-Glied: $\frac{K}{s}$</h3><p>Gerade mit <b>−20 dB/Dek</b> über alle Frequenzen, schneidet 0 dB bei $\omega=K$. Phase konstant $-90°$.</p></div>
-      <div class="info-card"><h3>IPT1: $\frac{K}{s(1+sT)}$</h3><p>Start −20 dB/Dek (I), ab $1/T$ Knick auf −40 dB/Dek. Phase $-90°\to-180°$.</p></div>
-    </div>
-
-    <h2 class="sub-heading">Interaktiver Vergleich (asymptotisch + exakt)</h2>
-    <p>Wähle die Grundglieder und verstelle $K$, $T$ und (für PT2) die Dämpfung $D$. <b>Durchgezogen</b> = exakter Verlauf, <b>gestrichelt</b> = asymptotische Näherung. Vertikale gepunktete Linien markieren die Knickfrequenzen.</p>
-    <div class="demo-controls">
-      <div class="control-group" style="flex:2;min-width:260px;">
-        <label>Grundglieder anzeigen</label>
-        <div class="chk-row">
-          <label><input type="checkbox" class="bode-chk" value="PT1" checked> PT1</label>
-          <label><input type="checkbox" class="bode-chk" value="PT2" checked> PT2</label>
-          <label><input type="checkbox" class="bode-chk" value="I"> I</label>
-          <label><input type="checkbox" class="bode-chk" value="IPT1"> IPT1</label>
-        </div>
-      </div>
-      <div class="control-group"><label>Verstärkung $K$</label><input type="range" id="bode-K" min="0.1" max="10" step="0.1" value="1"><span class="control-val" id="bode-K-val">1.0</span></div>
-      <div class="control-group"><label>Zeitkonstante $T$ (s)</label><input type="range" id="bode-T" min="0.1" max="5" step="0.1" value="1"><span class="control-val" id="bode-T-val">1.0</span></div>
-      <div class="control-group"><label>Dämpfung $D$ (PT2)</label><input type="range" id="bode-D" min="0.1" max="2" step="0.05" value="0.4"><span class="control-val" id="bode-D-val">0.40</span></div>
-      <div class="control-group"><label>Asymptoten</label><div class="chk-row"><label><input type="checkbox" id="bode-asym" checked> einblenden</label></div></div>
-    </div>
-    <div id="bode-cmp-plot" class="plot-box tall"></div>
-
-    <!-- Worked example: read F_o from Bode -->
-    <div class="klausur-box">
-      <div class="klausur-head"><span>Klausuraufgabe – $F_o(s)$ aus dem Bode-Diagramm ablesen</span><span class="src">Tutorium 1/5 · A5</span></div>
-      <div class="klausur-body">
-        <p><b>Aufgabe:</b> Alle Pole/Nullstellen reell und in der linken Halbebene. Abzulesen sind: Grundverstärkung $20\,$dB, eine Zähler-Knickfrequenz und zwei Nenner-Knickfrequenzen.</p>
-        <div class="anleitung">
-          <div class="a-step"><div><b>Grundverstärkung</b> bei tiefer Frequenz ablesen: $20\,\text{dB} \Rightarrow K=10^{20/20}=10$.</div></div>
-          <div class="a-step"><div><b>Knickfrequenzen</b> dort, wo sich die Steigung ändert: $+20\,$dB/Dek-Knick (Zähler) bei $\omega_{Z}=0{,}1\Rightarrow T_Z=10$; $-20\,$dB/Dek-Knicke (Nenner) bei $\omega_{N1}=10\Rightarrow T_{N1}=0{,}1$ und $\omega_{N2}=100\Rightarrow T_{N2}=0{,}01$.</div></div>
-          <div class="a-step"><div>Faktoren zusammensetzen: $+20$/Dek $=(1+sT_Z)$ im Zähler, $-20$/Dek $=(1+sT_N)$ im Nenner.</div></div>
-        </div>
-        <div class="ergebnis-box"><div class="lbl">Ergebnis</div>$$F_o(s)=\frac{10\,(10s+1)}{(0{,}1s+1)(0{,}01s+1)}$$Pole bei $s=-10$ und $s=-100$, Nullstelle bei $s=-0{,}1$.</div>
-      </div>
-    </div>
-
-    <div class="warning-box"><b>PT2-Korrektur:</b> Bei einem konjugiert komplexen Polpaar ($D<\tfrac{1}{\sqrt2}\approx0{,}707$) liegt der exakte Betrag an der Knickfrequenz <b>über</b> der Asymptote (Resonanzüberhöhung); bei $D=1$ (doppelter reeller Pol) liegt er $-6\,$dB <b>darunter</b>. Genau daran erkennt man im Bode-Diagramm, ob ein PT2 oder zwei einzelne PT1 vorliegen. Verstelle oben $D$ und beobachte die Überhöhung!</div>
-  </div><!-- end bode -->
-
-  <!-- ═══════════════════════════════ TAB 4: STABILITÄTSRESERVEN ═══════════════════════════════ -->
-  <div class="tab-content" id="tab-reserven">
-    <div class="section-title">Stabilitätsreserven (Phasen- und Amplitudenreserve)</div>
-
-    <p>Stabilität allein genügt nicht – der Kreis soll auch ausreichend <b>Abstand zur Stabilitätsgrenze</b> (Punkt $-1$ bzw. $-180°$) haben. Das spezielle Nyquist-Kriterium im Bode-Diagramm liefert dafür zwei Maße.</p>
-
-    <div class="two-col">
-      <div class="formula-box"><div class="formula-label">Phasenreserve $\varphi_r$</div>
-        $$\varphi_r = 180° + \angle F_o(j\omega_D)$$
-        <p style="font-size:.86rem;color:#475569;">$\omega_D$ = <b>Durchtrittsfrequenz</b>, wo $|F_o(j\omega_D)|=0\,$dB (Betrag = 1).</p></div>
-      <div class="formula-box"><div class="formula-label">Amplitudenreserve $A_r$</div>
-        $$A_{r,\text{dB}} = -\,|F_o(j\omega_k)|_{\text{dB}}$$
-        <p style="font-size:.86rem;color:#475569;">$\omega_k$ = <b>kritische Frequenz</b>, wo $\angle F_o(j\omega_k)=-180°$.</p></div>
-    </div>
-    <div class="merk"><div class="lbl">Faustregel (gutes Einschwingverhalten)</div>
-      Phasenreserve $\varphi_r \approx 30°\dots60°$ &nbsp;·&nbsp; Amplitudenreserve $A_r \approx 2\dots7$ ($\approx 6\dots17\,$dB). Stabil ist der Kreis (fallender Phasenverlauf), solange $\varphi_r>0$ bzw. $A_{r}>0\,$dB.
-    </div>
-
-    <h2 class="sub-heading">Bildliche Anleitung – wie liest man die Reserven ab?</h2>
-    <div class="svg-wrap">
-      <svg viewBox="0 0 640 460" role="img" aria-label="Anleitung Reserven im Bode">
-        <defs><marker id="ra" markerWidth="9" markerHeight="9" refX="4.5" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 Z" fill="#dc2626"/></marker>
-        <marker id="rb" markerWidth="9" markerHeight="9" refX="4.5" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 Z" fill="#0891b2"/></marker></defs>
-        <rect x="70" y="20" width="520" height="160" fill="#fafafa" stroke="#cbd5e1"/>
-        <text x="20" y="100" font-size="13" transform="rotate(-90 20,100)">Betrag [dB]</text>
-        <line x1="70" y1="80" x2="590" y2="80" stroke="#94a3b8" stroke-dasharray="4 3"/>
-        <text x="595" y="84" font-size="12" fill="#475569">0 dB</text>
-        <path d="M70,40 Q200,45 300,80 T590,150" fill="none" stroke="#4f46e5" stroke-width="2.5"/>
-        <line x1="300" y1="80" x2="300" y2="430" stroke="#dc2626" stroke-dasharray="5 4" stroke-width="1.5"/>
-        <circle cx="300" cy="80" r="5" fill="#dc2626"/>
-        <text x="306" y="36" font-size="13" fill="#dc2626" font-weight="700">ω_D</text>
-        <rect x="70" y="250" width="520" height="170" fill="#fafafa" stroke="#cbd5e1"/>
-        <text x="20" y="340" font-size="13" transform="rotate(-90 20,340)">Phase [°]</text>
-        <line x1="70" y1="390" x2="590" y2="390" stroke="#94a3b8" stroke-dasharray="4 3"/>
-        <text x="595" y="394" font-size="12" fill="#475569">−180°</text>
-        <path d="M70,265 Q220,270 330,360 T590,415" fill="none" stroke="#4f46e5" stroke-width="2.5"/>
-        <circle cx="300" cy="345" r="5" fill="#dc2626"/>
-        <line x1="300" y1="390" x2="300" y2="350" stroke="#dc2626" stroke-width="2" marker-end="url(#ra)"/>
-        <text x="312" y="372" font-size="13" fill="#dc2626" font-weight="700">φ_r</text>
-        <line x1="450" y1="390" x2="450" y2="80" stroke="#0891b2" stroke-dasharray="5 4" stroke-width="1.5"/>
-        <circle cx="450" cy="390" r="5" fill="#0891b2"/>
-        <text x="456" y="412" font-size="13" fill="#0891b2" font-weight="700">ω_k</text>
-        <circle cx="450" cy="118" r="5" fill="#0891b2"/>
-        <line x1="450" y1="80" x2="450" y2="118" stroke="#0891b2" stroke-width="2" marker-end="url(#rb)"/>
-        <text x="458" y="104" font-size="13" fill="#0891b2" font-weight="700">A_r</text>
-        <text x="120" y="448" font-size="12" fill="#475569">Frequenz ω (log) →</text>
-      </svg>
-      <div class="svg-cap">Abb. 3 – Vorgehen: Durchtrittsfrequenz $\omega_D$ (0 dB) → Phase ablesen → $\varphi_r$. Kritische Frequenz $\omega_k$ (−180°) → Betrag ablesen → $A_r$.</div>
-    </div>
-    <div class="anleitung">
-      <div class="a-step"><div><b>Phasenreserve:</b> Im <b>Betrags</b>diagramm den Schnittpunkt mit der 0-dB-Linie suchen ($\omega_D$), senkrecht ins Phasendiagramm projizieren, Phase ablesen und $\varphi_r=180°+\angle F_o(j\omega_D)$ bilden.</div></div>
-      <div class="a-step"><div><b>Amplitudenreserve:</b> Im <b>Phasen</b>diagramm den Schnittpunkt mit der −180°-Linie suchen ($\omega_k$), senkrecht ins Betragsdiagramm projizieren, den (negativen) dB-Wert ablesen; $A_{r,\text{dB}}$ ist der Abstand zur 0-dB-Linie.</div></div>
-      <div class="a-step"><div><b>Bewertung:</b> Liegt der Betrag bei $\omega_k$ unter 0 dB <i>und</i> die Phase bei $\omega_D$ über −180°, ist der Kreis stabil ($\varphi_r,A_r>0$).</div></div>
-    </div>
-
-    <h2 class="sub-heading">Ortskurve – Abstand zum kritischen Punkt</h2>
-    <div class="svg-wrap">
-      <svg viewBox="0 0 460 320" role="img" aria-label="Ortskurve mit Reserven">
-        <defs><marker id="oa" markerWidth="9" markerHeight="9" refX="4.5" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 Z" fill="#0891b2"/></marker></defs>
-        <line x1="30" y1="170" x2="440" y2="170" stroke="#94a3b8"/><text x="425" y="188" font-size="12">Re</text>
-        <line x1="250" y1="20" x2="250" y2="310" stroke="#94a3b8"/><text x="258" y="30" font-size="12">Im</text>
-        <circle cx="250" cy="170" r="90" fill="none" stroke="#cbd5e1" stroke-dasharray="4 3"/>
-        <text x="300" y="115" font-size="11" fill="#94a3b8">Einheitskreis</text>
-        <text x="146" y="166" font-size="22" fill="#dc2626" font-weight="700">×</text>
-        <text x="120" y="200" font-size="12" fill="#dc2626">(−1, 0)</text>
-        <path d="M340,170 C340,250 250,275 180,230 C120,192 150,150 200,140 C235,133 250,150 250,170" fill="none" stroke="#4f46e5" stroke-width="2.5"/>
-        <text x="345" y="165" font-size="11" fill="#4f46e5">ω→0</text>
-        <line x1="250" y1="170" x2="178" y2="223" stroke="#0891b2" stroke-width="1.5"/>
-        <path d="M180,170 A70,70 0 0,1 178,223" fill="none" stroke="#0891b2" stroke-width="1.5" marker-end="url(#oa)"/>
-        <text x="150" y="252" font-size="13" fill="#0891b2" font-weight="700">φ_r</text>
-        <circle cx="195" cy="170" r="4" fill="#0891b2"/>
-        <text x="158" y="140" font-size="12" fill="#0891b2">1/A_r</text>
-      </svg>
-      <div class="svg-cap">Abb. 4 – In der Ortskurve ist $\varphi_r$ der Winkel zwischen negativer reeller Achse und dem Schnittpunkt mit dem Einheitskreis; $A_r$ folgt aus dem Schnittpunkt mit der negativen reellen Achse: $A_r=1/|F_o(j\omega_k)|$.</div>
-    </div>
-
-    <h2 class="sub-heading">Interaktiv: $\varphi_r$ und $A_r$ live berechnen</h2>
-    <p>Offener Kreis $F_o=\dfrac{K_R}{(s+1)(0{,}5s+1)(0{,}2s+1)}$. Verstelle $K_R$ und beobachte, wie sich die Reserven (Pfeile im Diagramm) verschieben.</p>
-    <div class="demo-controls">
-      <div class="control-group"><label>Reglerverstärkung $K_R$</label><input type="range" id="kr-res" min="0.2" max="30" step="0.2" value="4"><span class="control-val" id="kr-res-val">4.0</span></div>
-    </div>
-    <div class="pill-row">
-      <div class="pill">Durchtrittsfreq. <b id="res-wd">–</b></div>
-      <div class="pill">Phasenreserve <b id="res-pr">–</b></div>
-      <div class="pill">krit. Frequenz <b id="res-wk">–</b></div>
-      <div class="pill">Amplitudenreserve <b id="res-ar">–</b></div>
-    </div>
-    <div id="res-verdict" style="border-radius:8px;padding:12px 18px;margin:8px 0;font-size:.92rem;font-weight:600;"></div>
-    <div id="res-plot" class="plot-box tall"></div>
-
-    <div class="klausur-box">
-      <div class="klausur-head"><span>Klausuraufgabe – Reserven ablesen &amp; bewerten</span><span class="src">Klausur 25.08.2023 · A1</span></div>
-      <div class="klausur-body">
-        <p>Aus dem Bode-Diagramm von $F_o$ wurde abgelesen: Bei $\omega_D=5\,\tfrac{\text{rad}}{\text{s}}$ schneidet der Betrag die 0-dB-Linie mit $\angle F_o=-135°$; bei $\omega_k=20\,\tfrac{\text{rad}}{\text{s}}$ schneidet die Phase $-180°$ mit $|F_o|=-20\,$dB.</p>
-        <div class="ergebnis-box"><div class="lbl">Ergebnis</div>$\varphi_r=180°-135°=\mathbf{45°}$ &nbsp;·&nbsp; $A_{r}=\mathbf{20\,dB}$. Beide positiv → geschlossener Kreis <b>stabil</b> mit gutem Einschwingverhalten. (Fortsetzung mit Totzeit in Tab 5.)</div>
-      </div>
-    </div>
-  </div><!-- end reserven -->
-
-  <!-- ═══════════════════════════════ TAB 5: TOTZEIT ═══════════════════════════════ -->
-  <div class="tab-content" id="tab-totzeit">
-    <div class="section-title">Totzeit</div>
-
-    <p>Ein Totzeitglied $G_{T}(s)=e^{-T_t s}$ (Transport, Förderband, Kommunikation) verschiebt das Signal um $T_t$. Es ist <b>keine rationale</b> Übertragungsfunktion → Hurwitz ist nicht anwendbar, das Nyquist-Kriterium dagegen schon.</p>
-
-    <div class="two-col">
-      <div class="formula-box"><div class="formula-label">Betrag</div>$$|e^{-j\omega T_t}|=1$$<p style="font-size:.86rem;color:#475569;">Der Betragsverlauf bleibt <b>unverändert</b>.</p></div>
-      <div class="formula-box"><div class="formula-label">Phase</div>$$\angle e^{-j\omega T_t}=-\omega T_t\;\text{(rad)}$$<p style="font-size:.86rem;color:#475569;">Die Phase wird <b>linear mit $\omega$ abgesenkt</b> → frisst Phasenreserve.</p></div>
-    </div>
-
-    <div class="merk"><div class="lbl">Kritische Totzeit</div>
-      Instabil wird der Kreis, sobald die Totzeit bei der Durchtrittsfrequenz die ganze Phasenreserve aufzehrt:
-      $$\varphi_r = \omega_D\, T_{t,\text{krit}} \;\Rightarrow\; \boxed{\,T_{t,\text{krit}}=\dfrac{\varphi_r\,[\text{rad}]}{\omega_D}\,}$$
-    </div>
-
-    <h2 class="sub-heading">Interaktiv: Phasenabsenkung durch Totzeit</h2>
-    <p>Offener Kreis $F_o=\dfrac{4}{(s+1)(0{,}5s+1)(0{,}2s+1)}$. Erhöhe $T_t$ und sieh zu, wie die Phasenreserve schrumpft, bis der Kreis bei $T_{t,\text{krit}}$ instabil wird (Betrag bleibt gleich).</p>
-    <div class="demo-controls">
-      <div class="control-group"><label>Totzeit $T_t$ (s)</label><input type="range" id="tt" min="0" max="2" step="0.02" value="0"><span class="control-val" id="tt-val">0.00</span></div>
-    </div>
-    <div class="pill-row">
-      <div class="pill">$\omega_D$ <b id="tt-wd">–</b></div>
-      <div class="pill">$\varphi_r$ ohne Totzeit <b id="tt-pr0">–</b></div>
-      <div class="pill">$\varphi_r$ mit Totzeit <b id="tt-pr">–</b></div>
-      <div class="pill">$T_{t,\text{krit}}$ <b id="tt-krit">–</b></div>
-    </div>
-    <div id="tt-verdict" style="border-radius:8px;padding:12px 18px;margin:8px 0;font-size:.92rem;font-weight:600;"></div>
-    <div id="tt-plot" class="plot-box tall"></div>
-
-    <div class="klausur-box">
-      <div class="klausur-head"><span>Klausuraufgabe – Totzeit destabilisiert</span><span class="src">Klausur 25.08.2023 · A1 (Forts.)</span></div>
-      <div class="klausur-body">
-        <p>Aus Tab 4: $\omega_D=5\,\tfrac{\text{rad}}{\text{s}}$, $\varphi_r=45°$. Nun wirkt zusätzlich $T_t=0{,}15\,$s.</p>
-        <div class="steps">
-          <div class="step"><div class="step-num">1</div><div class="step-body">Zusätzliche Phasenabsenkung bei $\omega_D$: $\Delta\varphi=\omega_D T_t = 5\cdot0{,}15=0{,}75\,\text{rad}\approx 45°$.</div></div>
-          <div class="step"><div class="step-num">2</div><div class="step-body">Neue Phase bei $\omega_D$: $-135°-45°=-180°$.</div></div>
-        </div>
-        <div class="ergebnis-box"><div class="lbl">Ergebnis</div>Die Phase liegt am 0-dB-Punkt nun genau bei $-180°$ → $\varphi_r=0°$, der Kreis ist <b>an der Stabilitätsgrenze / instabil</b>. Schon eine kleine Totzeit kann einen gut gedämpften Kreis kippen.</div>
-      </div>
-    </div>
-
-    <div class="example-box">
-      <p><b>Weiteres Beispiel (Tutorium 4, A4):</b> $F_o=\dfrac{10}{100s^3+125s^2+26s+1}$ hat $\omega_D\approx0{,}277\,\tfrac{\text{rad}}{\text{s}}$ und $\varphi_r\approx30{,}5°=0{,}532\,$rad.</p>
-      <div class="ergebnis-box"><div class="lbl">Ergebnis</div>$T_{t,\text{krit}}=\dfrac{0{,}532}{0{,}277}\approx \mathbf{1{,}92\,s}$ – größere Totzeiten machen den Kreis instabil.</div>
-    </div>
-  </div><!-- end totzeit -->
-
-  <!-- ═══════════════════════════════ TAB 6: REGLER-ENTWURF ═══════════════════════════════ -->
-  <div class="tab-content" id="tab-regler">
-    <div class="section-title">Regler-Entwurf: P, PI, PID</div>
-
-    <table class="var-table">
-      <tr><th>Regler</th><th>$G_R(s)$</th><th>Wirkung</th></tr>
-      <tr><td>P</td><td>$K_R$</td><td>schnell, einfach – aber bleibende Regelabweichung</td></tr>
-      <tr><td>PI</td><td>$K_R\left(1+\frac{1}{T_R s}\right)$</td><td>I-Anteil → <b>stationär genau</b>, etwas langsamer</td></tr>
-      <tr><td>PD</td><td>$K_R(1+T_D s)$</td><td>D-Anteil → mehr Dämpfung/Schnelligkeit, kein I</td></tr>
-      <tr><td>PID</td><td>$K_R\left(1+\frac{1}{T_R s}+T_D s\right)$</td><td>vereint beide Vorteile</td></tr>
+    <div class="h2">Grundglieder &amp; Asymptoten</div>
+    <table class="tbl">
+      <tr><th>Glied</th><th class="m">G(s)</th><th>Betrag-Asymptote</th><th>Phase</th></tr>
+      <tr><td>P</td><td class="m">K</td><td>konstant $20\log_{10}K$</td><td>$0\deg$</td></tr>
+      <tr><td>I</td><td class="m">K/s</td><td>$-20$ dB/Dek (durch $\omega{=}K$ bei 0 dB)</td><td>$-90\deg$</td></tr>
+      <tr><td>PT1</td><td class="m">K/(1+sT)</td><td>0 bis $1/T$, dann $-20$ dB/Dek</td><td>$0\deg\!\to\!-90\deg$ ($-45\deg$ bei $1/T$)</td></tr>
+      <tr><td>PT2</td><td class="m">K/(1+2D s/ω₀+s²/ω₀²)</td><td>0 bis $\omega_0$, dann $-40$ dB/Dek</td><td>$0\deg\!\to\!-180\deg$</td></tr>
+      <tr><td>IPT1</td><td class="m">K/(s(1+sT))</td><td>$-20$, ab $1/T$ dann $-40$ dB/Dek</td><td>$-90\deg\!\to\!-180\deg$</td></tr>
     </table>
 
-    <h2 class="sub-heading">Struktur des PI-Reglers (Parallelschaltung)</h2>
-    <div class="svg-wrap">
-      <svg viewBox="0 0 560 220" role="img" aria-label="PI-Regler Struktur">
-        <defs><marker id="pa" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#0f172a"/></marker></defs>
-        <line x1="20" y1="110" x2="80" y2="110" stroke="#0f172a" stroke-width="2" marker-end="url(#pa)"/>
-        <text x="30" y="100" font-size="14" font-style="italic">e(t)</text>
-        <circle cx="90" cy="110" r="4" fill="#0f172a"/>
-        <line x1="90" y1="110" x2="90" y2="55" stroke="#0f172a" stroke-width="2"/>
-        <line x1="90" y1="55" x2="180" y2="55" stroke="#0f172a" stroke-width="2" marker-end="url(#pa)"/>
-        <rect x="184" y="33" width="100" height="44" rx="6" fill="#eef2ff" stroke="#4f46e5" stroke-width="2"/>
-        <text x="234" y="60" font-size="15" text-anchor="middle">K_R</text>
-        <line x1="90" y1="110" x2="90" y2="165" stroke="#0f172a" stroke-width="2"/>
-        <line x1="90" y1="165" x2="180" y2="165" stroke="#0f172a" stroke-width="2" marker-end="url(#pa)"/>
-        <rect x="184" y="143" width="100" height="44" rx="6" fill="#eef2ff" stroke="#4f46e5" stroke-width="2"/>
-        <text x="234" y="170" font-size="14" text-anchor="middle" font-style="italic">K_R/(T_R·s)</text>
-        <line x1="284" y1="55" x2="370" y2="55" stroke="#0f172a" stroke-width="2"/>
-        <line x1="370" y1="55" x2="370" y2="95" stroke="#0f172a" stroke-width="2" marker-end="url(#pa)"/>
-        <line x1="284" y1="165" x2="370" y2="165" stroke="#0f172a" stroke-width="2"/>
-        <line x1="370" y1="165" x2="370" y2="125" stroke="#0f172a" stroke-width="2" marker-end="url(#pa)"/>
-        <circle cx="370" cy="110" r="15" fill="#fff" stroke="#0f172a" stroke-width="2"/>
-        <text x="365" y="106" font-size="13">+</text><text x="365" y="130" font-size="13">+</text>
-        <line x1="385" y1="110" x2="510" y2="110" stroke="#0f172a" stroke-width="2" marker-end="url(#pa)"/>
-        <text x="475" y="100" font-size="14" font-style="italic">u(t)</text>
+    <div class="h2">Interaktiv: PT1 / PT2 / I / IPT1 vergleichen</div>
+    <p>Exakter Verlauf <b>durchgezogen</b>, asymptotische Näherung <b>gestrichelt</b>; Knickfrequenzen als gepunktete Linien. Verstelle $K,T,D$ und beobachte besonders die PT2-Resonanz bei kleinem $D$.</p>
+    <div class="lab">
+      <div class="labtitle">Bode-Vergleich der Grundglieder</div>
+      <div class="ctrls">
+        <div class="cg" style="flex:2;min-width:230px;"><label>Grundglieder</label><div class="chk">
+          <label><input type="checkbox" class="bchk" value="PT1" checked> PT1</label>
+          <label><input type="checkbox" class="bchk" value="PT2" checked> PT2</label>
+          <label><input type="checkbox" class="bchk" value="I"> I</label>
+          <label><input type="checkbox" class="bchk" value="IPT1"> IPT1</label></div></div>
+        <div class="cg"><label>$K$</label><input type="range" id="bK" min="0.1" max="10" step="0.1" value="1"><span class="val" id="bK-val">1.0</span></div>
+        <div class="cg"><label>$T$ (s)</label><input type="range" id="bT" min="0.1" max="5" step="0.1" value="1"><span class="val" id="bT-val">1.0</span></div>
+        <div class="cg"><label>$D$ (PT2)</label><input type="range" id="bD" min="0.1" max="2" step="0.05" value="0.4"><span class="val" id="bD-val">0.40</span></div>
+        <div class="cg"><label>Asymptoten</label><div class="chk"><label><input type="checkbox" id="bAsym" checked> zeigen</label></div></div>
+      </div>
+      <div id="bode-cmp" class="plot tall"></div>
+    </div>
+
+    <div class="h2">Bildliche Anleitung: asymptotischen Betragsgang zeichnen</div>
+    <div class="anl">
+      <div class="s"><div>$F_o$ in <b>Zeitkonstantenform</b> bringen: jeder Faktor $(1+sT_i)$, Verstärkung $K$ ausklammern. Knickfrequenzen $\omega_i=1/T_i$.</div></div>
+      <div class="s"><div>Bei tiefer Frequenz mit der <b>Grundverstärkung</b> $20\log_{10}K$ starten (bei einem I-Glied stattdessen mit Steigung $-20$ dB/Dek durch $\omega=K$).</div></div>
+      <div class="s"><div>An jeder <b>Nenner</b>-Knickfrequenz die Steigung um $-20$ (PT1) bzw. $-40$ (PT2) dB/Dek <b>verringern</b>, an jeder <b>Zähler</b>-Knickfrequenz um $+20$ dB/Dek <b>erhöhen</b>.</div></div>
+      <div class="s"><div><b>Korrektur</b>: an einer PT1-Knickstelle $-3$ dB, bei reellem Doppelpol $-6$ dB; bei PT2 mit $D<\tfrac1{\sqrt2}$ Resonanz-Überhöhung <b>nach oben</b>.</div></div>
+    </div>
+
+    <!-- Exam: read F_o from bode -->
+    <div class="exam">
+      <div class="exam-h"><div class="t">$F_o(s)$ aus dem Bode-Diagramm rekonstruieren</div><div class="badges"><span class="b">25.08.2023 · 1.1</span><span class="b">Tut 1/5 · A5</span></div></div>
+      <div class="exam-b">
+        <div class="aufg">Gegeben $F_o=\dfrac{1000(10+2s)}{(s^2+52s+100)(s^2+11s+10)}$. Normieren und Eckfrequenzen + asymptotischen Amplitudengang bestimmen.</div>
+        <div class="solver">
+          <details class="sd"><summary><span class="ar">▸</span><span class="sn">Schritt 1</span> Auf Zeitkonstantenform normieren</summary><div class="sc">$s^2+11s+10=(s+1)(s+10)$, $s^2+52s+100=(s+2)(s+50)$, $10+2s=10(1+0{,}2s)$.<div class="eq">$$F_o=\frac{10\,(0{,}2s+1)}{(0{,}5s+1)(0{,}02s+1)(s+1)(0{,}1s+1)}$$</div></div></details>
+          <details class="sd"><summary><span class="ar">▸</span><span class="sn">Schritt 2</span> Verstärkung &amp; Eckfrequenzen</summary><div class="sc">Grundverstärkung $K=10\;\hat=\;20$ dB. Zähler-Knick $\omega_Z=1/0{,}2=5$. Nenner-Knicke: $\omega=2,\;50,\;1,\;10$ rad/s.</div></details>
+          <details class="sd"><summary><span class="ar">▸</span><span class="sn">Schritt 3</span> Verlauf aufbauen</summary><div class="sc">Start bei 20 dB. Knicke (sortiert): $\omega{=}1$ ($-20$), $\omega{=}2$ ($-40$), $\omega{=}5$ Zähler ($\to-20$), $\omega{=}10$ ($-40$), $\omega{=}50$ ($-60$ dB/Dek).<div class="box result"><span class="lbl">Ergebnis</span>$F_o=\dfrac{10(0{,}2s+1)}{(0{,}5s+1)(0{,}02s+1)(s+1)(0{,}1s+1)}$ — Pole $-2,-50,-1,-10$, Nullstelle $-5$.</div></div></details>
+        </div>
+      </div>
+    </div>
+
+    <div class="h2">Interaktiv: Ausgangssignal $y(t)$ bei Sinus-Anregung</div>
+    <p>Klausurtyp 2023-08/2024-02: „Bestimme $y(t)$ für $e(t)=\hat e\sin(\omega t+\varphi_0)$ mit Hilfe des Bode-Diagramms." Prinzip: $y(t)=|F_o(j\omega)|\cdot\hat e\cdot\sin\big(\omega t+\varphi_0+\angle F_o(j\omega)\big)$. Schiebe $\omega$ und lies $|F_o|$ und $\angle F_o$ ab — am Punkt $\omega=20$ ergibt sich der Klausurwert.</p>
+    <div class="lab">
+      <div class="labtitle">Sinus-Antwort des offenen Kreises (25.08.2023)</div>
+      <div class="ctrls">
+        <div class="cg"><label>Frequenz $\omega$ (rad/s)</label><input type="range" id="sw" min="-2" max="3" step="0.02" value="1.301"><span class="val" id="sw-val">20</span></div>
+        <div class="cg"><label>Eingangsamplitude $\hat e$</label><input type="range" id="se" min="0.5" max="5" step="0.5" value="3"><span class="val" id="se-val">3.0</span></div>
+        <div class="cg"><label>Eingangsphase $\varphi_0$ (Grad)</label><input type="range" id="sp" min="0" max="180" step="5" value="45"><span class="val" id="sp-val">45</span></div>
+      </div>
+      <div class="pills">
+        <div class="p">$|F_o(j\omega)|$ <b id="s-mag">–</b></div>
+        <div class="p">in dB <b id="s-magdb">–</b></div>
+        <div class="p">$\angle F_o$ <b id="s-ph">–</b></div>
+        <div class="p">Ausgangsamplitude <b id="s-out">–</b></div>
+      </div>
+      <div id="s-eq" class="box result" style="font-size:.9rem;"></div>
+      <div id="sinus-plot" class="plot"></div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════ TAB 4: RESERVEN ════════════════════════ -->
+  <div class="tab-content" id="tab-reserven">
+    <p class="lead">Stabilität reicht nicht — der Kreis braucht <b>Abstand zur Stabilitätsgrenze</b> ($-1$ bzw. $-180\deg$). Diese Reserven liest man im Bode-Diagramm des offenen Kreises ab.</p>
+
+    <div class="two">
+      <div class="box def"><span class="lbl">Phasenreserve $\varphi_r$</span>$$\varphi_r=180\deg+\angle F_o(j\omega_D)$$ $\omega_D$ = Durchtrittsfrequenz, wo $|F_o|=0$ dB.</div>
+      <div class="box def"><span class="lbl">Amplitudenreserve $A_r$</span>$$A_{r,\mathrm{dB}}=-\,|F_o(j\omega_k)|_{\mathrm{dB}}$$ $\omega_k$ = kritische Frequenz, wo $\angle F_o=-180\deg$.</div>
+    </div>
+    <div class="box merk"><span class="lbl">Faustregel</span>Gutes Einschwingverhalten: $\varphi_r\approx30\deg\!\dots\!60\deg$ und $A_r\approx2\dots7$ ($\approx6\dots17$ dB). Stabil (bei fallender Phase), solange beide $>0$.</div>
+
+    <div class="h2">Bildliche Anleitung</div>
+    <div class="fig">
+      <svg viewBox="0 0 640 460" role="img" aria-label="Anleitung Reserven">
+        <defs><marker id="r1" markerWidth="9" markerHeight="9" refX="4.5" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 Z" fill="#dc2626"/></marker><marker id="r2" markerWidth="9" markerHeight="9" refX="4.5" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 Z" fill="#0891b2"/></marker></defs>
+        <rect x="70" y="20" width="520" height="160" fill="#fafafa" stroke="#cbd5e1"/><text x="22" y="100" font-size="12" transform="rotate(-90 22,100)">Betrag [dB]</text>
+        <line x1="70" y1="80" x2="590" y2="80" stroke="#94a3b8" stroke-dasharray="4 3"/><text x="595" y="84" font-size="11" fill="#475569">0 dB</text>
+        <path d="M70,40 Q200,45 300,80 T590,150" fill="none" stroke="#4f46e5" stroke-width="2.5"/>
+        <line x1="300" y1="80" x2="300" y2="430" stroke="#dc2626" stroke-dasharray="5 4" stroke-width="1.5"/><circle cx="300" cy="80" r="5" fill="#dc2626"/><text x="306" y="36" font-size="13" fill="#dc2626" font-weight="700">ω_D</text>
+        <rect x="70" y="250" width="520" height="170" fill="#fafafa" stroke="#cbd5e1"/><text x="22" y="345" font-size="12" transform="rotate(-90 22,345)">Phase [°]</text>
+        <line x1="70" y1="390" x2="590" y2="390" stroke="#94a3b8" stroke-dasharray="4 3"/><text x="595" y="394" font-size="11" fill="#475569">−180°</text>
+        <path d="M70,265 Q220,270 330,360 T590,415" fill="none" stroke="#4f46e5" stroke-width="2.5"/>
+        <circle cx="300" cy="345" r="5" fill="#dc2626"/><line x1="300" y1="390" x2="300" y2="350" stroke="#dc2626" stroke-width="2" marker-end="url(#r1)"/><text x="310" y="373" font-size="13" fill="#dc2626" font-weight="700">φ_r</text>
+        <line x1="450" y1="390" x2="450" y2="80" stroke="#0891b2" stroke-dasharray="5 4" stroke-width="1.5"/><circle cx="450" cy="390" r="5" fill="#0891b2"/><text x="456" y="410" font-size="13" fill="#0891b2" font-weight="700">ω_k</text>
+        <circle cx="450" cy="118" r="5" fill="#0891b2"/><line x1="450" y1="80" x2="450" y2="118" stroke="#0891b2" stroke-width="2" marker-end="url(#r2)"/><text x="458" y="104" font-size="13" fill="#0891b2" font-weight="700">A_r</text>
+        <text x="120" y="448" font-size="11" fill="#64748b">Frequenz ω (log) →</text>
       </svg>
-      <div class="svg-cap">Abb. 5 – PI-Regler als Parallelschaltung von P- und I-Glied: $G_R(s)=K_R\big(1+\frac{1}{T_R s}\big)=K_R\frac{T_R s+1}{T_R s}$.</div>
+      <div class="cap">Abb. 3 – $\omega_D$ aus dem Betragsdiagramm (0 dB), Phase dort ablesen → $\varphi_r$. $\omega_k$ aus dem Phasendiagramm (−180°), Betrag dort ablesen → $A_r$.</div>
     </div>
-    <p>Im Bode-Diagramm des PI-Reglers fällt der Betrag bei tiefen Frequenzen mit $-20\,$dB/Dek (I-Verhalten) und knickt bei der <b>Reglerknickfrequenz $1/T_R$</b> in den konstanten P-Bereich ab; die Phase steigt von $-90°$ auf $0°$.</p>
-    <div id="pi-bode-plot" class="plot-box"></div>
 
-    <h2 class="sub-heading">Sprungantwort-Vergleich: offen vs. P / PI / PID</h2>
-    <p>Gemeinsame Strecke $G_S=\dfrac{1}{(1+T_1 s)(1+T_2 s)}$ mit $T_2=\tfrac{1}{2}T_1$. Verstelle die Reglerparameter und vergleiche die Sprungantworten des geschlossenen Kreises mit der ungeregelten Strecke (grau).</p>
-    <div class="demo-controls">
-      <div class="control-group"><label>$K_R$ (alle Regler)</label><input type="range" id="st-kr" min="0.5" max="12" step="0.1" value="4"><span class="control-val" id="st-kr-val">4.0</span></div>
-      <div class="control-group"><label>$T_R$ (Nachstellzeit, PI/PID)</label><input type="range" id="st-tr" min="0.2" max="6" step="0.1" value="1.5"><span class="control-val" id="st-tr-val">1.5</span></div>
-      <div class="control-group"><label>$T_D$ (Vorhaltzeit, PID)</label><input type="range" id="st-td" min="0" max="2" step="0.05" value="0.4"><span class="control-val" id="st-td-val">0.40</span></div>
-      <div class="control-group"><label>$T_1$ Strecke (s)</label><input type="range" id="st-t1" min="0.3" max="3" step="0.1" value="1"><span class="control-val" id="st-t1-val">1.0</span></div>
+    <div class="h2">Interaktiv: $\varphi_r$ und $A_r$ live (Klausursystem 25.08.2023)</div>
+    <p>$F_o=K\cdot\dfrac{10(0{,}2s+1)}{(0{,}5s+1)(0{,}02s+1)(s+1)(0{,}1s+1)}$. Bei $K=1$ ergeben sich genau die Klausurwerte. Erhöhe $K$, bis die Reserven verschwinden.</p>
+    <div class="lab">
+      <div class="labtitle">Reserven im Bode-Diagramm</div>
+      <div class="ctrls"><div class="cg"><label>Zusatzverstärkung $K$</label><input type="range" id="kr-res" min="0.2" max="20" step="0.1" value="1"><span class="val" id="kr-res-val">1.0</span></div></div>
+      <div class="pills"><div class="p">$\omega_D$ <b id="res-wd">–</b></div><div class="p">$\varphi_r$ <b id="res-pr">–</b></div><div class="p">$\omega_k$ <b id="res-wk">–</b></div><div class="p">$A_r$ <b id="res-ar">–</b></div></div>
+      <div class="verdict" id="res-verdict"></div>
+      <div id="res-plot" class="plot tall"></div>
     </div>
-    <div class="legend-inline">
-      <span><i style="border-color:#94a3b8;"></i> Strecke (offen)</span>
-      <span><i style="border-color:#4f46e5;"></i> P</span>
-      <span><i style="border-color:#0891b2;"></i> PI</span>
-      <span><i style="border-color:#dc2626;"></i> PID</span>
-      <span><i style="border-color:#94a3b8;border-top-style:dashed;"></i> Sollwert $w=1$</span>
-    </div>
-    <div id="step-plot" class="plot-box tall"></div>
-    <div id="step-info" class="ergebnis-box"><div class="lbl">Beobachtung (live)</div><span id="step-info-txt">–</span></div>
 
-    <h2 class="sub-heading">Endwertsatz – warum der I-Anteil stationär genau macht</h2>
-    <div class="formula-box"><div class="formula-label">Endwertsatz der Laplace-Transformation</div>
-      $$\lim_{t\to\infty} e(t)=\lim_{s\to0} s\,E(s)=\lim_{s\to0}\frac{s\,W(s)}{1+F_o(s)}$$
-      <p style="margin-top:8px;font-size:.88rem;color:#475569;">Bei Sprunganregung $W(s)=\tfrac{1}{s}$: $\;e_\infty=\dfrac{1}{1+F_o(0)}$. Enthält $F_o$ einen Integrator (I-Anteil), so ist $F_o(0)=\infty \Rightarrow e_\infty=0$ → exakt. Ohne Integrator (reiner P-Regler) bleibt der Fehler $e_\infty=\tfrac{1}{1+F_o(0)}$.</p>
+    <div class="exam">
+      <div class="exam-h"><div class="t">Reserven ablesen &amp; bewerten</div><div class="badges"><span class="b">25.08.2023 · 1.4</span></div></div>
+      <div class="exam-b">
+        <div class="aufg">Aus dem Bode-Diagramm von $F_o$ (Verstärkung 10): bestimme $\varphi_r$ und $A_r$.</div>
+        <div class="solver">
+          <details class="sd"><summary><span class="ar">▸</span><span class="sn">Schritt 1</span> Phasenreserve</summary><div class="sc">Betrag schneidet 0 dB bei $\omega_D=5$ rad/s. Phase dort: $\angle F_o(j5)=-135\deg$.<div class="eq">$$\varphi_r=180\deg+(-135\deg)=45\deg$$</div></div></details>
+          <details class="sd"><summary><span class="ar">▸</span><span class="sn">Schritt 2</span> Amplitudenreserve</summary><div class="sc">Phase schneidet $-180\deg$ bei $\omega_k=20$ rad/s. Betrag dort: $|F_o(j20)|=-20$ dB.<div class="eq">$$A_{r,\mathrm{dB}}=-(-20\,\mathrm{dB})=20\;\mathrm{dB}$$</div></div></details>
+          <details class="sd"><summary><span class="ar">▸</span><span class="sn">Ergebnis</span></summary><div class="sc"><div class="box result"><span class="lbl">Ergebnis</span>$\varphi_r=45\deg$, $A_r=20$ dB — beide positiv und im Faustregelbereich ⇒ <b>stabil mit gutem Einschwingverhalten</b>. (Totzeit in Tab 5.)</div></div></details>
+        </div>
+      </div>
     </div>
-    <div class="merk"><div class="lbl">Zusammenhang zur Sprungantwort oben</div>
-      Genau deshalb erreicht im Plot der <b>P-Regler den Sollwert 1 nicht ganz</b> (bleibende Abweichung), während <b>PI und PID</b> dank Integrator exakt auf 1 einlaufen.</div>
-  </div><!-- end regler -->
+  </div>
 
-</div><!-- end content-wrap -->
+  <!-- ════════════════════════ TAB 5: TOTZEIT ════════════════════════ -->
+  <div class="tab-content" id="tab-totzeit">
+    <p class="lead">Eine Totzeit $G_T(s)=e^{-T_t s}$ (Transport, Förderband, Kommunikation) ist <b>nicht rational</b> → Hurwitz versagt, Nyquist/Bode funktionieren weiter.</p>
+    <div class="two">
+      <div class="box def"><span class="lbl">Betrag</span>$$|e^{-j\omega T_t}|=1$$ Betragsverlauf bleibt <b>unverändert</b>.</div>
+      <div class="box def"><span class="lbl">Phase</span>$$\angle e^{-j\omega T_t}=-\omega T_t\;\text{(rad)}$$ Phase wird <b>linear mit $\omega$ abgesenkt</b>.</div>
+    </div>
+    <div class="box merk"><span class="lbl">Kritische Totzeit</span>$$\varphi_r=\omega_D\,T_{t,\mathrm{krit}}\;\Rightarrow\;T_{t,\mathrm{krit}}=\frac{\varphi_r\,[\mathrm{rad}]}{\omega_D}$$</div>
+
+    <div class="h2">Interaktiv: Phasenabsenkung durch Totzeit</div>
+    <p>Klausursystem 25.08.2023 (Verstärkung 10, $\omega_D=5$, $\varphi_r=45\deg$). Erhöhe $T_t$ und beobachte, wie die Phasenreserve schrumpft — bei $T_t\approx0{,}15$ s wird der Kreis instabil.</p>
+    <div class="lab">
+      <div class="labtitle">Totzeit-Simulator</div>
+      <div class="ctrls"><div class="cg"><label>Totzeit $T_t$ (s)</label><input type="range" id="tt" min="0" max="0.5" step="0.005" value="0"><span class="val" id="tt-val">0.000</span></div></div>
+      <div class="pills"><div class="p">$\omega_D$ <b id="tt-wd">–</b></div><div class="p">$\varphi_r$ ohne <b id="tt-pr0">–</b></div><div class="p">$\varphi_r$ mit Totzeit <b id="tt-pr">–</b></div><div class="p">$T_{t,\mathrm{krit}}$ <b id="tt-krit">–</b></div></div>
+      <div class="verdict" id="tt-verdict"></div>
+      <div id="tt-plot" class="plot tall"></div>
+    </div>
+
+    <div class="exam">
+      <div class="exam-h"><div class="t">Totzeit destabilisiert den Kreis</div><div class="badges"><span class="b">25.08.2023 · 1.5</span></div></div>
+      <div class="exam-b">
+        <div class="aufg">Zusätzliche Totzeit $T_t=0{,}15$ s. Auswirkung auf Frequenzgang und Stabilität?</div>
+        <div class="solver">
+          <details class="sd"><summary><span class="ar">▸</span><span class="sn">Schritt 1</span> Zusätzliche Phase bei $\omega_D$</summary><div class="sc">$\Delta\varphi=\omega_D T_t=5\cdot0{,}15=0{,}75\,\mathrm{rad}\approx43\deg$. Der Betrag ändert sich nicht.</div></details>
+          <details class="sd"><summary><span class="ar">▸</span><span class="sn">Schritt 2</span> Neue Phase</summary><div class="sc">Bei $\omega_D=5$: $\;-135\deg-43\deg\approx-178\deg\approx-180\deg$ ⇒ $\varphi_r\to0$.</div></details>
+          <details class="sd"><summary><span class="ar">▸</span><span class="sn">Ergebnis</span></summary><div class="sc"><div class="box result"><span class="lbl">Ergebnis</span>Die Phasenreserve ist aufgebraucht — der geschlossene Kreis liegt <b>an der Stabilitätsgrenze / wird instabil</b>. Schon $0{,}15$ s Totzeit kippen einen gut gedämpften Kreis.</div></div></details>
+        </div>
+      </div>
+    </div>
+
+    <div class="box info"><span class="lbl">Weiteres Beispiel · Tutorium 4 A4</span>$F_o=\dfrac{10}{100s^3+125s^2+26s+1}$ mit $\omega_D\approx0{,}277$, $\varphi_r\approx30{,}5\deg=0{,}532$ rad ⇒ $T_{t,\mathrm{krit}}=\dfrac{0{,}532}{0{,}277}\approx1{,}92$ s.</div>
+  </div>
+
+  <!-- ════════════════════════ TAB 6: REGLER ════════════════════════ -->
+  <div class="tab-content" id="tab-regler">
+    <p class="lead">Welcher Regler? P ist schnell aber ungenau, der I-Anteil macht stationär genau, der D-Anteil bringt Dämpfung/Schnelligkeit.</p>
+    <table class="tbl">
+      <tr><th>Regler</th><th class="m">G_R(s)</th><th>Wirkung</th></tr>
+      <tr><td>P</td><td class="m">K_R</td><td>schnell, einfach — bleibende Regelabweichung</td></tr>
+      <tr><td>PI</td><td class="m">K_R(1+1/(T_R s))</td><td>I-Anteil → <b>stationär genau</b></td></tr>
+      <tr><td>PD</td><td class="m">K_R(1+T_D s)</td><td>D-Anteil → Dämpfung/Schnelligkeit</td></tr>
+      <tr><td>PID</td><td class="m">K_R(1+1/(T_R s)+T_D s)</td><td>beide Vorteile vereint</td></tr>
+    </table>
+
+    <div class="h2">PI-Regler: Struktur &amp; Bode</div>
+    <div class="fig">
+      <svg viewBox="0 0 560 210" role="img" aria-label="PI-Struktur">
+        <defs><marker id="p1" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#0f172a"/></marker></defs>
+        <line x1="20" y1="105" x2="78" y2="105" stroke="#0f172a" stroke-width="2" marker-end="url(#p1)"/><text x="28" y="96" font-size="13" font-style="italic">e</text>
+        <circle cx="88" cy="105" r="4" fill="#0f172a"/>
+        <line x1="88" y1="105" x2="88" y2="52" stroke="#0f172a" stroke-width="2"/><line x1="88" y1="52" x2="178" y2="52" stroke="#0f172a" stroke-width="2" marker-end="url(#p1)"/>
+        <rect x="182" y="32" width="104" height="40" rx="6" fill="#eef2ff" stroke="#4f46e5" stroke-width="2"/><text x="234" y="57" font-size="14" text-anchor="middle">K_R</text>
+        <line x1="88" y1="105" x2="88" y2="158" stroke="#0f172a" stroke-width="2"/><line x1="88" y1="158" x2="178" y2="158" stroke="#0f172a" stroke-width="2" marker-end="url(#p1)"/>
+        <rect x="182" y="138" width="104" height="40" rx="6" fill="#eef2ff" stroke="#4f46e5" stroke-width="2"/><text x="234" y="163" font-size="13" text-anchor="middle" font-style="italic">K_R/(T_R s)</text>
+        <line x1="286" y1="52" x2="372" y2="52" stroke="#0f172a" stroke-width="2"/><line x1="372" y1="52" x2="372" y2="90" stroke="#0f172a" stroke-width="2" marker-end="url(#p1)"/>
+        <line x1="286" y1="158" x2="372" y2="158" stroke="#0f172a" stroke-width="2"/><line x1="372" y1="158" x2="372" y2="120" stroke="#0f172a" stroke-width="2" marker-end="url(#p1)"/>
+        <circle cx="372" cy="105" r="14" fill="#fff" stroke="#0f172a" stroke-width="2"/><text x="367" y="101" font-size="12">+</text><text x="367" y="125" font-size="12">+</text>
+        <line x1="386" y1="105" x2="510" y2="105" stroke="#0f172a" stroke-width="2" marker-end="url(#p1)"/><text x="476" y="96" font-size="13" font-style="italic">u</text>
+      </svg>
+      <div class="cap">Abb. 4 – PI-Regler: $G_R=K_R\big(1+\frac{1}{T_R s}\big)=K_R\frac{T_R s+1}{T_R s}$. Bode-Knick bei $\omega=1/T_R$.</div>
+    </div>
+    <div id="pi-bode" class="plot"></div>
+
+    <div class="h2">Interaktiv: Sprungantwort P vs. PI vs. PID</div>
+    <p>Gemeinsame Strecke $G_S=\dfrac{1}{(1+T_1s)(1+T_2s)}$, $T_2=\tfrac12T_1$. Vergleiche die geschlossenen Kreise mit der ungeregelten Strecke (grau).</p>
+    <div class="lab">
+      <div class="labtitle">Sprungantwort-Vergleich</div>
+      <div class="ctrls">
+        <div class="cg"><label>$K_R$</label><input type="range" id="st-kr" min="0.5" max="12" step="0.1" value="4"><span class="val" id="st-kr-val">4.0</span></div>
+        <div class="cg"><label>$T_R$ (PI/PID)</label><input type="range" id="st-tr" min="0.2" max="6" step="0.1" value="1.5"><span class="val" id="st-tr-val">1.5</span></div>
+        <div class="cg"><label>$T_D$ (PID)</label><input type="range" id="st-td" min="0" max="2" step="0.05" value="0.4"><span class="val" id="st-td-val">0.40</span></div>
+        <div class="cg"><label>$T_1$ Strecke (s)</label><input type="range" id="st-t1" min="0.3" max="3" step="0.1" value="1"><span class="val" id="st-t1-val">1.0</span></div>
+      </div>
+      <div class="leg"><span><i style="border-color:#94a3b8"></i>Strecke</span><span><i style="border-color:#4f46e5"></i>P</span><span><i style="border-color:#0891b2"></i>PI</span><span><i style="border-color:#dc2626"></i>PID</span><span><i style="border-color:#94a3b8;border-top-style:dashed"></i>Sollwert</span></div>
+      <div id="step-plot" class="plot tall"></div>
+      <div id="step-info" class="box result" style="font-size:.9rem;"></div>
+    </div>
+
+    <div class="h2">Endwertsatz &amp; stationäre Genauigkeit</div>
+    <div class="eq">$$\lim_{t\to\infty}e(t)=\lim_{s\to0}s\,E(s)=\lim_{s\to0}\frac{s\,W(s)}{1+F_o(s)}\;\overset{W=1/s}{=}\;\frac{1}{1+F_o(0)}$$</div>
+    <div class="box merk"><span class="lbl">Regel</span>Enthält der offene Kreis einen <b>Integrator</b>, ist $F_o(0)=\infty\Rightarrow e_\infty=0$ (stationär genau). Ohne Integrator bleibt $e_\infty=\frac{1}{1+F_o(0)}$.</div>
+
+    <div class="exam">
+      <div class="exam-h"><div class="t">Stationärer Fehler — P-Regler vs. PI</div><div class="badges"><span class="b">Tut 4 · A5</span><span class="b">28.02.2024 · 1.4</span></div></div>
+      <div class="exam-b">
+        <div class="subt">P-Regler, Drehzahlregelung (Tut 4 A5)</div>
+        <div class="solver">
+          <details class="sd"><summary><span class="ar">▸</span><span class="sn">Lösung</span> Endwertsatz</summary><div class="sc">$F_o(0)=G_M G_R G_{St}G_S|_{s=0}=0{,}2\cdot K_R\cdot30\cdot0{,}25=1{,}5K_R$.<div class="eq">$$e_\infty=\frac{u_0}{1+1{,}5K_R}$$</div>Für $e_\infty<10\%$: $K_R>6$ (im Stabilitätsbereich $K_R<44{,}88$ erreichbar). Für $<1\%$ wäre $K_R>66$ nötig — <b>nicht</b> stabil realisierbar. <div class="box result"><span class="lbl">Merke</span>Ohne Integrator bleibt immer ein Fehler; er lässt sich mit $K_R$ nur verkleinern, nicht beseitigen.</div></div></details>
+        </div>
+        <div class="subt">PI-Regler, Gasturbine (28.02.2024)</div>
+        <div class="solver">
+          <details class="sd"><summary><span class="ar">▸</span><span class="sn">Lösung</span> Integrator vorhanden</summary><div class="sc">Der offene Kreis $F_o=\dfrac{10}{s(0{,}2s+1)(s+1)}$ enthält durch den PI-Regler einen Integrator ($s$ im Nenner). ⇒ $F_o(0)=\infty$. <div class="box result"><span class="lbl">Ergebnis</span>Führungs- <b>und</b> Störverhalten sind <b>stationär genau</b> ($e_\infty=0$) — sofern der Kreis stabil ist.</div></div></details>
+        </div>
+      </div>
+    </div>
+
+    <div class="h2">PD-Regler qualitativ (Klausur 26.02.2025)</div>
+    <div class="box info"><span class="lbl">Vor-/Nachteile</span><b>Vorteil:</b> der PD-Anteil kann ein PT1 der Strecke kompensieren und erlaubt höhere Verstärkung/Dämpfung. <b>Nachteil:</b> der ideale D-Anteil $K_D s$ ist <b>nicht realisierbar</b> (Zählergrad &gt; Nennergrad) und verstärkt hochfrequentes Rauschen — praktisch nur als <b>realer</b> PD-Regler $K_R\frac{1+T_D s}{1+T_N s}$ ($T_N\ll T_D$).</div>
+  </div>
+
+</div>
 
 <footer style="text-align:center;padding:40px 32px;background:#f8fafc;border-top:1px solid #e2e8f0;margin-top:60px;">
-  <p style="color:#94a3b8;font-size:0.88rem;">
-    <a href="index.html" style="color:#4f46e5;text-decoration:none;">← Zurück zur Übersicht</a> ·
-    Regelungstechnik 1 · Uni Paderborn · Prof. Trächtler
-  </p>
+  <p style="color:#94a3b8;font-size:0.88rem;"><a href="index.html" style="color:#4f46e5;text-decoration:none;">← Zurück zur Übersicht</a> · Regelungstechnik 1 · Uni Paderborn · Prof. Trächtler</p>
 </footer>
 
 <script>
-/* ════════════════ Tab handling ════════════════ */
-const RENDERERS = {
-  grundstruktur: null,
-  hurwitz: renderPoleZero,
-  bode: renderBodeCompare,
-  reserven: renderReserves,
-  totzeit: renderTotzeit,
-  regler: renderReglerTab
-};
+const RENDERERS={grundstruktur:null,hurwitz:renderPoleZero,bode:renderBodeTab,reserven:renderReserves,totzeit:renderTotzeit,regler:renderReglerTab};
 function showTab(id){
   document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('tab-'+id).classList.add('active');
-  if(typeof event!=='undefined' && event.target) event.target.classList.add('active');
-  if(RENDERERS[id]) setTimeout(RENDERERS[id],60);
+  if(typeof event!=='undefined'&&event.target)event.target.classList.add('active');
+  if(RENDERERS[id])setTimeout(RENDERERS[id],60);
 }
-
-/* ════════════════ Math helpers ════════════════ */
-const log10 = x => Math.log(x)/Math.LN10;
+const log10=x=>Math.log(x)/Math.LN10;
 function logspace(a,b,n){const r=[];for(let i=0;i<n;i++)r.push(Math.pow(10,a+(b-a)*i/(n-1)));return r;}
-function polymul(a,b){const r=new Array(a.length+b.length-1).fill(0);
-  for(let i=0;i<a.length;i++)for(let j=0;j<b.length;j++)r[i+j]+=a[i]*b[j];return r;}
-function polyadd(a,b){const n=Math.max(a.length,b.length);const r=new Array(n).fill(0);
-  for(let i=0;i<a.length;i++)r[n-a.length+i]+=a[i];
-  for(let i=0;i<b.length;i++)r[n-b.length+i]+=b[i];return r;}
+function polymul(a,b){const r=new Array(a.length+b.length-1).fill(0);for(let i=0;i<a.length;i++)for(let j=0;j<b.length;j++)r[i+j]+=a[i]*b[j];return r;}
+function polyadd(a,b){const n=Math.max(a.length,b.length);const r=new Array(n).fill(0);for(let i=0;i<a.length;i++)r[n-a.length+i]+=a[i];for(let i=0;i<b.length;i++)r[n-b.length+i]+=b[i];return r;}
+function polyRoots(c0){let c=c0.slice();while(c.length>1&&Math.abs(c[0])<1e-12)c.shift();const n=c.length-1;if(n<1)return[];const a=c.map(v=>v/c[0]);
+  function ev(re,im){let sr=a[0],si=0;for(let k=1;k<a.length;k++){const nr=sr*re-si*im+a[k],ni=sr*im+si*re;sr=nr;si=ni;}return[sr,si];}
+  let R=[];for(let i=0;i<n;i++){const an=2*Math.PI*i/n+0.4;R.push([0.7*Math.cos(an)+0.05,0.7*Math.sin(an)]);}
+  for(let it=0;it<300;it++){let md=0;for(let i=0;i<n;i++){const[fr,fi]=ev(R[i][0],R[i][1]);let dr=1,di=0;for(let j=0;j<n;j++){if(j===i)continue;const er=R[i][0]-R[j][0],ei=R[i][1]-R[j][1];const nr=dr*er-di*ei,ni=dr*ei+di*er;dr=nr;di=ni;}const dn=dr*dr+di*di||1e-12;const qr=(fr*dr+fi*di)/dn,qi=(fi*dr-fr*di)/dn;R[i][0]-=qr;R[i][1]-=qi;md=Math.max(md,Math.abs(qr)+Math.abs(qi));}if(md<1e-11)break;}
+  return R.map(r=>({re:r[0],im:Math.abs(r[1])<1e-6?0:r[1]}));}
+function crossing(X,Y,t){for(let i=0;i<X.length-1;i++){if((Y[i]-t)*(Y[i+1]-t)<=0&&Y[i]!==Y[i+1]){const f=(t-Y[i])/(Y[i+1]-Y[i]);return Math.pow(10,log10(X[i])+f*(log10(X[i+1])-log10(X[i])));}}return null;}
+function verdict(el,ok,txt){el.textContent=txt;el.style.background=ok?'#ecfdf5':'#fef2f2';el.style.color=ok?'#166534':'#991b1b';el.style.border='1px solid '+(ok?'#6ee7b7':'#fca5a5');}
+const BLAYOUT=()=>({grid:{rows:2,columns:1,pattern:'independent'},xaxis:{type:'log',gridcolor:'#eef2f7',domain:[0,1]},yaxis:{title:'Betrag [dB]',gridcolor:'#eef2f7',domain:[0.56,1]},xaxis2:{type:'log',title:'ω [rad/s]',gridcolor:'#eef2f7',domain:[0,1]},yaxis2:{title:'Phase [°]',gridcolor:'#eef2f7',domain:[0,0.44],dtick:45},margin:{l:60,r:20,t:18,b:46},plot_bgcolor:'#fafafa',paper_bgcolor:'white',font:{family:'Inter,sans-serif',size:11},legend:{orientation:'h',y:1.08}});
 
-// Durand-Kerner root finder for real-coefficient polynomial (highest first)
-function polyRoots(coeffs){
-  let c=coeffs.slice(); while(c.length>1&&Math.abs(c[0])<1e-12)c.shift();
-  const n=c.length-1; if(n<1)return [];
-  const a=c.map(v=>v/c[0]);
-  function evalC(re,im){let sr=a[0],si=0;
-    for(let k=1;k<a.length;k++){const nr=sr*re-si*im+a[k];const ni=sr*im+si*re;sr=nr;si=ni;}
-    return [sr,si];}
-  let R=[];for(let i=0;i<n;i++){const ang=2*Math.PI*i/n+0.4;R.push([0.7*Math.cos(ang)+0.05,0.7*Math.sin(ang)]);}
-  for(let iter=0;iter<300;iter++){let maxd=0;
-    for(let i=0;i<n;i++){
-      const [fr,fi]=evalC(R[i][0],R[i][1]);
-      let dr=1,di=0;
-      for(let j=0;j<n;j++){if(j===i)continue;
-        const er=R[i][0]-R[j][0],ei=R[i][1]-R[j][1];
-        const nr=dr*er-di*ei,ni=dr*ei+di*er;dr=nr;di=ni;}
-      const den=dr*dr+di*di||1e-12;
-      const qr=(fr*dr+fi*di)/den,qi=(fi*dr-fr*di)/den;
-      R[i][0]-=qr;R[i][1]-=qi;maxd=Math.max(maxd,Math.abs(qr)+Math.abs(qi));}
-    if(maxd<1e-11)break;}
-  return R.map(r=>({re:r[0],im:Math.abs(r[1])<1e-6?0:r[1]}));
-}
-
-/* ════════════════ TAB 2: Pole-Zero ════════════════ */
+/* TAB 2 */
 function renderPoleZero(){
-  const KR=parseFloat(document.getElementById('kr-pz').value);
-  document.getElementById('kr-pz-val').textContent=KR.toFixed(1);
-  const roots=polyRoots([1,3,3,1+KR]);
+  const KR=parseFloat(document.getElementById('kr-pz').value);document.getElementById('kr-pz-val').textContent=KR.toFixed(2);
+  const roots=polyRoots([1,5,2,6*KR-8]);
   const v=document.getElementById('pz-verdict');
-  if(KR<8-1e-9){v.textContent='✓ Stabil – alle Pole links der imaginären Achse (K_R < 8).';v.style.background='#f0fdf4';v.style.color='#166534';v.style.border='1px solid #4ade80';}
-  else if(KR<8+0.06){v.textContent='⚠ Stabilitätsgrenze – Polpaar auf der j-Achse bei s = ± j√3, Dauerschwingung (K_R = 8).';v.style.background='#fffbeb';v.style.color='#92400e';v.style.border='1px solid #fcd34d';}
-  else{v.textContent='✗ Instabil – mindestens ein Pol rechts der imaginären Achse (K_R > 8).';v.style.background='#fef2f2';v.style.color='#991b1b';v.style.border='1px solid #fca5a5';}
-  const maxv=Math.max(3,...roots.map(r=>Math.abs(r.re)),...roots.map(r=>Math.abs(r.im)))*1.2;
+  if(KR>4/3+1e-6&&KR<3-1e-6)verdict(v,true,'✓ Stabil – alle Pole links der j-Achse (4/3 < K_R < 3).');
+  else if(Math.abs(KR-3)<0.04||Math.abs(KR-4/3)<0.04)verdict(v,false,'⚠ Stabilitätsgrenze – Pol(paar) auf der j-Achse.');
+  else verdict(v,false,'✗ Instabil – mindestens ein Pol rechts der j-Achse.');
+  const mv=Math.max(2,...roots.map(r=>Math.abs(r.re)),...roots.map(r=>Math.abs(r.im)))*1.2;
   Plotly.newPlot('pz-plot',[
-    {x:roots.map(r=>r.re),y:roots.map(r=>r.im),mode:'markers',type:'scatter',name:'Pole',
-     marker:{symbol:'x',size:16,color:'#4f46e5',line:{width:3}}},
-    {x:[0,0],y:[-maxv,maxv],mode:'lines',name:'Stabilitätsgrenze',line:{color:'#dc2626',width:1.5,dash:'dash'}}
-  ],{
-    title:{text:'Pol-Lage des geschlossenen Kreises',font:{size:14}},
-    xaxis:{title:'Realteil σ',range:[-maxv,maxv],zeroline:false,gridcolor:'#eef2f7'},
-    yaxis:{title:'Imaginärteil jω',range:[-maxv,maxv],scaleanchor:'x',zeroline:false,gridcolor:'#eef2f7'},
-    shapes:[{type:'rect',x0:0,x1:maxv,y0:-maxv,y1:maxv,fillcolor:'rgba(220,38,38,0.05)',line:{width:0}}],
-    margin:{l:60,r:20,t:40,b:50},plot_bgcolor:'#fafafa',paper_bgcolor:'white',
-    font:{family:'Inter,sans-serif',size:12},showlegend:true,legend:{x:0.02,y:0.98}
-  },{responsive:true});
+    {x:roots.map(r=>r.re),y:roots.map(r=>r.im),mode:'markers',type:'scatter',name:'Pole',marker:{symbol:'x',size:16,color:'#4f46e5',line:{width:3}}},
+    {x:[0,0],y:[-mv,mv],mode:'lines',name:'j-Achse',line:{color:'#dc2626',width:1.5,dash:'dash'}}
+  ],{title:{text:'Pole des geschlossenen Kreises',font:{size:14}},xaxis:{title:'Re',range:[-mv,mv],gridcolor:'#eef2f7',zeroline:false},yaxis:{title:'Im',range:[-mv,mv],scaleanchor:'x',gridcolor:'#eef2f7',zeroline:false},shapes:[{type:'rect',x0:0,x1:mv,y0:-mv,y1:mv,fillcolor:'rgba(220,38,38,0.05)',line:{width:0}}],margin:{l:55,r:20,t:40,b:48},plot_bgcolor:'#fafafa',paper_bgcolor:'white',font:{family:'Inter,sans-serif',size:12},legend:{x:.02,y:.98}},{responsive:true});
 }
-
-/* ════════════════ TAB 3: Bode comparison ════════════════ */
-function gliedResp(type,K,T,D,w){
-  const wt=w*T; let magdB,phDeg,asym;
-  if(type==='PT1'){const m=K/Math.sqrt(1+wt*wt);magdB=20*log10(m);phDeg=-Math.atan(wt)*180/Math.PI;
-    asym=(w<1/T)?20*log10(K):20*log10(K)-20*log10(wt);}
-  else if(type==='PT2'){const w0=1/T,xx=w/w0,den=Math.sqrt((1-xx*xx)**2+(2*D*xx)**2),m=K/den;
-    magdB=20*log10(m);phDeg=-Math.atan2(2*D*xx,1-xx*xx)*180/Math.PI;
-    asym=(w<w0)?20*log10(K):20*log10(K)-40*log10(w/w0);}
-  else if(type==='I'){const m=K/w;magdB=20*log10(m);phDeg=-90;asym=magdB;}
-  else if(type==='IPT1'){const m=K/(w*Math.sqrt(1+wt*wt));magdB=20*log10(m);phDeg=-90-Math.atan(wt)*180/Math.PI;
-    asym=20*log10(K)-20*log10(w)-((w>1/T)?20*log10(wt):0);}
-  return {magdB,phDeg,asym};
+/* TAB 3 */
+function glied(type,K,T,D,w){const wt=w*T;let m,ph,as;
+  if(type==='PT1'){m=K/Math.sqrt(1+wt*wt);ph=-Math.atan(wt)*180/Math.PI;as=(w<1/T)?20*log10(K):20*log10(K)-20*log10(wt);}
+  else if(type==='PT2'){const w0=1/T,x=w/w0,d=Math.sqrt((1-x*x)**2+(2*D*x)**2);m=K/d;ph=-Math.atan2(2*D*x,1-x*x)*180/Math.PI;as=(w<w0)?20*log10(K):20*log10(K)-40*log10(w/w0);}
+  else if(type==='I'){m=K/w;ph=-90;as=20*log10(m);}
+  else{m=K/(w*Math.sqrt(1+wt*wt));ph=-90-Math.atan(wt)*180/Math.PI;as=20*log10(K)-20*log10(w)-((w>1/T)?20*log10(wt):0);}
+  return{magdB:20*log10(m),phDeg:ph,as};}
+const BC={PT1:'#4f46e5',PT2:'#dc2626',I:'#059669',IPT1:'#d97706'};
+function renderBodeTab(){renderBodeCmp();renderSinus();}
+function renderBodeCmp(){
+  const K=+document.getElementById('bK').value,T=+document.getElementById('bT').value,D=+document.getElementById('bD').value,as=document.getElementById('bAsym').checked;
+  document.getElementById('bK-val').textContent=K.toFixed(1);document.getElementById('bT-val').textContent=T.toFixed(1);document.getElementById('bD-val').textContent=D.toFixed(2);
+  const sel=[...document.querySelectorAll('.bchk:checked')].map(c=>c.value),w=logspace(-2,3,400),tr=[],sh=[],cn=new Set();
+  sel.forEach(t=>{const e=w.map(wi=>glied(t,K,T,D,wi));
+    tr.push({x:w,y:e.map(x=>x.magdB),xaxis:'x',yaxis:'y',mode:'lines',name:t,line:{color:BC[t],width:2.5}});
+    tr.push({x:w,y:e.map(x=>x.phDeg),xaxis:'x2',yaxis:'y2',mode:'lines',line:{color:BC[t],width:2.5},showlegend:false});
+    if(as)tr.push({x:w,y:e.map(x=>x.as),xaxis:'x',yaxis:'y',mode:'lines',line:{color:BC[t],width:1.3,dash:'dash'},showlegend:false});
+    if(t!=='I')cn.add(1/T);});
+  cn.forEach(c=>sh.push({type:'line',xref:'x',yref:'paper',x0:c,x1:c,y0:0,y1:1,line:{color:'#94a3b8',width:1,dash:'dot'}}));
+  sh.push({type:'line',xref:'x',yref:'y',x0:.01,x1:1000,y0:0,y1:0,line:{color:'#cbd5e1',width:1.5}});
+  const L=BLAYOUT();L.shapes=sh;Plotly.newPlot('bode-cmp',tr,L,{responsive:true});
 }
-const BODE_COLORS={PT1:'#4f46e5',PT2:'#dc2626',I:'#059669',IPT1:'#d97706'};
-function renderBodeCompare(){
-  const K=parseFloat(document.getElementById('bode-K').value),
-        T=parseFloat(document.getElementById('bode-T').value),
-        D=parseFloat(document.getElementById('bode-D').value),
-        showAsym=document.getElementById('bode-asym').checked;
-  document.getElementById('bode-K-val').textContent=K.toFixed(1);
-  document.getElementById('bode-T-val').textContent=T.toFixed(1);
-  document.getElementById('bode-D-val').textContent=D.toFixed(2);
-  const sel=[...document.querySelectorAll('.bode-chk:checked')].map(c=>c.value);
-  const w=logspace(-2,3,400);
-  const traces=[],shapes=[];const corners=new Set();
-  sel.forEach(type=>{
-    const ex=w.map(wi=>gliedResp(type,K,T,D,wi));
-    traces.push({x:w,y:ex.map(e=>e.magdB),xaxis:'x',yaxis:'y',mode:'lines',name:type+' Betrag',
-      line:{color:BODE_COLORS[type],width:2.5}});
-    traces.push({x:w,y:ex.map(e=>e.phDeg),xaxis:'x2',yaxis:'y2',mode:'lines',name:type+' Phase',
-      line:{color:BODE_COLORS[type],width:2.5},showlegend:false});
-    if(showAsym) traces.push({x:w,y:ex.map(e=>e.asym),xaxis:'x',yaxis:'y',mode:'lines',name:type+' Asymptote',
-      line:{color:BODE_COLORS[type],width:1.5,dash:'dash'},showlegend:false});
-    if(type!=='I') corners.add(1/T);
-  });
-  corners.forEach(wc=>{shapes.push({type:'line',xref:'x',yref:'paper',x0:wc,x1:wc,y0:0,y1:1,line:{color:'#94a3b8',width:1,dash:'dot'}});});
-  shapes.push({type:'line',xref:'x',yref:'y',x0:0.01,x1:1000,y0:0,y1:0,line:{color:'#cbd5e1',width:1.5}});
-  Plotly.newPlot('bode-cmp-plot',traces,{
-    grid:{rows:2,columns:1,pattern:'independent',roworder:'top to bottom'},
-    xaxis:{type:'log',gridcolor:'#eef2f7',domain:[0,1]},
-    yaxis:{title:'Betrag [dB]',gridcolor:'#eef2f7',domain:[0.56,1]},
-    xaxis2:{type:'log',title:'Frequenz ω [rad/s]',gridcolor:'#eef2f7',domain:[0,1]},
-    yaxis2:{title:'Phase [°]',gridcolor:'#eef2f7',domain:[0,0.44],dtick:45},
-    shapes,margin:{l:60,r:20,t:20,b:50},plot_bgcolor:'#fafafa',paper_bgcolor:'white',
-    font:{family:'Inter,sans-serif',size:11},legend:{orientation:'h',y:1.08}
-  },{responsive:true});
+function fo2(w,K){const mag=K*10*Math.sqrt(1+(0.2*w)**2)/(Math.sqrt(1+(0.5*w)**2)*Math.sqrt(1+(0.02*w)**2)*Math.sqrt(1+w*w)*Math.sqrt(1+(0.1*w)**2));
+  const ph=(Math.atan(0.2*w)-Math.atan(0.5*w)-Math.atan(0.02*w)-Math.atan(w)-Math.atan(0.1*w))*180/Math.PI;return{mag,magdB:20*log10(mag),phDeg:ph};}
+function renderSinus(){
+  const w=Math.pow(10,+document.getElementById('sw').value),eh=+document.getElementById('se').value,p0=+document.getElementById('sp').value;
+  document.getElementById('sw-val').textContent=w.toFixed(2);document.getElementById('se-val').textContent=eh.toFixed(1);document.getElementById('sp-val').textContent=p0;
+  const r=fo2(w,1),out=r.mag*eh,ph=r.phDeg;
+  document.getElementById('s-mag').textContent=r.mag.toFixed(3);
+  document.getElementById('s-magdb').textContent=r.magdB.toFixed(1)+' dB';
+  document.getElementById('s-ph').textContent=ph.toFixed(1)+'°';
+  document.getElementById('s-out').textContent=out.toFixed(2);
+  document.getElementById('s-eq').innerHTML='y(t) = '+out.toFixed(2)+' · sin('+w.toFixed(2)+'·t + '+(p0+ph).toFixed(0)+'°)  &nbsp;(Eingang '+eh.toFixed(1)+'·sin('+w.toFixed(2)+'·t + '+p0+'°))';
+  const T=2*Math.PI/w,t=[];for(let i=0;i<=300;i++)t.push(i/300*3*T);
+  const inp=t.map(x=>eh*Math.sin(w*x+p0*Math.PI/180)),outp=t.map(x=>out*Math.sin(w*x+(p0+ph)*Math.PI/180));
+  Plotly.newPlot('sinus-plot',[
+    {x:t,y:inp,mode:'lines',name:'Eingang e(t)',line:{color:'#94a3b8',width:2}},
+    {x:t,y:outp,mode:'lines',name:'Ausgang y(t)',line:{color:'#4f46e5',width:2.5}}
+  ],{title:{text:'Ein- und Ausgangssinus',font:{size:13}},xaxis:{title:'t [s]',gridcolor:'#eef2f7'},yaxis:{title:'Amplitude',gridcolor:'#eef2f7'},margin:{l:55,r:20,t:40,b:46},plot_bgcolor:'#fafafa',paper_bgcolor:'white',font:{family:'Inter,sans-serif',size:12},legend:{orientation:'h',y:1.12}},{responsive:true});
 }
-
-/* ════════════════ Shared F_o for reserves & totzeit ════════════════ */
-function foResp(w,KR){
-  const m=KR/(Math.sqrt(1+w*w)*Math.sqrt(1+(0.5*w)**2)*Math.sqrt(1+(0.2*w)**2));
-  const ph=-Math.atan(w)-Math.atan(0.5*w)-Math.atan(0.2*w);
-  return {magdB:20*log10(m),phRad:ph,phDeg:ph*180/Math.PI};
-}
-function crossing(arrX,arrY,target){
-  for(let i=0;i<arrX.length-1;i++){
-    if((arrY[i]-target)*(arrY[i+1]-target)<=0 && arrY[i]!==arrY[i+1]){
-      const f=(target-arrY[i])/(arrY[i+1]-arrY[i]);
-      const lx=log10(arrX[i])+f*(log10(arrX[i+1])-log10(arrX[i]));
-      return Math.pow(10,lx);
-    }
-  }
-  return null;
-}
-
-/* ════════════════ TAB 4: Reserves ════════════════ */
+/* TAB 4 */
 function renderReserves(){
-  const KR=parseFloat(document.getElementById('kr-res').value);
-  document.getElementById('kr-res-val').textContent=KR.toFixed(1);
-  const w=logspace(-2,3,500);
-  const mag=w.map(wi=>foResp(wi,KR).magdB), ph=w.map(wi=>foResp(wi,KR).phDeg);
-  const wD=crossing(w,mag,0), wK=crossing(w,ph,-180);
-  let pr=null,ar=null;
-  if(wD)pr=180+foResp(wD,KR).phDeg;
-  if(wK)ar=-foResp(wK,KR).magdB;
-  document.getElementById('res-wd').textContent=wD?wD.toFixed(2)+' rad/s':'–';
-  document.getElementById('res-pr').textContent=pr!==null?pr.toFixed(1)+'°':'–';
-  document.getElementById('res-wk').textContent=wK?wK.toFixed(2)+' rad/s':'–';
-  document.getElementById('res-ar').textContent=ar!==null?ar.toFixed(1)+' dB':'∞';
-  const stable=(pr===null||pr>0)&&(ar===null||ar>0);
-  const v=document.getElementById('res-verdict');
-  v.textContent=stable?`✓ Stabil – φ_r = ${pr!==null?pr.toFixed(1)+'°':'—'},  A_r = ${ar!==null?ar.toFixed(1)+' dB':'∞'}`
-                      :`✗ Instabil – Reserve aufgebraucht (φ_r = ${pr!==null?pr.toFixed(1)+'°':'—'})`;
-  v.style.background=stable?'#f0fdf4':'#fef2f2';v.style.color=stable?'#166534':'#991b1b';
-  v.style.border='1px solid '+(stable?'#4ade80':'#fca5a5');
-  const shapes=[{type:'line',xref:'x',yref:'y',x0:0.01,x1:1000,y0:0,y1:0,line:{color:'#cbd5e1',width:1.5}},
-                {type:'line',xref:'x2',yref:'y2',x0:0.01,x1:1000,y0:-180,y1:-180,line:{color:'#cbd5e1',width:1.5}}];
-  const ann=[];
-  if(wD){shapes.push({type:'line',xref:'x',yref:'paper',x0:wD,x1:wD,y0:0,y1:1,line:{color:'#dc2626',width:1.5,dash:'dot'}});
-    ann.push({xref:'x2',yref:'y2',x:log10(wD),y:-180+pr,ax:0,ay:42,text:'φ_r='+pr.toFixed(0)+'°',arrowcolor:'#dc2626',font:{color:'#dc2626',size:12},showarrow:true,arrowhead:3,bgcolor:'rgba(255,255,255,0.8)'});}
-  if(wK){shapes.push({type:'line',xref:'x2',yref:'paper',x0:wK,x1:wK,y0:0,y1:1,line:{color:'#0891b2',width:1.5,dash:'dot'}});
-    ann.push({xref:'x',yref:'y',x:log10(wK),y:-ar,ax:0,ay:-42,text:'A_r='+ar.toFixed(0)+'dB',arrowcolor:'#0891b2',font:{color:'#0891b2',size:12},showarrow:true,arrowhead:3,bgcolor:'rgba(255,255,255,0.8)'});}
-  Plotly.newPlot('res-plot',[
-    {x:w,y:mag,xaxis:'x',yaxis:'y',mode:'lines',name:'|F_o| [dB]',line:{color:'#4f46e5',width:2.5}},
-    {x:w,y:ph,xaxis:'x2',yaxis:'y2',mode:'lines',name:'∠F_o [°]',line:{color:'#4f46e5',width:2.5},showlegend:false}
-  ],{
-    grid:{rows:2,columns:1,pattern:'independent'},
-    xaxis:{type:'log',gridcolor:'#eef2f7',domain:[0,1]},
-    yaxis:{title:'Betrag [dB]',gridcolor:'#eef2f7',domain:[0.56,1]},
-    xaxis2:{type:'log',title:'Frequenz ω [rad/s]',gridcolor:'#eef2f7',domain:[0,1]},
-    yaxis2:{title:'Phase [°]',gridcolor:'#eef2f7',domain:[0,0.44],dtick:45},
-    shapes,annotations:ann,margin:{l:60,r:20,t:20,b:50},
-    plot_bgcolor:'#fafafa',paper_bgcolor:'white',font:{family:'Inter,sans-serif',size:11},
-    legend:{orientation:'h',y:1.08}
-  },{responsive:true});
+  const K=+document.getElementById('kr-res').value;document.getElementById('kr-res-val').textContent=K.toFixed(1);
+  const w=logspace(-2,3,600),mag=w.map(x=>fo2(x,K).magdB),ph=w.map(x=>fo2(x,K).phDeg);
+  const wD=crossing(w,mag,0),wK=crossing(w,ph,-180);let pr=null,ar=null;
+  if(wD)pr=180+fo2(wD,K).phDeg;if(wK)ar=-fo2(wK,K).magdB;
+  document.getElementById('res-wd').textContent=wD?wD.toFixed(2):'–';document.getElementById('res-pr').textContent=pr!==null?pr.toFixed(1)+'°':'–';
+  document.getElementById('res-wk').textContent=wK?wK.toFixed(2):'–';document.getElementById('res-ar').textContent=ar!==null?ar.toFixed(1)+' dB':'∞';
+  const ok=(pr===null||pr>0)&&(ar===null||ar>0);
+  verdict(document.getElementById('res-verdict'),ok,ok?`✓ Stabil – φ_r=${pr!==null?pr.toFixed(1)+'°':'—'}, A_r=${ar!==null?ar.toFixed(1)+' dB':'∞'}`:`✗ Instabil – φ_r=${pr!==null?pr.toFixed(1)+'°':'—'}`);
+  const sh=[{type:'line',xref:'x',yref:'y',x0:.01,x1:1000,y0:0,y1:0,line:{color:'#cbd5e1',width:1.5}},{type:'line',xref:'x2',yref:'y2',x0:.01,x1:1000,y0:-180,y1:-180,line:{color:'#cbd5e1',width:1.5}}],an=[];
+  if(wD){sh.push({type:'line',xref:'x',yref:'paper',x0:wD,x1:wD,y0:0,y1:1,line:{color:'#dc2626',width:1.5,dash:'dot'}});an.push({xref:'x2',yref:'y2',x:log10(wD),y:-180+pr,ax:0,ay:42,text:'φ_r='+pr.toFixed(0)+'°',arrowcolor:'#dc2626',font:{color:'#dc2626',size:12},showarrow:true,arrowhead:3,bgcolor:'rgba(255,255,255,.85)'});}
+  if(wK){sh.push({type:'line',xref:'x2',yref:'paper',x0:wK,x1:wK,y0:0,y1:1,line:{color:'#0891b2',width:1.5,dash:'dot'}});an.push({xref:'x',yref:'y',x:log10(wK),y:-ar,ax:0,ay:-42,text:'A_r='+ar.toFixed(0)+'dB',arrowcolor:'#0891b2',font:{color:'#0891b2',size:12},showarrow:true,arrowhead:3,bgcolor:'rgba(255,255,255,.85)'});}
+  const L=BLAYOUT();L.shapes=sh;L.annotations=an;L.yaxis.title='Betrag [dB]';
+  Plotly.newPlot('res-plot',[{x:w,y:mag,xaxis:'x',yaxis:'y',mode:'lines',name:'|F_o|',line:{color:'#4f46e5',width:2.5}},{x:w,y:ph,xaxis:'x2',yaxis:'y2',mode:'lines',line:{color:'#4f46e5',width:2.5},showlegend:false}],L,{responsive:true});
 }
-
-/* ════════════════ TAB 5: Totzeit ════════════════ */
+/* TAB 5 */
 function renderTotzeit(){
-  const Tt=parseFloat(document.getElementById('tt').value);
-  document.getElementById('tt-val').textContent=Tt.toFixed(2);
-  const KR=4, w=logspace(-2,3,500);
-  const mag=w.map(wi=>foResp(wi,KR).magdB);
-  const ph0=w.map(wi=>foResp(wi,KR).phDeg);
-  const phTt=w.map((wi,i)=>ph0[i]-wi*Tt*180/Math.PI);
-  const wD=crossing(w,mag,0);
-  const pr0=wD?180+foResp(wD,KR).phDeg:null;
-  const pr=wD?pr0-wD*Tt*180/Math.PI:null;
-  const ttKrit=(pr0&&wD)?(pr0*Math.PI/180)/wD:null;
-  document.getElementById('tt-wd').textContent=wD?wD.toFixed(2)+' rad/s':'–';
-  document.getElementById('tt-pr0').textContent=pr0!==null?pr0.toFixed(1)+'°':'–';
-  document.getElementById('tt-pr').textContent=pr!==null?pr.toFixed(1)+'°':'–';
-  document.getElementById('tt-krit').textContent=ttKrit!==null?ttKrit.toFixed(2)+' s':'–';
-  const stable=pr!==null&&pr>0;
-  const v=document.getElementById('tt-verdict');
-  v.textContent=stable?`✓ Stabil – Phasenreserve φ_r = ${pr.toFixed(1)}° (von ${pr0.toFixed(1)}° ohne Totzeit)`
-                      :`✗ Instabil – Totzeit hat die Phasenreserve aufgezehrt (φ_r = ${pr.toFixed(1)}°)`;
-  v.style.background=stable?'#f0fdf4':'#fef2f2';v.style.color=stable?'#166534':'#991b1b';
-  v.style.border='1px solid '+(stable?'#4ade80':'#fca5a5');
-  const shapes=[{type:'line',xref:'x',yref:'y',x0:0.01,x1:1000,y0:0,y1:0,line:{color:'#cbd5e1',width:1.5}},
-                {type:'line',xref:'x2',yref:'y2',x0:0.01,x1:1000,y0:-180,y1:-180,line:{color:'#cbd5e1',width:1.5}}];
-  if(wD)shapes.push({type:'line',xref:'x',yref:'paper',x0:wD,x1:wD,y0:0,y1:1,line:{color:'#dc2626',width:1.5,dash:'dot'}});
+  const Tt=+document.getElementById('tt').value;document.getElementById('tt-val').textContent=Tt.toFixed(3);
+  const K=1,w=logspace(-2,3,600),mag=w.map(x=>fo2(x,K).magdB),ph0=w.map(x=>fo2(x,K).phDeg),phT=w.map((x,i)=>ph0[i]-x*Tt*180/Math.PI);
+  const wD=crossing(w,mag,0),pr0=wD?180+fo2(wD,K).phDeg:null,pr=wD?pr0-wD*Tt*180/Math.PI:null,tk=(pr0&&wD)?(pr0*Math.PI/180)/wD:null;
+  document.getElementById('tt-wd').textContent=wD?wD.toFixed(2):'–';document.getElementById('tt-pr0').textContent=pr0!==null?pr0.toFixed(1)+'°':'–';
+  document.getElementById('tt-pr').textContent=pr!==null?pr.toFixed(1)+'°':'–';document.getElementById('tt-krit').textContent=tk!==null?tk.toFixed(3)+' s':'–';
+  const ok=pr!==null&&pr>0;verdict(document.getElementById('tt-verdict'),ok,ok?`✓ Stabil – φ_r=${pr.toFixed(1)}° (ohne Totzeit ${pr0.toFixed(1)}°)`:`✗ Instabil – Phasenreserve aufgezehrt (φ_r=${pr.toFixed(1)}°)`);
+  const sh=[{type:'line',xref:'x',yref:'y',x0:.01,x1:1000,y0:0,y1:0,line:{color:'#cbd5e1',width:1.5}},{type:'line',xref:'x2',yref:'y2',x0:.01,x1:1000,y0:-180,y1:-180,line:{color:'#cbd5e1',width:1.5}}];
+  if(wD)sh.push({type:'line',xref:'x',yref:'paper',x0:wD,x1:wD,y0:0,y1:1,line:{color:'#dc2626',width:1.5,dash:'dot'}});
+  const L=BLAYOUT();L.shapes=sh;L.yaxis2.range=[-360,0];L.yaxis2.dtick=90;L.legend={orientation:'h',y:1.1};
   Plotly.newPlot('tt-plot',[
-    {x:w,y:mag,xaxis:'x',yaxis:'y',mode:'lines',name:'|F_o| (unverändert)',line:{color:'#4f46e5',width:2.5}},
+    {x:w,y:mag,xaxis:'x',yaxis:'y',mode:'lines',name:'|F_o| (fest)',line:{color:'#4f46e5',width:2.5}},
     {x:w,y:ph0,xaxis:'x2',yaxis:'y2',mode:'lines',name:'Phase ohne Totzeit',line:{color:'#94a3b8',width:2,dash:'dash'}},
-    {x:w,y:phTt,xaxis:'x2',yaxis:'y2',mode:'lines',name:'Phase mit Totzeit',line:{color:'#dc2626',width:2.5}}
-  ],{
-    grid:{rows:2,columns:1,pattern:'independent'},
-    xaxis:{type:'log',gridcolor:'#eef2f7',domain:[0,1]},
-    yaxis:{title:'Betrag [dB]',gridcolor:'#eef2f7',domain:[0.56,1]},
-    xaxis2:{type:'log',title:'Frequenz ω [rad/s]',gridcolor:'#eef2f7',domain:[0,1]},
-    yaxis2:{title:'Phase [°]',gridcolor:'#eef2f7',domain:[0,0.44],range:[-360,0],dtick:90},
-    shapes,margin:{l:60,r:20,t:20,b:50},
-    plot_bgcolor:'#fafafa',paper_bgcolor:'white',font:{family:'Inter,sans-serif',size:11},
-    legend:{orientation:'h',y:1.1}
-  },{responsive:true});
+    {x:w,y:phT,xaxis:'x2',yaxis:'y2',mode:'lines',name:'Phase mit Totzeit',line:{color:'#dc2626',width:2.5}}
+  ],L,{responsive:true});
 }
-
-/* ════════════════ TAB 6: Regler ════════════════ */
-function stepResponse(num,den,tEnd,dt){
-  const d0=den[0]; den=den.map(v=>v/d0); num=num.map(v=>v/d0);
-  const n=den.length-1;
-  let nm=num.slice(); while(nm.length<n)nm.unshift(0); if(nm.length>n)nm=nm.slice(nm.length-n);
-  const alpha=[],beta=[];
-  for(let k=0;k<n;k++)alpha[k]=den[n-k];
-  for(let j=0;j<n;j++)beta[j]=nm[n-1-j];
-  function deriv(x){const dx=new Array(n).fill(0);
-    for(let i=0;i<n-1;i++)dx[i]=x[i+1];
-    let s=1; for(let k=0;k<n;k++)s-=alpha[k]*x[k]; dx[n-1]=s; return dx;}
-  let x=new Array(n).fill(0);const ts=[],ys=[];
-  for(let t=0;t<=tEnd+1e-9;t+=dt){
-    let y=0;for(let j=0;j<n;j++)y+=beta[j]*x[j];
-    ts.push(t);ys.push(y);
-    const k1=deriv(x);
-    const x2=x.map((v,i)=>v+dt/2*k1[i]);const k2=deriv(x2);
-    const x3=x.map((v,i)=>v+dt/2*k2[i]);const k3=deriv(x3);
-    const x4=x.map((v,i)=>v+dt*k3[i]);const k4=deriv(x4);
-    x=x.map((v,i)=>v+dt/6*(k1[i]+2*k2[i]+2*k3[i]+k4[i]));
-  }
-  return {t:ts,y:ys};
-}
-function reglerTF(type,KR,TR,TD){
-  if(type==='P')return {num:[KR],den:[1]};
-  if(type==='PI')return {num:[KR*TR,KR],den:[TR,0]};
-  if(type==='PID')return {num:[KR*TD*TR,KR*TR,KR],den:[TR,0]};
-}
-function renderReglerTab(){ renderPiBode(); renderStep(); }
-function renderPiBode(){
-  const KR=2,TR=1; const w=logspace(-2,2,300);
-  const mag=w.map(wi=>20*log10(KR*Math.sqrt(1+(TR*wi)**2)/(TR*wi)));
-  const ph=w.map(wi=>(Math.atan(TR*wi)*180/Math.PI-90));
-  Plotly.newPlot('pi-bode-plot',[
-    {x:w,y:mag,xaxis:'x',yaxis:'y',mode:'lines',name:'Betrag',line:{color:'#4f46e5',width:2.5}},
-    {x:w,y:ph,xaxis:'x2',yaxis:'y2',mode:'lines',name:'Phase',line:{color:'#0891b2',width:2.5}}
-  ],{
-    title:{text:'Bode-Diagramm PI-Regler  (K_R=2, T_R=1 → Knick bei ω=1/T_R=1)',font:{size:13}},
-    grid:{rows:2,columns:1,pattern:'independent'},
-    xaxis:{type:'log',domain:[0,1],gridcolor:'#eef2f7'},
-    yaxis:{title:'Betrag [dB]',domain:[0.56,1],gridcolor:'#eef2f7'},
-    xaxis2:{type:'log',title:'ω [rad/s]',domain:[0,1],gridcolor:'#eef2f7'},
-    yaxis2:{title:'Phase [°]',domain:[0,0.44],gridcolor:'#eef2f7',range:[-95,5],dtick:45},
-    shapes:[{type:'line',xref:'x',yref:'paper',x0:1,x1:1,y0:0,y1:1,line:{color:'#94a3b8',dash:'dot',width:1}}],
-    margin:{l:60,r:20,t:40,b:45},plot_bgcolor:'#fafafa',paper_bgcolor:'white',
-    font:{family:'Inter,sans-serif',size:11},legend:{orientation:'h',y:1.12}
-  },{responsive:true});
+/* TAB 6 */
+function stepResponse(num,den,tEnd,dt){const d0=den[0];den=den.map(v=>v/d0);num=num.map(v=>v/d0);const n=den.length-1;let nm=num.slice();while(nm.length<n)nm.unshift(0);if(nm.length>n)nm=nm.slice(nm.length-n);
+  const al=[],be=[];for(let k=0;k<n;k++)al[k]=den[n-k];for(let j=0;j<n;j++)be[j]=nm[n-1-j];
+  function dv(x){const d=new Array(n).fill(0);for(let i=0;i<n-1;i++)d[i]=x[i+1];let s=1;for(let k=0;k<n;k++)s-=al[k]*x[k];d[n-1]=s;return d;}
+  let x=new Array(n).fill(0),ly=0;const ts=[],ys=[];
+  for(let t=0;t<=tEnd+1e-9;t+=dt){let y=0;for(let j=0;j<n;j++)y+=be[j]*x[j];ly=y;ts.push(t);ys.push(y);
+    const k1=dv(x),x2=x.map((v,i)=>v+dt/2*k1[i]),k2=dv(x2),x3=x.map((v,i)=>v+dt/2*k2[i]),k3=dv(x3),x4=x.map((v,i)=>v+dt*k3[i]),k4=dv(x4);
+    x=x.map((v,i)=>v+dt/6*(k1[i]+2*k2[i]+2*k3[i]+k4[i]));}
+  return{t:ts,y:ys,last:ly};}
+function regTF(t,KR,TR,TD){if(t==='P')return{num:[KR],den:[1]};if(t==='PI')return{num:[KR*TR,KR],den:[TR,0]};return{num:[KR*TD*TR,KR*TR,KR],den:[TR,0]};}
+function renderReglerTab(){renderPiBode();renderStep();}
+function renderPiBode(){const KR=2,TR=1,w=logspace(-2,2,300);
+  const mag=w.map(x=>20*log10(KR*Math.sqrt(1+(TR*x)**2)/(TR*x))),ph=w.map(x=>Math.atan(TR*x)*180/Math.PI-90);
+  const L=BLAYOUT();L.title={text:'PI-Regler  (K_R=2, T_R=1 → Knick bei ω=1)',font:{size:13}};L.yaxis2.range=[-95,5];L.shapes=[{type:'line',xref:'x',yref:'paper',x0:1,x1:1,y0:0,y1:1,line:{color:'#94a3b8',dash:'dot',width:1}}];L.margin.t=40;
+  Plotly.newPlot('pi-bode',[{x:w,y:mag,xaxis:'x',yaxis:'y',mode:'lines',name:'Betrag',line:{color:'#4f46e5',width:2.5}},{x:w,y:ph,xaxis:'x2',yaxis:'y2',mode:'lines',name:'Phase',line:{color:'#0891b2',width:2.5}}],L,{responsive:true});
 }
 function renderStep(){
-  const KR=parseFloat(document.getElementById('st-kr').value),
-        TR=parseFloat(document.getElementById('st-tr').value),
-        TD=parseFloat(document.getElementById('st-td').value),
-        T1=parseFloat(document.getElementById('st-t1').value),T2=T1*0.5;
-  document.getElementById('st-kr-val').textContent=KR.toFixed(1);
-  document.getElementById('st-tr-val').textContent=TR.toFixed(1);
-  document.getElementById('st-td-val').textContent=TD.toFixed(2);
-  document.getElementById('st-t1-val').textContent=T1.toFixed(1);
-  const Snum=[1],Sden=polymul([T1,1],[T2,1]);
-  const tEnd=Math.max(20,10*T1),dt=tEnd/1400;
-  function closed(type){
-    const R=reglerTF(type,KR,TR,TD);
-    const Fnum=polymul(R.num,Snum),Fden=polymul(R.den,Sden);
-    const Wden=polyadd(Fnum,Fden);
-    return stepResponse(Fnum,Wden,tEnd,dt);
-  }
-  const strecke=stepResponse(Snum,Sden,tEnd,dt);
-  const P=closed('P'),PI=closed('PI'),PID=closed('PID');
+  const KR=+document.getElementById('st-kr').value,TR=+document.getElementById('st-tr').value,TD=+document.getElementById('st-td').value,T1=+document.getElementById('st-t1').value,T2=T1*0.5;
+  document.getElementById('st-kr-val').textContent=KR.toFixed(1);document.getElementById('st-tr-val').textContent=TR.toFixed(1);document.getElementById('st-td-val').textContent=TD.toFixed(2);document.getElementById('st-t1-val').textContent=T1.toFixed(1);
+  const Sn=[1],Sd=polymul([T1,1],[T2,1]),tE=Math.max(20,10*T1),dt=tE/1400;
+  function cl(t){const R=regTF(t,KR,TR,TD),Fn=polymul(R.num,Sn),Fd=polymul(R.den,Sd);return stepResponse(Fn,polyadd(Fn,Fd),tE,dt);}
+  const S=stepResponse(Sn,Sd,tE,dt),P=cl('P'),PI=cl('PI'),PID=cl('PID');
   Plotly.newPlot('step-plot',[
-    {x:strecke.t,y:strecke.y,mode:'lines',name:'Strecke (offen)',line:{color:'#94a3b8',width:2}},
+    {x:S.t,y:S.y,mode:'lines',name:'Strecke',line:{color:'#94a3b8',width:2}},
     {x:P.t,y:P.y,mode:'lines',name:'P',line:{color:'#4f46e5',width:2.5}},
     {x:PI.t,y:PI.y,mode:'lines',name:'PI',line:{color:'#0891b2',width:2.5}},
     {x:PID.t,y:PID.y,mode:'lines',name:'PID',line:{color:'#dc2626',width:2.5}}
-  ],{
-    title:{text:'Sprungantworten des geschlossenen Regelkreises',font:{size:13}},
-    xaxis:{title:'Zeit t [s]',gridcolor:'#eef2f7'},
-    yaxis:{title:'y(t)',gridcolor:'#eef2f7'},
-    shapes:[{type:'line',x0:0,x1:tEnd,y0:1,y1:1,line:{color:'#94a3b8',dash:'dash',width:1.5}}],
-    margin:{l:55,r:20,t:40,b:50},plot_bgcolor:'#fafafa',paper_bgcolor:'white',
-    font:{family:'Inter,sans-serif',size:12},legend:{x:0.99,y:0.02,xanchor:'right'}
-  },{responsive:true});
-  const last=a=>a.y[a.y.length-1];
-  const eP=(1-last(P))*100;
-  document.getElementById('step-info-txt').innerHTML=
-    `P läuft auf <b>${last(P).toFixed(3)}</b> ein → bleibende Regelabweichung <b>${eP.toFixed(1)} %</b>. `+
-    `PI auf <b>${last(PI).toFixed(3)}</b>, PID auf <b>${last(PID).toFixed(3)}</b> → dank Integrator stationär genau (→ 1). `+
-    `Die offene Strecke erreicht nur ihren statischen Endwert ${last(strecke).toFixed(2)}.`;
+  ],{title:{text:'Sprungantworten geschlossener Kreis',font:{size:13}},xaxis:{title:'t [s]',gridcolor:'#eef2f7'},yaxis:{title:'y(t)',gridcolor:'#eef2f7'},shapes:[{type:'line',x0:0,x1:tE,y0:1,y1:1,line:{color:'#94a3b8',dash:'dash',width:1.5}}],margin:{l:55,r:20,t:40,b:48},plot_bgcolor:'#fafafa',paper_bgcolor:'white',font:{family:'Inter,sans-serif',size:12},legend:{x:.99,y:.02,xanchor:'right'}},{responsive:true});
+  document.getElementById('step-info').innerHTML='<span class="lbl">Beobachtung (live)</span>P läuft auf <b>'+P.last.toFixed(3)+'</b> → bleibende Abweichung <b>'+((1-P.last)*100).toFixed(1)+'%</b>. PI: <b>'+PI.last.toFixed(3)+'</b>, PID: <b>'+PID.last.toFixed(3)+'</b> → dank Integrator stationär genau (→1).';
 }
-
-/* ════════════════ wire up controls ════════════════ */
-document.getElementById('kr-pz').addEventListener('input',renderPoleZero);
-['bode-K','bode-T','bode-D'].forEach(id=>document.getElementById(id).addEventListener('input',renderBodeCompare));
-document.getElementById('bode-asym').addEventListener('change',renderBodeCompare);
-document.querySelectorAll('.bode-chk').forEach(c=>c.addEventListener('change',renderBodeCompare));
+['kr-pz'].forEach(id=>document.getElementById(id).addEventListener('input',renderPoleZero));
+['bK','bT','bD'].forEach(id=>document.getElementById(id).addEventListener('input',renderBodeCmp));
+document.getElementById('bAsym').addEventListener('change',renderBodeCmp);
+document.querySelectorAll('.bchk').forEach(c=>c.addEventListener('change',renderBodeCmp));
+['sw','se','sp'].forEach(id=>document.getElementById(id).addEventListener('input',renderSinus));
 document.getElementById('kr-res').addEventListener('input',renderReserves);
 document.getElementById('tt').addEventListener('input',renderTotzeit);
 ['st-kr','st-tr','st-td','st-t1'].forEach(id=>document.getElementById(id).addEventListener('input',renderStep));
-
-window.addEventListener('resize',()=>{
-  ['pz-plot','bode-cmp-plot','res-plot','tt-plot','pi-bode-plot','step-plot'].forEach(id=>{
-    const el=document.getElementById(id); if(el&&el.offsetParent!==null)Plotly.Plots.resize(el);
-  });
-});
+window.addEventListener('resize',()=>{['pz-plot','bode-cmp','sinus-plot','res-plot','tt-plot','pi-bode','step-plot'].forEach(id=>{const el=document.getElementById(id);if(el&&el.offsetParent!==null)Plotly.Plots.resize(el);});});
 </script>
 </body>
 </html>
